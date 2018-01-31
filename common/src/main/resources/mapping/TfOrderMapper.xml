@@ -1,0 +1,1081 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfOrder" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="o_master_id" property="oMasterId" jdbcType="INTEGER" />
+    <result column="o_user_id" property="oUserId" jdbcType="INTEGER" />
+    <result column="o_product_id" property="oProductId" jdbcType="INTEGER" />
+    <result column="o_business_id" property="oBusinessId" jdbcType="INTEGER" />
+    <result column="o_pay_status" property="oPayStatus" jdbcType="INTEGER" />
+    <result column="o_cancel_type" property="oCancelType" jdbcType="INTEGER" />
+    <result column="o_pay_time" property="oPayTime" jdbcType="TIMESTAMP" />
+    <result column="o_status" property="oStatus" jdbcType="INTEGER" />
+    <result column="o_pay_way" property="oPayWay" jdbcType="INTEGER" />
+    <result column="o_order_type" property="oOrderType" jdbcType="INTEGER" />
+    <result column="o_order_no" property="oOrderNo" jdbcType="VARCHAR" />
+    <result column="o_logistics_no" property="oLogisticsNo" jdbcType="VARCHAR" />
+    <result column="o_create_time" property="oCreateTime" jdbcType="TIMESTAMP" />
+    <result column="o_update_time" property="oUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="o_appointment_time" property="oAppointmentTime" jdbcType="TIMESTAMP" />
+    <result column="o_complete_time" property="oCompleteTime" jdbcType="TIMESTAMP" />
+    <result column="o_cancel_time" property="oCancelTime" jdbcType="TIMESTAMP" />
+    <result column="o_price" property="oPrice" jdbcType="INTEGER" />
+    <result column="o_qty" property="oQty" jdbcType="INTEGER" />
+    <result column="o_amount" property="oAmount" jdbcType="INTEGER" />
+    <result column="o_is_order_total" property="oIsOrderTotal" jdbcType="BIT" />
+    <result column="o_order_total_no" property="oOrderTotalNo" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultWithAttach" type="com.yinghai.twentyfour.common.model.TfOrder" extends="BaseResultMap" >
+    <association property="tfOrderAttach" javaType="com.yinghai.twentyfour.common.model.TfOrderAttach">
+      <id column="ah_order_id" property="ahOrderId" jdbcType="INTEGER" />
+      <result column="ah_name" property="ahName" jdbcType="VARCHAR" />
+      <result column="ah_sex" property="ahSex" jdbcType="BIT" />
+      <result column="ah_birthday" property="ahBirthday" jdbcType="DATE" />
+      <result column="ah_country_code" property="ahCountryCode" jdbcType="VARCHAR" />
+      <result column="ah_tel" property="ahTel" jdbcType="VARCHAR" />
+      <result column="ah_birthplace" property="ahBirthplace" jdbcType="VARCHAR" />
+      <result column="ah_describe" property="ahDescribe" jdbcType="VARCHAR" />
+      <result column="ah_create_time" property="ahCreateTime" jdbcType="TIMESTAMP" />
+    </association>
+    <association property="tfMaster" javaType="com.yinghai.twentyfour.common.model.TfMaster">
+      <id column="master_id" property="masterId" jdbcType="INTEGER" />
+      <result column="m_nick" property="mNick" jdbcType="VARCHAR" />
+      <result column="m_sex" property="mSex" jdbcType="BIT" />
+      <result column="m_status" property="mStatus" jdbcType="INTEGER" />
+      <result column="m_head_img" property="mHeadImg" jdbcType="VARCHAR" />
+      <result column="m_constellation" property="mConstellation" jdbcType="INTEGER" />
+      <result column="m_country_code" property="mCountryCode" jdbcType="VARCHAR" />
+      <result column="m_tel" property="mTel" jdbcType="VARCHAR" />
+      <result column="m_password" property="mPassword" jdbcType="VARCHAR" />
+      <result column="m_address" property="mAddress" jdbcType="VARCHAR" />
+      <result column="m_business_type" property="mBusinessType" jdbcType="VARCHAR" />
+      <result column="m_label" property="mLabel" jdbcType="VARCHAR" />
+      <result column="m_bargain" property="mBargain" jdbcType="INTEGER" />
+      <result column="m_device_id" property="mDeviceId" jdbcType="VARCHAR" />
+      <result column="m_im" property="mIm" jdbcType="VARCHAR" />
+      <result column="m_token" property="mToken" jdbcType="VARCHAR" />
+      <result column="m_device_type" property="mDeviceType" jdbcType="INTEGER" />
+      <result column="m_follows" property="mFollows" jdbcType="BIGINT" />
+      <result column="m_deals" property="mDeals" jdbcType="BIGINT" />
+      <result column="m_score" property="mScore" jdbcType="DOUBLE" />
+      <result column="m_create_time" property="mCreateTime" jdbcType="TIMESTAMP" />
+      <result column="m_update_time" property="mUpdateTime" jdbcType="TIMESTAMP" />
+      <result column="m_deleted" property="mDeleted" jdbcType="BIT" />
+    </association>
+    <association property="tfBusiness" javaType="com.yinghai.twentyfour.common.model.TfBusiness">
+      <id column="business_id" property="businessId" jdbcType="INTEGER" />
+      <result column="b_master_id" property="bMasterId" jdbcType="INTEGER" />
+      <result column="b_name" property="bName" jdbcType="VARCHAR" />
+      <result column="b_price" property="bPrice" jdbcType="INTEGER" />
+      <result column="b_deals" property="bDeals" jdbcType="BIGINT" />
+      <result column="b_create_time" property="bCreateTime" jdbcType="TIMESTAMP" />
+      <result column="b_update_time" property="bUpdateTime" jdbcType="TIMESTAMP" />
+      <result column="b_introduction" property="bIntroduction" jdbcType="LONGVARCHAR" />
+      <result column="b_type" property="bType" jdbcType="VARCHAR" />
+    </association>
+    <association property="tfProduct" javaType="com.yinghai.twentyfour.common.model.TfProduct">
+      <id column="product_id" property="productId" jdbcType="INTEGER" />
+      <result column="p_master_id" property="pMasterId" jdbcType="INTEGER" />
+      <result column="p_name" property="pName" jdbcType="VARCHAR" />
+      <result column="p_price" property="pPrice" jdbcType="INTEGER" />
+      <result column="p_total" property="pTotal" jdbcType="INTEGER" />
+      <result column="p_size" property="pSize" jdbcType="VARCHAR" />
+      <result column="p_img" property="pImg" jdbcType="VARCHAR" />
+      <result column="p_type" property="pType" jdbcType="VARCHAR" />
+      <result column="p_deals" property="pDeals" jdbcType="BIGINT" />
+      <result column="p_attribution" property="pAttribution" jdbcType="VARCHAR" />
+      <result column="p_free_shipping" property="pFreeShipping" jdbcType="BIT" />
+      <result column="p_hot" property="pHot" jdbcType="BIGINT" />
+      <result column="p_offline" property="pOffline" jdbcType="BIT" />
+      <result column="p_delete" property="pDelete" jdbcType="BIT" />
+      <result column="p_create_time" property="pCreateTime" jdbcType="TIMESTAMP" />
+      <result column="p_update_time" property="pUpdateTime" jdbcType="TIMESTAMP" />
+    </association>
+    <association property="tfUser" javaType="com.yinghai.twentyfour.common.model.TfUser">
+      <id column="user_id" property="userId" jdbcType="INTEGER" />
+      <result column="u_nick" property="uNick" jdbcType="VARCHAR" />
+      <result column="u_img_url" property="uImgUrl" jdbcType="VARCHAR" />
+      <result column="u_country_code" property="uCountryCode" jdbcType="VARCHAR" />
+      <result column="u_tel" property="uTel" jdbcType="VARCHAR" />
+      <result column="u_password" property="uPassword" jdbcType="VARCHAR" />
+      <result column="u_status" property="uStatus" jdbcType="INTEGER" />
+      <result column="u_birthday" property="uBirthday" jdbcType="DATE" />
+      <result column="u_sex" property="uSex" jdbcType="BIT" />
+      <result column="u_constellation" property="uConstellation" jdbcType="INTEGER" />
+      <result column="u_create_time" property="uCreateTime" jdbcType="TIMESTAMP" />
+      <result column="u_update_time" property="uUpdateTime" jdbcType="TIMESTAMP" />
+      <result column="u_deleted" property="uDeleted" jdbcType="BIT" />
+      <result column="u_device_id" property="uDeviceId" jdbcType="VARCHAR" />
+      <result column="u_device_type" property="uDeviceType" jdbcType="INTEGER" />
+      <result column="u_im" property="uIm" jdbcType="VARCHAR" />
+      <result column="u_token" property="uToken" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+
+  <resultMap id="MasterScheduleResult" type="com.yinghai.twentyfour.common.vo.MasterSchedule">
+    <result column="ms_date" property="msDate" jdbcType="DATE" />
+    <result column="ms_qty" property="msQty" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, o_master_id, o_user_id, o_product_id, o_business_id, o_pay_status,o_cancel_type, o_pay_time,
+    o_status,o_pay_way, o_order_type, o_order_no, o_logistics_no, o_create_time, o_update_time,
+    o_appointment_time,o_complete_time,o_cancel_time, o_price, o_qty, o_amount, o_is_order_total, o_order_total_no
+  </sql>
+  <!--大师-->
+  <sql id="Master_Column_List" >
+    master_id, m_nick, m_sex, m_status, m_head_img, m_constellation, m_country_code,
+    m_tel, m_password, m_address, m_business_type, m_label, m_bargain, m_follows, m_deals,
+    m_score, m_create_time, m_update_time, m_deleted,m_device_id,m_im,m_token,m_device_type,m_introduction
+  </sql>
+  <!--业务-->
+  <sql id="Business_Column_List" >
+    business_id, b_master_id, b_name, b_price, b_deals, b_create_time, b_update_time,b_introduction,b_type
+  </sql>
+  <!--订单附加信息-->
+  <sql id="Attach_Column_List" >
+    attach_id, ah_order_id, ah_name, ah_sex, ah_birthday, ah_country_code, ah_tel, ah_birthplace,ah_describe,
+    ah_create_time
+  </sql>
+  <!--商品信息-->
+  <sql id="Product_Column_List" >
+    product_id, p_master_id, p_name, p_price, p_total, p_size, p_img,p_type, p_deals, p_attribution,
+    p_free_shipping, p_hot, p_offline, p_delete, p_create_time, p_update_time,p_introduction
+  </sql>
+  <!--用户信息-->
+  <sql id="User_Column_List" >
+    user_id, u_nick,u_img_url, u_country_code, u_tel, u_password, u_status, u_birthday, u_sex,
+    u_constellation, u_create_time, u_update_time, u_deleted,u_device_id,u_device_type,u_im,u_token
+  </sql>
+  <resultMap id="ProductResultMap" type="com.yinghai.twentyfour.common.model.TfOrderTotalHelper">
+  	<id column="total_id" property="totalId" jdbcType="INTEGER" />
+    <result column="t_order_no" property="tOrderNo" jdbcType="VARCHAR" />
+    <result column="t_amount" property="tAmount" jdbcType="INTEGER" />
+    <result column="t_create_time" property="tCreateTime" jdbcType="TIMESTAMP" />
+    <result column="t_user_id" property="tUserId" jdbcType="INTEGER" />
+    <result column="t_address_id" property="tAddressId" jdbcType="INTEGER" />
+    <result column="t_status" property="tStatus" jdbcType="INTEGER" />
+    <result column="t_qty" property="tQty" jdbcType="INTEGER" />
+    <result column="t_parent_id" property="tParentId" jdbcType="INTEGER" />
+    <result column="t_pay_no" property="tPayNo" jdbcType="VARCHAR" />
+    <result column="t_master_id" property="tMasterId" jdbcType="INTEGER" />
+    <result column="t_express_no" property="tExpressNo" jdbcType="VARCHAR" />
+    <result column="t_express_company_id" property="tExpressCompanyId" jdbcType="INTEGER" />
+    <result column="t_express_company" property="tExpressCompany" jdbcType="VARCHAR" />
+    <association property="address" javaType="com.yinghai.twentyfour.common.model.TfAddress">
+    	<id column="address_id" property="addressId" jdbcType="INTEGER" />
+	    <result column="as_user_id" property="asUserId" jdbcType="INTEGER" />
+	    <result column="as_consignee_name" property="asConsigneeName" jdbcType="VARCHAR" />
+	    <result column="as_country_code" property="asCountryCode" jdbcType="VARCHAR" />
+	    <result column="as_tel" property="asTel" jdbcType="VARCHAR" />
+	    <result column="as_details" property="asDetails" jdbcType="VARCHAR" />
+	    <result column="as_create_time" property="asCreateTime" jdbcType="TIMESTAMP" />
+	    <result column="as_update_time" property="asUpdateTime" jdbcType="TIMESTAMP" />
+	    <result column="as_default" property="asDefault" jdbcType="TINYINT" />
+	    <result column="as_street" property="asStreet" jdbcType="VARCHAR" />
+    	<result column="as_sex" property="asSex" jdbcType="TINYINT" />
+    </association>
+    <collection property="orderList" ofType="com.yinghai.twentyfour.common.model.TfOrder" >
+    	<id column="order_id" property="orderId" jdbcType="INTEGER" />
+	    <result column="o_master_id" property="oMasterId" jdbcType="INTEGER" />
+	    <result column="o_user_id" property="oUserId" jdbcType="INTEGER" />
+	    <result column="o_product_id" property="oProductId" jdbcType="INTEGER" />
+	    <result column="o_business_id" property="oBusinessId" jdbcType="INTEGER" />
+	    <result column="o_pay_status" property="oPayStatus" jdbcType="INTEGER" />
+	    <result column="o_cancel_type" property="oCancelType" jdbcType="INTEGER" />
+	    <result column="o_pay_time" property="oPayTime" jdbcType="TIMESTAMP" />
+	    <result column="o_status" property="oStatus" jdbcType="INTEGER" />
+	    <result column="o_pay_way" property="oPayWay" jdbcType="INTEGER" />
+	    <result column="o_order_type" property="oOrderType" jdbcType="INTEGER" />
+	    <result column="o_order_no" property="oOrderNo" jdbcType="VARCHAR" />
+	    <result column="o_logistics_no" property="oLogisticsNo" jdbcType="VARCHAR" />
+	    <result column="o_create_time" property="oCreateTime" jdbcType="TIMESTAMP" />
+	    <result column="o_update_time" property="oUpdateTime" jdbcType="TIMESTAMP" />
+	    <result column="o_appointment_time" property="oAppointmentTime" jdbcType="TIMESTAMP" />
+	    <result column="o_complete_time" property="oCompleteTime" jdbcType="TIMESTAMP" />
+	    <result column="o_cancel_time" property="oCancelTime" jdbcType="TIMESTAMP" />
+	    <result column="o_price" property="oPrice" jdbcType="INTEGER" />
+	    <result column="o_qty" property="oQty" jdbcType="INTEGER" />
+	    <result column="o_amount" property="oAmount" jdbcType="INTEGER" />
+	    <result column="o_is_order_total" property="oIsOrderTotal" jdbcType="BIT" />
+	    <result column="o_order_total_no" property="oOrderTotalNo" jdbcType="VARCHAR" />
+		<association property="tfOrderAttach" javaType="com.yinghai.twentyfour.common.model.TfOrderAttach">
+	      <id column="ah_order_id" property="ahOrderId" jdbcType="INTEGER" />
+	      <result column="ah_name" property="ahName" jdbcType="VARCHAR" />
+	      <result column="ah_sex" property="ahSex" jdbcType="BIT" />
+	      <result column="ah_birthday" property="ahBirthday" jdbcType="DATE" />
+	      <result column="ah_country_code" property="ahCountryCode" jdbcType="VARCHAR" />
+	      <result column="ah_tel" property="ahTel" jdbcType="VARCHAR" />
+	      <result column="ah_birthplace" property="ahBirthplace" jdbcType="VARCHAR" />
+	      <result column="ah_create_time" property="ahCreateTime" jdbcType="TIMESTAMP" />
+	    </association>
+	    <association property="tfMaster" javaType="com.yinghai.twentyfour.common.model.TfMaster">
+	      <id column="master_id" property="masterId" jdbcType="INTEGER" />
+	      <result column="m_nick" property="mNick" jdbcType="VARCHAR" />
+	      <result column="m_sex" property="mSex" jdbcType="BIT" />
+	      <result column="m_status" property="mStatus" jdbcType="INTEGER" />
+	      <result column="m_head_img" property="mHeadImg" jdbcType="VARCHAR" />
+	      <result column="m_constellation" property="mConstellation" jdbcType="INTEGER" />
+	      <result column="m_country_code" property="mCountryCode" jdbcType="VARCHAR" />
+	      <result column="m_tel" property="mTel" jdbcType="VARCHAR" />
+	      <result column="m_password" property="mPassword" jdbcType="VARCHAR" />
+	      <result column="m_address" property="mAddress" jdbcType="VARCHAR" />
+	      <result column="m_business_type" property="mBusinessType" jdbcType="VARCHAR" />
+	      <result column="m_label" property="mLabel" jdbcType="VARCHAR" />
+	      <result column="m_bargain" property="mBargain" jdbcType="INTEGER" />
+	      <result column="m_device_id" property="mDeviceId" jdbcType="VARCHAR" />
+	      <result column="m_im" property="mIm" jdbcType="VARCHAR" />
+	      <result column="m_token" property="mToken" jdbcType="VARCHAR" />
+	      <result column="m_device_type" property="mDeviceType" jdbcType="INTEGER" />
+	      <result column="m_follows" property="mFollows" jdbcType="BIGINT" />
+	      <result column="m_deals" property="mDeals" jdbcType="BIGINT" />
+	      <result column="m_score" property="mScore" jdbcType="DOUBLE" />
+	      <result column="m_create_time" property="mCreateTime" jdbcType="TIMESTAMP" />
+	      <result column="m_update_time" property="mUpdateTime" jdbcType="TIMESTAMP" />
+	      <result column="m_deleted" property="mDeleted" jdbcType="BIT" />
+	    </association>
+	    <association property="tfProduct" javaType="com.yinghai.twentyfour.common.model.TfProduct">
+	      <id column="product_id" property="productId" jdbcType="INTEGER" />
+	      <result column="p_master_id" property="pMasterId" jdbcType="INTEGER" />
+	      <result column="p_name" property="pName" jdbcType="VARCHAR" />
+	      <result column="p_price" property="pPrice" jdbcType="INTEGER" />
+	      <result column="p_total" property="pTotal" jdbcType="INTEGER" />
+	      <result column="p_size" property="pSize" jdbcType="VARCHAR" />
+	      <result column="p_img" property="pImg" jdbcType="VARCHAR" />
+	      <result column="p_type" property="pType" jdbcType="VARCHAR" />
+	      <result column="p_deals" property="pDeals" jdbcType="BIGINT" />
+	      <result column="p_attribution" property="pAttribution" jdbcType="VARCHAR" />
+	      <result column="p_free_shipping" property="pFreeShipping" jdbcType="BIT" />
+	      <result column="p_hot" property="pHot" jdbcType="BIGINT" />
+	      <result column="p_offline" property="pOffline" jdbcType="BIT" />
+	      <result column="p_delete" property="pDelete" jdbcType="BIT" />
+	      <result column="p_create_time" property="pCreateTime" jdbcType="TIMESTAMP" />
+	      <result column="p_update_time" property="pUpdateTime" jdbcType="TIMESTAMP" />
+	      <collection property="imgList"  ofType="com.yinghai.twentyfour.common.model.TfImgTmp">
+	     	<id column="img_tmp_id" property="imgTmpId" jdbcType="INTEGER" />
+	        <result column="it_type" property="itType" jdbcType="INTEGER" />
+		    <result column="it_url" property="itUrl" jdbcType="VARCHAR" />
+		    <result column="it_app_path" property="itAppPath" jdbcType="VARCHAR" />
+		    <result column="it_is_userd" property="itIsUser" jdbcType="BIT" />
+		    <result column="it_size" property="itSize" jdbcType="VARCHAR" />
+	      </collection>
+	    </association>
+	    <association property="tfUser" javaType="com.yinghai.twentyfour.common.model.TfUser">
+	      <id column="user_id" property="userId" jdbcType="INTEGER" />
+	      <result column="u_nick" property="uNick" jdbcType="VARCHAR" />
+	      <result column="u_img_url" property="uImgUrl" jdbcType="VARCHAR" />
+	      <result column="u_country_code" property="uCountryCode" jdbcType="VARCHAR" />
+	      <result column="u_tel" property="uTel" jdbcType="VARCHAR" />
+	      <result column="u_password" property="uPassword" jdbcType="VARCHAR" />
+	      <result column="u_status" property="uStatus" jdbcType="INTEGER" />
+	      <result column="u_birthday" property="uBirthday" jdbcType="DATE" />
+	      <result column="u_sex" property="uSex" jdbcType="BIT" />
+	      <result column="u_constellation" property="uConstellation" jdbcType="INTEGER" />
+	      <result column="u_create_time" property="uCreateTime" jdbcType="TIMESTAMP" />
+	      <result column="u_update_time" property="uUpdateTime" jdbcType="TIMESTAMP" />
+	      <result column="u_deleted" property="uDeleted" jdbcType="BIT" />
+	      <result column="u_device_id" property="uDeviceId" jdbcType="VARCHAR" />
+	      <result column="u_device_type" property="uDeviceType" jdbcType="INTEGER" />
+	      <result column="u_im" property="uIm" jdbcType="VARCHAR" />
+	      <result column="u_token" property="uToken" jdbcType="VARCHAR" />
+	    </association>
+    </collection>
+  </resultMap>
+
+  <!--由订单编号获得相关用户以及大师-->
+  <resultMap id="UserAndMasterResultMap" type="com.yinghai.twentyfour.common.vo.MasterAndUserIm" >
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <association property="tfUser" javaType="com.yinghai.twentyfour.common.model.TfUser">
+      <id column="user_id" property="userId" jdbcType="INTEGER" />
+      <result column="u_nick" property="uNick" jdbcType="VARCHAR" />
+      <result column="u_img_url" property="uImgUrl" jdbcType="VARCHAR" />
+      <result column="u_country_code" property="uCountryCode" jdbcType="VARCHAR" />
+      <result column="u_tel" property="uTel" jdbcType="VARCHAR" />
+      <result column="u_sex" property="uSex" jdbcType="BIT" />
+      <result column="u_deleted" property="uDeleted" jdbcType="BIT" />
+      <result column="u_device_id" property="uDeviceId" jdbcType="VARCHAR" />
+      <result column="u_device_type" property="uDeviceType" jdbcType="INTEGER" />
+      <result column="u_im" property="uIm" jdbcType="VARCHAR" />
+    </association>
+    <association property="tfMaster" javaType="com.yinghai.twentyfour.common.model.TfMaster">
+      <id column="master_id" property="masterId" jdbcType="INTEGER" />
+      <result column="m_nick" property="mNick" jdbcType="VARCHAR" />
+      <result column="m_sex" property="mSex" jdbcType="BIT" />
+      <result column="m_head_img" property="mHeadImg" jdbcType="VARCHAR" />
+      <result column="m_country_code" property="mCountryCode" jdbcType="VARCHAR" />
+      <result column="m_tel" property="mTel" jdbcType="VARCHAR" />
+      <result column="m_deleted" property="mDeleted" jdbcType="BIT" />
+      <result column="m_device_id" property="mDeviceId" jdbcType="VARCHAR" />
+      <result column="m_device_type" property="mDeviceType" jdbcType="INTEGER" />
+      <result column="m_im" property="mIm" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <!--大师和用户部分字段-->
+  <sql id="User_And_Master_Column" >
+    user_id, u_nick,u_img_url, u_country_code, u_tel, u_sex,u_deleted,u_device_id,u_device_type,u_im,
+    master_id, m_nick,m_sex, m_head_img, m_country_code,m_tel,m_deleted,m_device_id,m_device_type,m_im
+  </sql>
+  <sql id="OrderTotal_Column_List">
+  	total_id, t_order_no, t_amount, t_create_time, t_user_id,t_address_id,t_status,t_qty,
+  	t_parent_id,t_pay_no,t_master_id,t_express_no,t_express_company_id,t_express_company
+  </sql>
+  <sql id="Img_Column_List">
+  	img_tmp_id,it_type,it_url,it_app_path,it_is_userd
+  </sql>
+  <sql id="Address_Column_List">
+  	address_id, as_user_id, as_consignee_name, as_country_code, as_tel, as_details, as_create_time, 
+    as_update_time,as_default,as_street,as_sex
+  </sql>
+<select id="findOrdersByTotalNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select
+	<include refid="Base_Column_List"/>
+	from tf_order
+	where o_order_type = 3 AND o_is_order_total = 1 AND o_order_total_no = #{orderTotalNo,jdbcType=VARCHAR}
+
+</select>
+<select id="selectProductOrderByPage" resultMap="ProductResultMap">
+	select 
+	<include refid="OrderTotal_Column_List"/>,
+ 	<include refid="Base_Column_List"/>,
+ 	<include refid="Attach_Column_List"/>,
+ 	<include refid="Master_Column_List"/>,
+ 	<include refid="Product_Column_List"/>,
+ 	<include refid="Img_Column_List"/>,
+ 	<include refid="Address_Column_List"/>
+ 	from
+ 	(select <include refid="OrderTotal_Column_List"/> from tf_order_total where t_parent_id IS NOT NULL
+ 	 <if test="tfOrder.oUserId != null">
+ 	 	AND t_user_id = #{tfOrder.oUserId,jdbcType=INTEGER}
+ 	 </if>
+ 	 <if test="tfOrder.oMasterId != null">
+ 	 	AND t_master_id = #{tfOrder.oMasterId,jdbcType=INTEGER}
+ 	 </if>
+ 	 ORDER BY t_create_time DESC
+ 	 LIMIT #{start,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+ 	) ot
+ 	LEFT JOIN tf_order o ON ot.t_order_no = o.o_order_total_no 
+    LEFT JOIN tf_order_attach oa ON o.order_id=oa.ah_order_id
+    LEFT JOIN tf_master m ON o.o_master_id=m.master_id
+    LEFT JOIN tf_product p ON o.o_product_id=p.product_id
+    LEFT JOIN tf_img_tmp it ON p.product_id=it.it_key_id
+    LEFT JOIN tf_address a ON ot.t_address_id = a.address_id
+    WHERE 1=1
+    <if test="tfOrder.oUserId != null" >
+     	AND o.o_user_id = #{tfOrder.oUserId,jdbcType=INTEGER}
+    </if>
+    <if test="tfOrder.oStatus != null" >
+     	AND t_status = #{tfOrder.oStatus,jdbcType=INTEGER}
+    </if>
+    <if test="tfOrder.statusArray!=null">
+    	and t_status in
+        <foreach item="item" index="index" collection="tfOrder.statusArray" open="("
+              separator="," close=")">
+       	#{item}
+       </foreach>
+   </if>
+   order by t_create_time DESC
+ </select>
+
+  
+<select id="findProductByCondition" resultMap="ProductResultMap" >
+ 	select
+ 	<include refid="OrderTotal_Column_List"/>,
+ 	<include refid="Base_Column_List"/>,
+ 	<include refid="Attach_Column_List"/>,
+ 	<include refid="Master_Column_List"/>,
+ 	<include refid="Product_Column_List"/>,
+ 	<include refid="Img_Column_List"/>,
+ 	<include refid="Address_Column_List"/>
+ 	from 
+ 	(select <include refid="OrderTotal_Column_List"/> from tf_order_total 
+ 		where 1=1 
+ 		<if test="tfOrder.oUserId != null">
+ 			AND t_user_id = #{tfOrder.oUserId,jdbcType=INTEGER}
+ 		</if>
+ 		ORDER BY t_create_time desc
+ 		LIMIT #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+ 	) ot 
+   LEFT JOIN tf_order o ON ot.t_order_no = o.o_order_total_no 
+   LEFT JOIN tf_order_attach oa ON o.order_id=oa.ah_order_id
+   LEFT JOIN tf_master m ON o.o_master_id=m.master_id
+   LEFT JOIN tf_product p ON o.o_product_id=p.product_id
+   LEFT JOIN tf_img_tmp it ON p.product_id=it.it_key_id
+   LEFT JOIN tf_address a ON ot.t_address_id = a.address_id
+   WHERE 1=1
+   <if test="tfOrder.oUserId != null" >
+     	AND o.o_user_id = #{tfOrder.oUserId,jdbcType=INTEGER}
+   </if>
+   <if test="tfOrder.oStatus != null" >
+     	AND o_status = #{tfOrder.oStatus,jdbcType=INTEGER}
+   </if>
+   <if test="tfOrder.statusArray!=null">
+     and o_status in
+     <foreach item="item" index="index" collection="tfOrder.statusArray" open="("
+              separator="," close=")">
+       #{item}
+     </foreach>
+   </if>
+   order by t_create_time desc
+ </select>
+
+<select id="getByOrderNo" resultMap="UserAndMasterResultMap">
+    select order_id,o_order_no as order_no,
+    <include refid="User_And_Master_Column" />
+    from tf_order join tf_user on user_id = o_user_id join tf_master on master_id = o_master_id
+    where o_order_no=#{orderNo,jdbcType=VARCHAR}
+</select>
+
+<select id="getByOrderTotalNo" resultMap="UserAndMasterResultMap">
+    select total_id as order_id,t_order_no as order_no,
+    <include refid="User_And_Master_Column" />
+    from tf_order_total JOIN tf_order ON t_order_no=o_order_total_no JOIN tf_user ON o_user_id=user_id JOIN tf_master ON o_master_id=master_id
+    where t_order_no=#{orderNo,jdbcType=VARCHAR} limit 0,1
+</select>
+
+  <select id="findFinishOrderByTime" resultType="java.util.HashMap">
+  	select DATE_FORMAT(o_complete_time, "%Y-%m"),SUM(o_amount)
+  	from tf_order WHERE o_master_id = #{masterId,jdbcType=INTEGER} AND o_status = 5 
+  	AND o_complete_time &lt; date_add(curdate(), interval - day(curdate()) + 1 day)
+  	<if test="start != null">
+	  	AND o_complete_time &gt;= #{start,jdbcType=TIMESTAMP}
+  	</if> 
+  	GROUP BY DATE_FORMAT(o_complete_time, "%Y-%m")
+  	ORDER BY DATE_FORMAT(o_complete_time, "%Y-%m")
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultWithAttach" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />,
+    <include refid="Master_Column_List" />,
+    <include refid="User_Column_List" />
+    from tf_order
+    LEFT JOIN tf_user ON o_user_id=user_id
+    LEFT JOIN tf_master ON o_master_id=master_id
+    where order_id = #{orderId,jdbcType=INTEGER}
+    <if test="masterId!=null">
+      AND o_master_id = #{masterId,jdbcType=INTEGER}
+    </if>
+    <if test="userId!=null">
+      AND o_user_id = #{userId,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+   <select id="findUnpaidTotalOrder" resultMap="BaseResultMap" parameterType="java.util.Date" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_order
+    where o_status = 1 and o_create_time &lt;= #{d1,jdbcType=TIMESTAMP} 
+   
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfOrder" >
+    insert into tf_order (order_id, o_master_id, o_user_id, 
+      o_product_id, o_business_id, o_pay_status, o_cancel_type,
+      o_pay_time, o_status,o_pay_way, o_order_type,
+      o_order_no, o_logistics_no, o_create_time, 
+      o_update_time, o_appointment_time,o_complete_time,o_cancel_time, o_price,
+      o_qty, o_amount, o_is_order_total, 
+      o_order_total_no)
+    values (#{orderId,jdbcType=INTEGER}, #{oMasterId,jdbcType=INTEGER}, #{oUserId,jdbcType=INTEGER}, 
+      #{oProductId,jdbcType=INTEGER}, #{oBusinessId,jdbcType=INTEGER}, #{oPayStatus,jdbcType=INTEGER},#{oCancelType,jdbcType=INTEGER},
+      #{oPayTime,jdbcType=TIMESTAMP}, #{oStatus,jdbcType=INTEGER},#{oPayWay,jdbcType=INTEGER}, #{oOrderType,jdbcType=INTEGER},
+      #{oOrderNo,jdbcType=VARCHAR}, #{oLogisticsNo,jdbcType=VARCHAR}, #{oCreateTime,jdbcType=TIMESTAMP}, 
+      #{oUpdateTime,jdbcType=TIMESTAMP}, #{oAppointmentTime,jdbcType=TIMESTAMP},#{oCompleteTime,jdbcType=TIMESTAMP},#{oCancelTime,jdbcType=TIMESTAMP}, #{oPrice,jdbcType=INTEGER},
+      #{oQty,jdbcType=INTEGER}, #{oAmount,jdbcType=INTEGER}, #{oIsOrderTotal,jdbcType=BIT}, 
+      #{oOrderTotalNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfOrder" useGeneratedKeys="true" keyProperty="orderId" >
+    insert into tf_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="oMasterId != null" >
+        o_master_id,
+      </if>
+      <if test="oUserId != null" >
+        o_user_id,
+      </if>
+      <if test="oProductId != null" >
+        o_product_id,
+      </if>
+      <if test="oBusinessId != null" >
+        o_business_id,
+      </if>
+      <if test="oPayStatus != null" >
+        o_pay_status,
+      </if>
+      <if test="oCancelType != null" >
+        o_cancel_type,
+      </if>
+      <if test="oPayTime != null" >
+        o_pay_time,
+      </if>
+      <if test="oStatus != null" >
+        o_status,
+      </if>
+      <if test="oPayWay != null" >
+        o_pay_way,
+      </if>
+      <if test="oOrderType != null" >
+        o_order_type,
+      </if>
+      <if test="oOrderNo != null" >
+        o_order_no,
+      </if>
+      <if test="oLogisticsNo != null" >
+        o_logistics_no,
+      </if>
+      <if test="oCreateTime != null" >
+        o_create_time,
+      </if>
+      <if test="oUpdateTime != null" >
+        o_update_time,
+      </if>
+      <if test="oAppointmentTime != null" >
+        o_appointment_time,
+      </if>
+      <if test="oCompleteTime != null" >
+        o_complete_time,
+      </if>
+      <if test="oCancelTime != null" >
+        o_cancel_time,
+      </if>
+      <if test="oPrice != null" >
+        o_price,
+      </if>
+      <if test="oQty != null" >
+        o_qty,
+      </if>
+      <if test="oAmount != null" >
+        o_amount,
+      </if>
+      <if test="oIsOrderTotal != null" >
+        o_is_order_total,
+      </if>
+      <if test="oOrderTotalNo != null" >
+        o_order_total_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="oMasterId != null" >
+        #{oMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="oUserId != null" >
+        #{oUserId,jdbcType=INTEGER},
+      </if>
+      <if test="oProductId != null" >
+        #{oProductId,jdbcType=INTEGER},
+      </if>
+      <if test="oBusinessId != null" >
+        #{oBusinessId,jdbcType=INTEGER},
+      </if>
+      <if test="oPayStatus != null" >
+        #{oPayStatus,jdbcType=INTEGER},
+      </if>
+      <if test="oCancelType != null" >
+        #{oCancelType,jdbcType=INTEGER},
+      </if>
+      <if test="oPayTime != null" >
+        #{oPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oStatus != null" >
+        #{oStatus,jdbcType=INTEGER},
+      </if>
+      <if test="oPayWay != null" >
+        #{oPayWay,jdbcType=INTEGER},
+      </if>
+      <if test="oOrderType != null" >
+        #{oOrderType,jdbcType=INTEGER},
+      </if>
+      <if test="oOrderNo != null" >
+        #{oOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oLogisticsNo != null" >
+        #{oLogisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oCreateTime != null" >
+        #{oCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oUpdateTime != null" >
+        #{oUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oAppointmentTime != null" >
+        #{oAppointmentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCompleteTime != null" >
+        #{oCompleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCancelTime != null" >
+        #{oCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oPrice != null" >
+        #{oPrice,jdbcType=INTEGER},
+      </if>
+      <if test="oQty != null" >
+        #{oQty,jdbcType=INTEGER},
+      </if>
+      <if test="oAmount != null" >
+        #{oAmount,jdbcType=INTEGER},
+      </if>
+      <if test="oIsOrderTotal != null" >
+        #{oIsOrderTotal,jdbcType=BIT},
+      </if>
+      <if test="oOrderTotalNo != null" >
+        #{oOrderTotalNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfOrder" >
+    update tf_order
+    <set >
+      <if test="oMasterId != null" >
+        o_master_id = #{oMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="oUserId != null" >
+        o_user_id = #{oUserId,jdbcType=INTEGER},
+      </if>
+      <if test="oProductId != null" >
+        o_product_id = #{oProductId,jdbcType=INTEGER},
+      </if>
+      <if test="oBusinessId != null" >
+        o_business_id = #{oBusinessId,jdbcType=INTEGER},
+      </if>
+      <if test="oPayStatus != null" >
+        o_pay_status = #{oPayStatus,jdbcType=INTEGER},
+      </if>
+      <if test="oCancelType != null" >
+        o_cancel_type = #{oCancelType,jdbcType=INTEGER},
+      </if>
+      <if test="oPayTime != null" >
+        o_pay_time = #{oPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oStatus != null" >
+        o_status = #{oStatus,jdbcType=INTEGER},
+      </if>
+      <if test="oPayWay != null" >
+        o_pay_way = #{oPayWay,jdbcType=INTEGER},
+      </if>
+      <if test="oOrderType != null" >
+        o_order_type = #{oOrderType,jdbcType=INTEGER},
+      </if>
+      <if test="oOrderNo != null" >
+        o_order_no = #{oOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oLogisticsNo != null" >
+        o_logistics_no = #{oLogisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oCreateTime != null" >
+        o_create_time = #{oCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oUpdateTime != null" >
+        o_update_time = #{oUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oAppointmentTime != null" >
+        o_appointment_time = #{oAppointmentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCompleteTime != null" >
+        o_complete_time = #{oCompleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCancelTime != null" >
+        o_cancel_time = #{oCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oPrice != null" >
+        o_price = #{oPrice,jdbcType=INTEGER},
+      </if>
+      <if test="oQty != null" >
+        o_qty = #{oQty,jdbcType=INTEGER},
+      </if>
+      <if test="oAmount != null" >
+        o_amount = #{oAmount,jdbcType=INTEGER},
+      </if>
+      <if test="oIsOrderTotal != null" >
+        o_is_order_total = #{oIsOrderTotal,jdbcType=BIT},
+      </if>
+      <if test="oOrderTotalNo != null" >
+        o_order_total_no = #{oOrderTotalNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfOrder" >
+    update tf_order
+    set o_master_id = #{oMasterId,jdbcType=INTEGER},
+      o_user_id = #{oUserId,jdbcType=INTEGER},
+      o_product_id = #{oProductId,jdbcType=INTEGER},
+      o_business_id = #{oBusinessId,jdbcType=INTEGER},
+      o_pay_status = #{oPayStatus,jdbcType=INTEGER},
+      o_cancel_type = #{oCancelType,jdbcType=INTEGER},
+      o_pay_time = #{oPayTime,jdbcType=TIMESTAMP},
+      o_status = #{oStatus,jdbcType=INTEGER},
+      o_pay_way = #{oPayWay,jdbcType=INTEGER},
+      o_order_type = #{oOrderType,jdbcType=INTEGER},
+      o_order_no = #{oOrderNo,jdbcType=VARCHAR},
+      o_logistics_no = #{oLogisticsNo,jdbcType=VARCHAR},
+      o_create_time = #{oCreateTime,jdbcType=TIMESTAMP},
+      o_update_time = #{oUpdateTime,jdbcType=TIMESTAMP},
+      o_appointment_time = #{oAppointmentTime,jdbcType=TIMESTAMP},
+      o_complete_time = #{oCompleteTime,jdbcType=TIMESTAMP},
+      o_cancel_time = #{oCancelTime,jdbcType=TIMESTAMP},
+      o_price = #{oPrice,jdbcType=INTEGER},
+      o_qty = #{oQty,jdbcType=INTEGER},
+      o_amount = #{oAmount,jdbcType=INTEGER},
+      o_is_order_total = #{oIsOrderTotal,jdbcType=BIT},
+      o_order_total_no = #{oOrderTotalNo,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <select id="findBackPageByCondition" resultMap="BaseResultWithAttach" parameterType="com.yinghai.twentyfour.common.model.TfOrder">
+SELECT
+    <include refid="Base_Column_List" /> ,
+    <include refid="Attach_Column_List" />,
+    <include refid="Master_Column_List" />,
+    <include refid="Business_Column_List" />,
+    <include refid="Product_Column_List" />,
+    <include refid="User_Column_List" />
+    FROM `tf_order`
+    LEFT JOIN `tf_order_attach` ON order_id=ah_order_id
+    LEFT JOIN `tf_master` ON o_master_id=master_id
+    LEFT JOIN `tf_business` ON o_business_id=business_id
+    LEFT JOIN `tf_product` ON o_product_id=product_id
+    LEFT JOIN `tf_user` on o_user_id=user_id
+    WHERE 1=1
+    <if test="orderId !=null">
+    	AND order_id = #{orderId,jdbcType=INTEGER}
+    </if>
+    <if test="oMasterId != null" >
+      	AND o_master_id = #{oMasterId,jdbcType=INTEGER}
+    </if>
+    <if test="oUserId != null" >
+      	AND o_user_id = #{oUserId,jdbcType=INTEGER}
+    </if>
+    <if test="oProductId != null" >
+      	AND o_product_id = #{oProductId,jdbcType=INTEGER}
+    </if>
+    <if test="oBusinessId != null" >
+      	AND o_business_id = #{oBusinessId,jdbcType=INTEGER}
+    </if>
+    <if test="oPayStatus != null" >
+      	AND o_pay_status = #{oPayStatus,jdbcType=INTEGER}
+    </if>
+    <if test="oCancelType != null" >
+      	AND o_cancel_type = #{oCancelType,jdbcType=INTEGER}
+    </if>
+    <if test="oPayTime != null" >
+      	AND o_pay_time = #{oPayTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="oStatus != null" >
+      	AND o_status = #{oStatus,jdbcType=INTEGER}
+    </if>
+    <if test="statusArray!=null">
+      and o_status in
+      <foreach item="item" index="index" collection="statusArray" open="("
+               separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="oPayWay != null" >
+      	AND o_pay_way = #{oPayWay,jdbcType=INTEGER}
+    </if>
+    <if test="oOrderType != null" >
+      	AND o_order_type = #{oOrderType,jdbcType=INTEGER}
+    </if>
+    <if test="oOrderNo != null" >
+      	AND o_order_no = #{oOrderNo,jdbcType=VARCHAR}
+    </if>
+    <if test="oLogisticsNo != null" >
+      	AND o_logistics_no = #{oLogisticsNo,jdbcType=VARCHAR}
+    </if>
+    <if test="oCreateTime != null" >
+      	AND o_create_time = #{oCreateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="oUpdateTime != null" >
+      	AND o_update_time = #{oUpdateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="oCompleteTime != null" >
+      	AND o_complete_time = #{oCompleteTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="oCancelTime != null" >
+      	AND o_cancel_time = #{oCancelTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="oAppointmentTime != null" >
+     	AND DATE_FORMAT(o_appointment_time,'%Y%m%d') = DATE_FORMAT(#{oAppointmentTime,jdbcType=TIMESTAMP},'%Y%m%d')
+    </if>
+    <if test="oPrice != null" >
+      	AND o_price = #{oPrice,jdbcType=INTEGER}
+    </if>
+    <if test="oQty != null" >
+      	AND o_qty = #{oQty,jdbcType=INTEGER}
+    </if>
+    <if test="oAmount != null" >
+      	AND o_amount = #{oAmount,jdbcType=INTEGER}
+    </if>
+    <if test="oIsOrderTotal != null" >
+      	AND o_is_order_total = #{oIsOrderTotal,jdbcType=BIT}
+    </if>
+    <if test="oOrderTotalNo != null" >
+      	AND o_order_total_no = #{oOrderTotalNo,jdbcType=VARCHAR}
+    </if>
+    order by o_create_time desc
+  </select>
+  <select id="findPageByCondition" resultMap="BaseResultWithAttach" parameterType="com.yinghai.twentyfour.common.model.TfOrder">
+    SELECT
+    <include refid="Base_Column_List" /> ,
+    <include refid="Attach_Column_List" />,
+    <include refid="Master_Column_List" />,
+    <include refid="Business_Column_List" />,
+    <include refid="Product_Column_List" />,
+    <include refid="User_Column_List" />
+    FROM 
+    (select <include refid="Base_Column_List" /> from tf_order 
+    WHERE 1=1
+    <if test="record.orderId !=null">
+    	AND order_id = #{record.orderId,jdbcType=INTEGER}
+    </if>
+    <if test="record.oMasterId != null" >
+      	AND o_master_id = #{record.oMasterId,jdbcType=INTEGER}
+    </if>
+    <if test="record.oUserId != null" >
+      	AND o_user_id = #{record.oUserId,jdbcType=INTEGER}
+    </if>
+    <if test="record.oProductId != null" >
+      	AND o_product_id = #{record.oProductId,jdbcType=INTEGER}
+    </if>
+    <if test="record.oBusinessId != null" >
+      	AND o_business_id = #{record.oBusinessId,jdbcType=INTEGER}
+    </if>
+    <if test="record.oPayStatus != null" >
+      	AND o_pay_status = #{record.oPayStatus,jdbcType=INTEGER}
+    </if>
+    <if test="record.oCancelType != null" >
+      	AND o_cancel_type = #{record.oCancelType,jdbcType=INTEGER}
+    </if>
+    <if test="record.oPayTime != null" >
+      	AND o_pay_time = #{record.oPayTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.oStatus != null" >
+      	AND o_status = #{record.oStatus,jdbcType=INTEGER}
+    </if>
+    <if test="record.statusArray!=null">
+      and o_status in
+      <foreach item="item" index="index" collection="record.statusArray" open="("
+               separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="record.oPayWay != null" >
+      	AND o_pay_way = #{record.oPayWay,jdbcType=INTEGER}
+    </if>
+    <if test="record.oOrderType != null" >
+      	AND o_order_type = #{record.oOrderType,jdbcType=INTEGER}
+    </if>
+    <if test="record.oOrderNo != null" >
+      	AND o_order_no = #{record.oOrderNo,jdbcType=VARCHAR}
+    </if>
+    <if test="record.oLogisticsNo != null" >
+      	AND o_logistics_no = #{record.oLogisticsNo,jdbcType=VARCHAR}
+    </if>
+    <if test="record.oCreateTime != null" >
+      	AND o_create_time = #{record.oCreateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.oUpdateTime != null" >
+      	AND o_update_time = #{record.oUpdateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.oCompleteTime != null" >
+      	AND o_complete_time = #{record.oCompleteTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.oCancelTime != null" >
+      	AND o_cancel_time = #{record.oCancelTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.oAppointmentTime != null" >
+     	AND DATE_FORMAT(o_appointment_time,'%Y%m%d') = DATE_FORMAT(#{record.oAppointmentTime,jdbcType=TIMESTAMP},'%Y%m%d')
+    </if>
+    <if test="record.oPrice != null" >
+      	AND o_price = #{record.oPrice,jdbcType=INTEGER}
+    </if>
+    <if test="record.oQty != null" >
+      	AND o_qty = #{record.oQty,jdbcType=INTEGER}
+    </if>
+    <if test="record.oAmount != null" >
+      	AND o_amount = #{record.oAmount,jdbcType=INTEGER}
+    </if>
+    <if test="record.oIsOrderTotal != null" >
+      	AND o_is_order_total = #{record.oIsOrderTotal,jdbcType=BIT}
+    </if>
+    <if test="record.oOrderTotalNo != null" >
+      	AND o_order_total_no = #{record.oOrderTotalNo,jdbcType=VARCHAR}
+    </if> 
+    order by o_create_time desc LIMIT #{start,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}) o 
+    LEFT JOIN `tf_order_attach` ON order_id=ah_order_id
+    LEFT JOIN `tf_master` ON o_master_id=master_id
+    LEFT JOIN `tf_business` ON o_business_id=business_id
+    LEFT JOIN `tf_product` ON o_product_id=product_id
+    LEFT JOIN `tf_user` on o_user_id=user_id
+  </select>
+
+  <select id="findByOrderNoAndUser" resultMap="BaseResultWithAttach">
+    SELECT
+    <include refid="Base_Column_List" /> ,
+    <include refid="Attach_Column_List" />,
+    <include refid="Master_Column_List" />,
+    <include refid="Business_Column_List" />
+    FROM `tf_order`
+    JOIN `tf_order_attach` ON order_id=ah_order_id
+    JOIN `tf_master` ON o_master_id=master_id
+    JOIN `tf_business` ON o_business_id=business_id
+    WHERE o_order_no = #{orderNo,jdbcType=VARCHAR}
+    <if test="userId != null" >
+      AND o_user_id = #{userId,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="findOrderWithAllModelById" resultMap="BaseResultWithAttach" parameterType="int">
+    SELECT
+      <include refid="Base_Column_List" /> ,
+      <include refid="Attach_Column_List" />,
+      <include refid="Master_Column_List" />,
+      	<include refid="User_Column_List" />,
+      <include refid="Business_Column_List" />
+      FROM `tf_order`
+      JOIN `tf_order_attach` ON order_id=ah_order_id
+      JOIN `tf_master` ON o_master_id=master_id
+      JOIN `tf_business` ON o_business_id=business_id
+      JOIN `tf_user` on o_user_id=user_id
+    WHERE order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <select id="findOrderWithAllModelByOrderId" resultMap="BaseResultWithAttach" parameterType="int">
+    SELECT
+	   	<include refid="Base_Column_List" /> ,
+	   	<include refid="Master_Column_List" />,
+	   	<include refid="User_Column_List" />,
+	   	<choose>
+	   		<when test="isProduct!=null">
+	   			<include refid="Product_Column_List" />
+	   		</when>
+	   		<otherwise>
+	   			<include refid="Attach_Column_List" />,
+	   			<include refid="Business_Column_List" />
+	   		</otherwise>
+	   	</choose>
+    FROM `tf_order`
+    JOIN `tf_master` ON o_master_id=master_id
+    JOIN `tf_user` on o_user_id=user_id
+	    <choose>
+	    	<when test="isProduct!=null">
+	     		JOIN `tf_product` ON o_product_id=product_id
+	    	</when>
+	  		<otherwise>
+	     		JOIN `tf_order_attach` ON order_id=ah_order_id
+	     		JOIN `tf_business` ON o_business_id=business_id
+	  		</otherwise>
+	    </choose>
+    WHERE order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+
+  <select id="findMasterSchedule" resultMap="MasterScheduleResult">
+    SELECT COUNT(order_id) AS ms_qty,DATE_FORMAT(o_appointment_time,'%Y-%m-%d') AS ms_date
+     FROM tf_order WHERE o_status=#{status,jdbcType=INTEGER} AND DATE_FORMAT(o_appointment_time,'%Y%m')=DATE_FORMAT(#{msDate,jdbcType=TIMESTAMP},'%Y%m') AND o_master_id=#{masterId,jdbcType=INTEGER} GROUP BY DATE_FORMAT(o_appointment_time,'%Y-%m-%d')
+  </select>
+  <select id="findOrderByProductId">
+  	select
+  	<include refid="Base_Column_List" />
+  	WHERE o_product_id = #{productId,jdbcType=INTEGER} AND o_user_id = #{order.oUserId,jdbcType=INTEGER}
+  	<if test="order.oStatus">
+  		AND o_status = #{order.oStatus,jdbcType=INTEGER}
+  	</if>
+  	
+  </select>
+
+  <update id="updateByConditon" parameterType="com.yinghai.twentyfour.common.model.TfOrder" >
+    update tf_order
+    <set >
+
+      <if test="oPayStatus != null" >
+        o_pay_status = #{oPayStatus,jdbcType=INTEGER},
+      </if>
+      <if test="oCancelType != null" >
+        o_cancel_type = #{oCancelType,jdbcType=INTEGER},
+      </if>
+
+      <if test="oStatus != null" >
+        o_status = #{oStatus,jdbcType=INTEGER},
+      </if>
+
+      <if test="oPayWay != null" >
+        o_pay_way = #{oPayWay,jdbcType=INTEGER},
+      </if>
+      <if test="oPayTime != null" >
+        o_pay_time = #{oPayTime,jdbcType=TIMESTAMP},
+      </if>
+	  
+      <if test="oUpdateTime != null" >
+        o_update_time = #{oUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCompleteTime != null" >
+        o_complete_time = #{oCompleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCancelTime != null" >
+        o_cancel_time = #{oCancelTime,jdbcType=TIMESTAMP},
+      </if>
+
+    </set>
+    where  o_order_no = #{oOrderNo,jdbcType=VARCHAR}
+      and o_status = 1
+    <!--  <if test="oOrderTotalNo != null and oOrderNo!=null" >
+      AND o_order_total_no = (SELECT total_id from tf_order_total WHERE  t_order_no=#{oOrderNo,jdbcType=INTEGER})
+    </if>-->
+  </update>
+    <update id="updateByConditonTotal" parameterType="com.yinghai.twentyfour.common.model.TfOrder" >
+    update tf_order
+    <set >
+
+      <if test="oPayStatus != null" >
+        o_pay_status = #{oPayStatus,jdbcType=INTEGER},
+      </if>
+      <if test="oCancelType != null" >
+        o_cancel_type = #{oCancelType,jdbcType=INTEGER},
+      </if>
+
+      <if test="oStatus != null" >
+        o_status = #{oStatus,jdbcType=INTEGER},
+      </if>
+
+      <if test="oPayWay != null" >
+        o_pay_way = #{oPayWay,jdbcType=INTEGER},
+      </if>
+	  <if test="oPayTime != null" >
+        o_pay_time = #{oPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oUpdateTime != null" >
+        o_update_time = #{oUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCompleteTime != null" >
+        o_complete_time = #{oCompleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oCancelTime != null" >
+        o_cancel_time = #{oCancelTime,jdbcType=TIMESTAMP},
+      </if>
+
+    </set>
+    where  o_order_total_no = #{oOrderTotalNo,jdbcType=VARCHAR}
+        and o_status = 1
+  </update>
+   <update id="updateUnpaidTotalOrder" parameterType="java.lang.String" >
+   UPDATE tf_order o 
+		LEFT JOIN tf_product p ON o.`o_product_id`=p.product_id  
+		LEFT JOIN tf_order_total t ON t.t_order_no=o.`o_order_total_no`
+		LEFT JOIN tf_order_total t2  ON t.`total_id`=t2.`t_parent_id` 
+		SET o.o_status=999  , o.o_cancel_type = 0 , 
+		o.o_pay_status=999,p.`p_total`=p.`p_total`+ o.`o_qty`,
+		t.`t_status`=999,t2.`t_status`=999
+    where o.o_status = 1 and unix_timestamp(o.o_create_time) &lt;= unix_timestamp(#{time1,jdbcType=VARCHAR}) 
+    </update>
+  
+</mapper>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<!-- head 头 -->
+<#include "../common/head.html"/>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- 菜单 -->
+    <#include "/ftl/menu.ftl"/>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+
+                <ul class="page-breadcrumb breadcrumb">
+
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">首頁</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">评论管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <div class="col-md-12">
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+                <!-- END EXAMPLE TABLE PORTLET-->
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box #fff">
+                    <div class="portlet-title">
+                        <div class="caption" style="color: black"><i class="icon-globe"></i>评论列表</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn default" href="#" data-toggle="dropdown">
+                                    更多
+                                    <i class="icon-angle-down"></i>
+                                </a>
+                                <div id="sample_2_column_toggler"
+                                     class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
+                                    <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"></span></div>
+                                        导出</label>
+                                    <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"><a href="${base!}/admin/comment/edit"></span></div>
+                                        新增<a/></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div id="sample_2_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                            <div class="row">
+                              <form action="" method="post" id="form1">
+   								<div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter"><label>评论ID: <input name='commentId' id='commentId'
+                                            type="text" aria-controls="sample_2" value='<#if comment??>${comment.commentId!}</#if>'
+                                            class="form-control input-small" onkeyup="value=value.replace(/[^\d]/g,'')"></label>
+                                    </div>
+                                </div>
+   								<div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter"><label>评论人ID: <input name='discussantId' id='discussantId'
+                                            type="text" aria-controls="sample_2" value='<#if comment??>${comment.ctDiscussantId!}</#if>'
+                                            class="form-control input-small" onkeyup="value=value.replace(/[^\d]/g,'')"></label>
+                                    </div>
+                                </div>
+   								<div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter"><label>文章ID: <input name='articleId' id='articleId'
+                                            type="text" aria-controls="sample_2" value='<#if comment??>${comment.ctArticleId!}</#if>'
+                                            class="form-control input-small" onkeyup="value=value.replace(/[^\d]/g,'')"></label>
+                                    </div>
+                                </div>
+   								<div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter"><label>商品ID: <input name='productId' id='productId'
+                                            type="text" aria-controls="sample_2" value='<#if comment??>${comment.ctProductId!}</#if>'
+                                            class="form-control input-small" onkeyup="value=value.replace(/[^\d]/g,'')"></label>
+                                    </div>
+                                </div>
+   								<div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter">
+                                    	<label>是否可见: 
+                                            <select class="form-control input-small" name="invisible" id="invisible">
+                                            	<option value=""></option> 
+								      			<option value="0" <#if comment??><#if comment.ctInvisible??><#if comment.ctInvisible?string("1","0")=="0">selected</#if></#if></#if>>可见</option> 
+								      			<option value="1" <#if comment??><#if comment.ctInvisible??><#if comment.ctInvisible?string("1","0")=="1">selected</#if></#if></#if>>不可见</option> 
+								    		</select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-sm-12">
+                                    <a href="javascript:void(0)" onclick="searchs()" class="btn default"><i class="icon-search"></i></a>
+                                </div>
+								</form>
+                            </div>
+                            <div class="table-scrollable">
+                                <table class="table table-striped table-bordered table-hover table-full-width dataTable"
+                                       id="sample_2" aria-describedby="sample_2_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample_2"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending"
+                                            style="width: 5%;">編號
+                                        </th>
+                                        <th class="sorting_asc" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1" aria-sort="ascending"
+                                            aria-label="Browser: activate to sort column descending"
+                                            style="width: 5%;">评论类型
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">文章或商品ID
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">评论人ID
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 35%;">评论内容
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 15%;">评论时间
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Engine version: activate to sort column ascending"
+                                            style="width: 10%;">评论是否可见
+                                        </th>
+                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Engine version: activate to sort column ascending"
+                                            style="width: 20%;">更多操作
+                                        </th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                     <#list page as item>
+                                    <tr class="odd" id="${item.commentId!}Tr">
+                                        <td class=" ">${item.commentId!}</td>
+                                        <td class=" sorting_1">
+                                        <#if item.ctType=1>文章<#else>商品</#if>
+                                        </td>
+                                        <td class=" ">
+                                        <#if item.ctType=1>
+                                        	${item.ctArticleId!}
+                                        <#else>
+                                        	${item.ctProductId!}
+                                        </#if>
+                                        </td>
+                                        <td class=" ">
+                                        	${item.ctDiscussantId!}
+                                        </td>
+                                        <td class=" ">
+                                        	<#if item.ctContent??>
+              										<#if item.ctContent?length gt 20>${item.ctContent[0..18]}...
+													<a href="#" data-container="body"  data-toggle="popover"  data-content="${item.ctContent!}" data-placement="auto">详情
+													</a>
+													<#else>${item.ctContent!} </#if>
+	  										</#if>
+                                        </td>
+                                        <td class=" ">${(item.ctCreateTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
+                                        <td class=" ">
+                                        	${item.ctInvisible?string("不可见","可见")}
+                                        </td>
+                                        <td>                 <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"></span></div>
+                                        	<a href="${base!}/admin/comment/edit?commentId=${item.commentId!}">編輯<a/>
+                                        	<a href="javascript:void(0)" onclick="delManager('${item.commentId!}')">删除</a>
+                                        	<a href="${base!}/admin/comment/edit?commentId=${item.commentId!}&look=look" >查看</a>
+                                        	</label>
+                                        	</td>
+                                    </tr>
+                                    </#list>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+
+                                <div class="row">
+                                    <#import "/ftl/pager.ftl" as p/> <#if page??> <@p.pager
+                                    pageNo=pageNo pageSize=pageSize recordCount=recordCount
+                                    pageCount=pageCount toURL="${base!}/admin/comment/list"
+                                    method="post"/> </#if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<#include "../common/footer.html"/>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+
+<!-- END CORE PLUGINS -->
+<script>
+	
+</script>
+<script>
+    var first = true;
+    jQuery(document).ready(function () {
+        App.init();
+        $("#layout").click(function(){
+            if(first){
+                layout();
+                first = false;
+            }else{
+                resetLayout();
+                first = true;
+            }
+
+        });
+        $(".luckdate").datepicker({format: 'yyyy-mm-dd',
+        	numberOfMonths:1,
+    		showButtonPanel:true,
+    		clearText:"清除",
+    		closeText:"关闭",
+    		changeMonth: true,
+            changeYear: true,
+            autoclose:true,
+            clearBtn:true,
+            todayBtn:true,
+            monthNames:['1','2','3','4','5','6','7','8','9','10','11','12'],
+            dayNamesMin: ['日','一','二','三','四','五','六'],
+    		onSelect:function(){}	
+    	});
+    });
+	
+    function searchs(){
+    	     document.getElementById("form1").action="${base!}/admin/comment/list";
+    	   	 $("#form1").submit();
+    }
+    
+    function layout() {
+        $("body").addClass("page-boxed");
+
+        // set header
+        $('.header > .header-inner').addClass("container");
+        var cont = $('body > .clearfix').after('<div class="container"></div>');
+
+        // set content
+        $('.page-container').appendTo('body > .container');
+
+        // set footer
+        $('.footer').html('<div class="container">' + $('.footer').html() + '</div>');
+    }
+    var resetLayout = function () {
+        $("body").
+        removeClass("page-boxed").
+        removeClass("page-footer-fixed").
+        removeClass("page-sidebar-fixed").
+        removeClass("page-header-fixed");
+
+        $('.header > .header-inner').removeClass("container");
+
+        if ($('.page-container').parent(".container").size() === 1) {
+            $('.page-container').insertAfter('body > .clearfix');
+        }
+
+        if ($('.footer > .container').size() === 1) {
+            $('.footer').html($('.footer > .container').html());
+        } else if ($('.footer').parent(".container").size() === 1) {
+            $('.footer').insertAfter('.page-container');
+        }
+
+        $('body > .container').remove();
+    }
+    
+    function delManager(id) {
+        var sure = confirm("確定刪除?");
+        if(sure) {
+            $.post("${base}/admin/comment/delete", {
+                    "commentId" : id
+                },
+                function(data) {
+                    if (data.code == "1") {
+                        alert("刪除成功!");
+                        $("#" + id + "Tr").remove();
+                    } else {
+                        alert("刪除失敗!");
+                        console.log(data.code+"——"+data.msg);
+                    }
+                });
+        }
+	}
+</script>
+	<script>
+	$(function(){
+		$('[data-toggle="popover"]').popover({trigger: 'focus'});
+	});
+	</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

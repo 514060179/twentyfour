@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfComment" >
+    <id column="comment_id" property="commentId" jdbcType="INTEGER" />
+    <result column="ct_article_id" property="ctArticleId" jdbcType="INTEGER" />
+    <result column="ct_product_id" property="ctProductId" jdbcType="INTEGER" />
+    <result column="ct_discussant_id" property="ctDiscussantId" jdbcType="INTEGER" />
+    <result column="ct_create_time" property="ctCreateTime" jdbcType="TIMESTAMP" />
+    <result column="ct_type" property="ctType" jdbcType="INTEGER" />
+    <result column="ct_invisible" property="ctInvisible" jdbcType="TINYINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yinghai.twentyfour.common.model.TfComment" extends="BaseResultMap" >
+    <result column="ct_content" property="ctContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap type="com.yinghai.twentyfour.common.model.TfCommentWithBLOBs" id="MoreResultMap" extends="ResultMapWithBLOBs">
+  	<result column="user_id" property="userId" jdbcType="INTEGER" />
+  	<result column="u_img_url" property="img" jdbcType="VARCHAR" />
+  	<result column="u_nick" property="nick" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="DetailResultMap" type="com.yinghai.twentyfour.common.model.TfCommentHelper" extends="ResultMapWithBLOBs">
+  	<association property="tfProduct" javaType="com.yinghai.twentyfour.common.model.TfProduct">
+      <id column="product_id" property="productId" jdbcType="INTEGER" />
+      <result column="p_master_id" property="pMasterId" jdbcType="INTEGER" />
+      <result column="p_name" property="pName" jdbcType="VARCHAR" />
+      <result column="p_price" property="pPrice" jdbcType="INTEGER" />
+      <result column="p_total" property="pTotal" jdbcType="INTEGER" />
+      <result column="p_size" property="pSize" jdbcType="VARCHAR" />
+      <result column="p_img" property="pImg" jdbcType="VARCHAR" />
+      <result column="p_type" property="pType" jdbcType="VARCHAR" />
+      <result column="p_deals" property="pDeals" jdbcType="BIGINT" />
+      <result column="p_attribution" property="pAttribution" jdbcType="VARCHAR" />
+      <result column="p_free_shipping" property="pFreeShipping" jdbcType="BIT" />
+      <result column="p_hot" property="pHot" jdbcType="BIGINT" />
+      <result column="p_offline" property="pOffline" jdbcType="BIT" />
+      <result column="p_delete" property="pDelete" jdbcType="BIT" />
+      <result column="p_create_time" property="pCreateTime" jdbcType="TIMESTAMP" />
+      <result column="p_update_time" property="pUpdateTime" jdbcType="TIMESTAMP" />
+    </association>
+    <association property="tfUser" javaType="com.yinghai.twentyfour.common.model.TfUser">
+      <id column="user_id" property="userId" jdbcType="INTEGER" />
+      <result column="u_nick" property="uNick" jdbcType="VARCHAR" />
+      <result column="u_img_url" property="uImgUrl" jdbcType="VARCHAR" />
+      <result column="u_country_code" property="uCountryCode" jdbcType="VARCHAR" />
+      <result column="u_tel" property="uTel" jdbcType="VARCHAR" />
+      <result column="u_password" property="uPassword" jdbcType="VARCHAR" />
+      <result column="u_status" property="uStatus" jdbcType="INTEGER" />
+      <result column="u_birthday" property="uBirthday" jdbcType="DATE" />
+      <result column="u_sex" property="uSex" jdbcType="BIT" />
+      <result column="u_constellation" property="uConstellation" jdbcType="INTEGER" />
+      <result column="u_create_time" property="uCreateTime" jdbcType="TIMESTAMP" />
+      <result column="u_update_time" property="uUpdateTime" jdbcType="TIMESTAMP" />
+      <result column="u_deleted" property="uDeleted" jdbcType="BIT" />
+      <result column="u_device_id" property="uDeviceId" jdbcType="VARCHAR" />
+      <result column="u_device_type" property="uDeviceType" jdbcType="INTEGER" />
+    </association>
+    <association property="tfArticle" javaType="com.yinghai.twentyfour.common.model.TfArticle">
+    	<id column="article_id" property="articleId" jdbcType="INTEGER" />
+	    <result column="a_master_id" property="aMasterId" jdbcType="INTEGER" />
+	    <result column="a_type" property="aType" jdbcType="VARCHAR" />
+	     <result column="a_title" property="aTitle" jdbcType="VARCHAR" />
+	    <result column="a_publish_date" property="aPublishDate" jdbcType="DATE" />
+	    <result column="a_abort_date" property="aAbortDate" jdbcType="DATE" />
+	    <result column="a_img" property="aImg" jdbcType="VARCHAR" />
+	    <result column="a_url" property="aUrl" jdbcType="VARCHAR" />
+	    <result column="a_create_time" property="aCreateTime" jdbcType="TIMESTAMP" />
+	    <result column="a_update_time" property="aUpdateTime" jdbcType="TIMESTAMP" />
+	    <result column="a_read_amount" property="aReadAmount" jdbcType="BIGINT" />
+    </association>
+  
+  </resultMap>
+  <sql id="Base_Column_List" >
+    comment_id, ct_article_id, ct_product_id, ct_discussant_id, ct_create_time, ct_type,ct_invisible
+  </sql>
+  <sql id="Blob_Column_List" >
+    ct_content
+  </sql>
+  <sql id="User_Colum_List">
+  	user_id,u_img_url, u_nick, u_country_code, u_tel, u_password, u_status, u_birthday, u_sex,
+    u_constellation, u_create_time, u_update_time, u_deleted,u_device_id,u_device_type
+  </sql>
+  <sql id="Article_Colum_List">
+  	article_id, a_master_id, a_type, a_publish_date, a_abort_date, a_img, a_url, a_create_time, a_title,
+    a_update_time,a_read_amount
+  </sql>
+  <sql id="Product_Column_List" >
+    product_id, p_master_id, p_name, p_price, p_total, p_size, p_img,p_type, p_deals, p_attribution,
+    p_free_shipping, p_hot, p_offline, p_delete, p_create_time, p_update_time,p_introduction
+  </sql>
+  <sql id="More_Column_List">
+  	user_id,u_img_url,u_nick
+  </sql>
+  <select id="selectCommentDetail" resultMap="DetailResultMap" parameterType="java.lang.Integer">
+  	select 
+    <include refid="Base_Column_List" />,
+    <include refid="Blob_Column_List" />,
+    <include refid="User_Colum_List" />,
+    <include refid="Product_Column_List" />,
+    <include refid="Article_Colum_List" />
+    from tf_comment
+    LEFT JOIN tf_user ON ct_discussant_id = user_id
+    LEFT JOIN tf_product ON ct_product_id = product_id
+    LEFT JOIN tf_article ON ct_article_id = article_id
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  
+  </select>
+  <select id="findCommentBySelective" resultMap="MoreResultMap" parameterType="com.yinghai.twentyfour.common.model.TfComment">
+  	select
+  	<include refid="Base_Column_List" />,
+    <include refid="Blob_Column_List" />,
+    <include refid="More_Column_List"/>
+    from tf_comment
+    LEFT JOIN tf_user ON ct_discussant_id=user_id
+    WHERE 1=1
+    <if test="ctDiscussantId != null">
+    	AND ct_discussant_id = #{ctDiscussantId,jdbcType=INTEGER}
+    </if>
+    <if test="commentId !=null">
+    	AND comment_id = #{commentId,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_comment
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </select>
+  <select id="findCommentByPageBack" resultMap="ResultMapWithBLOBs" parameterType="com.yinghai.twentyfour.common.model.TfComment">
+  	select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_comment
+    where 1=1
+    <if test="ctArticleId != null" >
+    	and ct_article_id = #{ctArticleId,jdbcType=INTEGER}
+    </if>
+    <if test="ctProductId != null" >
+    	and ct_product_id = #{ctProductId,jdbcType=INTEGER}
+    </if>
+    <if test="ctType != null" >
+    	and ct_type = #{ctType,jdbcType=INTEGER}
+    </if>
+    <if test="ctInvisible != null" >
+    	and ct_invisible = #{ctInvisible,jdbcType=TINYINT}
+    </if>
+    <if test="commentId != null" >
+    	and comment_id = #{commentId,jdbcType=INTEGER}
+    </if>
+    <if test="ctDiscussantId != null" >
+    	and ct_discussant_id = #{ctDiscussantId,jdbcType=INTEGER}
+    </if>
+    <if test="ctContent != null" >
+    	and ct_content like CONCAT("%",#{ctContent,jdbcType=LONGVARCHAR},"%") 
+    </if>
+    order by ct_create_time desc
+  </select>
+  <select id="findCommentByPage" resultMap="MoreResultMap" parameterType="com.yinghai.twentyfour.common.model.TfComment" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />,
+    <include refid="More_Column_List"/>
+    from tf_comment
+    LEFT JOIN tf_user ON ct_discussant_id=user_id
+    where 1=1
+    <if test="ctArticleId != null" >
+    	and ct_article_id = #{ctArticleId,jdbcType=INTEGER}
+    </if>
+    <if test="ctProductId != null" >
+    	and ct_product_id = #{ctProductId,jdbcType=INTEGER}
+    </if>
+    <if test="ctType != null" >
+    	and ct_type = #{ctType,jdbcType=INTEGER}
+    </if>
+    <if test="ctInvisible != null" >
+    	and ct_invisible = #{ctInvisible,jdbcType=TINYINT}
+    </if>
+    <if test="commentId != null" >
+    	and comment_id = #{commentId,jdbcType=INTEGER}
+    </if>
+    <if test="ctDiscussantId != null" >
+    	and ct_discussant_id = #{ctDiscussantId,jdbcType=INTEGER}
+    </if>
+    <if test="ctContent != null" >
+    	and ct_content like CONCAT("%",#{ctContent,jdbcType=LONGVARCHAR},"%") 
+    </if>
+    order by ct_create_time desc
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_comment
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByCondition" parameterType="com.yinghai.twentyfour.common.model.TfComment">
+  	delete from tf_comment
+  	where comment_id = #{commentId,jdbcType=INTEGER}
+  	<if test="ctArticleId != null" >
+    	and ct_article_id = #{ctArticleId,jdbcType=INTEGER}
+    </if>
+    <if test="ctProductId != null" >
+    	and ct_product_id = #{ctProductId,jdbcType=INTEGER}
+    </if>
+    <if test="ctDiscussantId != null" >
+    	and ct_discussant_id = #{ctDiscussantId,jdbcType=INTEGER}
+    </if>
+    <if test="ctCreateTime != null" >
+    	and ct_create_time = #{ctCreateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="ctType != null" >
+    	and ct_type = #{ctType,jdbcType=INTEGER}
+    </if>
+    <if test="ctInvisible != null" >
+    	and ct_invisible = #{ctInvisible,jdbcType=TINYINT}
+    </if>
+    <if test="ctContent != null" >
+    	and ct_content = #{ctContent,jdbcType=LONGVARCHAR}
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfComment" >
+    insert into tf_comment (comment_id, ct_article_id, ct_product_id, 
+      ct_discussant_id, ct_create_time, ct_type,cn_visible 
+      ct_content)
+    values (#{commentId,jdbcType=INTEGER}, #{ctArticleId,jdbcType=INTEGER}, #{ctProductId,jdbcType=INTEGER}, 
+      #{ctDiscussantId,jdbcType=INTEGER}, #{ctCreateTime,jdbcType=TIMESTAMP}, #{ctType,jdbcType=INTEGER}, #{ctInvisible,jdbcType=TINYINT},
+      #{ctContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfComment" useGeneratedKeys="true" keyProperty="commentId">
+    insert into tf_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        comment_id,
+      </if>
+      <if test="ctArticleId != null" >
+        ct_article_id,
+      </if>
+      <if test="ctProductId != null" >
+        ct_product_id,
+      </if>
+      <if test="ctDiscussantId != null" >
+        ct_discussant_id,
+      </if>
+      <if test="ctCreateTime != null" >
+        ct_create_time,
+      </if>
+      <if test="ctType != null" >
+        ct_type,
+      </if>
+      <if test="ctInvisible != null" >
+        ct_invisible,
+      </if>
+      <if test="ctContent != null" >
+        ct_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="ctArticleId != null" >
+        #{ctArticleId,jdbcType=INTEGER},
+      </if>
+      <if test="ctProductId != null" >
+        #{ctProductId,jdbcType=INTEGER},
+      </if>
+      <if test="ctDiscussantId != null" >
+        #{ctDiscussantId,jdbcType=INTEGER},
+      </if>
+      <if test="ctCreateTime != null" >
+        #{ctCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctType != null" >
+        #{ctType,jdbcType=INTEGER},
+      </if>
+      <if test="ctInvisible != null" >
+        #{ctInvisible,jdbcType=TINYINT},
+      </if>
+      <if test="ctContent != null" >
+        #{ctContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfComment" >
+    update tf_comment
+    <set >
+      <if test="ctArticleId != null" >
+        ct_article_id = #{ctArticleId,jdbcType=INTEGER},
+      </if>
+      <if test="ctProductId != null" >
+        ct_product_id = #{ctProductId,jdbcType=INTEGER},
+      </if>
+      <if test="ctDiscussantId != null" >
+        ct_discussant_id = #{ctDiscussantId,jdbcType=INTEGER},
+      </if>
+      <if test="ctCreateTime != null" >
+        ct_create_time = #{ctCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctType != null" >
+        ct_type = #{ctType,jdbcType=INTEGER},
+      </if>
+      <if test="ctInvisible != null" >
+        ct_invisible = #{ctInvisible,jdbcType=TINYINT},
+      </if>
+      <if test="ctContent != null" >
+        ct_content = #{ctContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yinghai.twentyfour.common.model.TfComment" >
+    update tf_comment
+    set ct_article_id = #{ctArticleId,jdbcType=INTEGER},
+      ct_product_id = #{ctProductId,jdbcType=INTEGER},
+      ct_discussant_id = #{ctDiscussantId,jdbcType=INTEGER},
+      ct_create_time = #{ctCreateTime,jdbcType=TIMESTAMP},
+      ct_type = #{ctType,jdbcType=INTEGER},
+      ct_invisible = #{ctInvisible,jdbcType=TINYINT},
+      ct_content = #{ctContent,jdbcType=LONGVARCHAR}
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfComment" >
+    update tf_comment
+    set ct_article_id = #{ctArticleId,jdbcType=INTEGER},
+      ct_product_id = #{ctProductId,jdbcType=INTEGER},
+      ct_discussant_id = #{ctDiscussantId,jdbcType=INTEGER},
+      ct_create_time = #{ctCreateTime,jdbcType=TIMESTAMP},
+      ct_type = #{ctType,jdbcType=INTEGER},
+      ct_invisible = #{ctInvisible,jdbcType=TINYINT}
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+</mapper>

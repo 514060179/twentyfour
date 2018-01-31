@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfBusinessMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfBusiness" >
+    <id column="business_id" property="businessId" jdbcType="INTEGER" />
+    <result column="b_master_id" property="bMasterId" jdbcType="INTEGER" />
+    <result column="b_name" property="bName" jdbcType="VARCHAR" />
+    <result column="b_price" property="bPrice" jdbcType="INTEGER" />
+    <result column="b_deals" property="bDeals" jdbcType="BIGINT" />
+    <result column="b_create_time" property="bCreateTime" jdbcType="TIMESTAMP" />
+    <result column="b_update_time" property="bUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="b_type" property="bType" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yinghai.twentyfour.common.model.TfBusiness" extends="BaseResultMap" >
+    <result column="b_introduction" property="bIntroduction" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    business_id, b_master_id, b_name, b_price, b_deals, b_create_time, b_update_time,b_type
+  </sql>
+  <sql id="Blob_Column_List" >
+    b_introduction
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_business
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_business
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfBusiness" >
+    insert into tf_business (business_id, b_master_id, b_name, 
+      b_price, b_deals, b_create_time, 
+      b_update_time, b_introduction,b_type)
+    values (#{businessId,jdbcType=INTEGER}, #{bMasterId,jdbcType=INTEGER}, #{bName,jdbcType=VARCHAR}, 
+      #{bPrice,jdbcType=INTEGER}, #{bDeals,jdbcType=BIGINT}, #{bCreateTime,jdbcType=TIMESTAMP}, 
+      #{bUpdateTime,jdbcType=TIMESTAMP}, #{bIntroduction,jdbcType=LONGVARCHAR}, #{bType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfBusiness" useGeneratedKeys="true" keyProperty="businessId">
+    insert into tf_business
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="bMasterId != null" >
+        b_master_id,
+      </if>
+      <if test="bName != null" >
+        b_name,
+      </if>
+      <if test="bPrice != null" >
+        b_price,
+      </if>
+      <if test="bDeals != null" >
+        b_deals,
+      </if>
+      <if test="bCreateTime != null" >
+        b_create_time,
+      </if>
+      <if test="bUpdateTime != null" >
+        b_update_time,
+      </if>
+      <if test="bIntroduction != null" >
+        b_introduction,
+      </if>
+      <if test="bType != null" >
+        b_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessId != null" >
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="bMasterId != null" >
+        #{bMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="bName != null" >
+        #{bName,jdbcType=VARCHAR},
+      </if>
+      <if test="bPrice != null" >
+        #{bPrice,jdbcType=INTEGER},
+      </if>
+      <if test="bDeals != null" >
+        #{bDeals,jdbcType=BIGINT},
+      </if>
+      <if test="bCreateTime != null" >
+        #{bCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bUpdateTime != null" >
+        #{bUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bIntroduction != null" >
+        #{bIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="bType != null" >
+        #{bType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfBusiness" >
+    update tf_business
+    <set >
+      <if test="bMasterId != null" >
+        b_master_id = #{bMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="bName != null" >
+        b_name = #{bName,jdbcType=VARCHAR},
+      </if>
+      <if test="bPrice != null" >
+        b_price = #{bPrice,jdbcType=INTEGER},
+      </if>
+      <if test="bDeals != null" >
+        b_deals = #{bDeals,jdbcType=BIGINT},
+      </if>
+      <if test="bCreateTime != null" >
+        b_create_time = #{bCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bUpdateTime != null" >
+        b_update_time = #{bUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bIntroduction != null" >
+        b_introduction = #{bIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="bType != null" >
+        b_type = #{bType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yinghai.twentyfour.common.model.TfBusiness" >
+    update tf_business
+    set b_master_id = #{bMasterId,jdbcType=INTEGER},
+      b_name = #{bName,jdbcType=VARCHAR},
+      b_price = #{bPrice,jdbcType=INTEGER},
+      b_deals = #{bDeals,jdbcType=BIGINT},
+      b_create_time = #{bCreateTime,jdbcType=TIMESTAMP},
+      b_update_time = #{bUpdateTime,jdbcType=TIMESTAMP},
+      b_type = #{bType,jdbcType=VARCHAR},
+      b_introduction = #{bIntroduction,jdbcType=LONGVARCHAR}
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfBusiness" >
+    update tf_business
+    set b_master_id = #{bMasterId,jdbcType=INTEGER},
+      b_name = #{bName,jdbcType=VARCHAR},
+      b_price = #{bPrice,jdbcType=INTEGER},
+      b_deals = #{bDeals,jdbcType=BIGINT},
+      b_create_time = #{bCreateTime,jdbcType=TIMESTAMP},
+      b_type = #{bType,jdbcType=VARCHAR},
+      b_update_time = #{bUpdateTime,jdbcType=TIMESTAMP}
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </update>
+
+  <select id="findOneByCondition" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_business where 1=1
+    <if test="businessId != null" >
+      AND business_id = #{businessId,jdbcType=INTEGER}
+    </if>
+    <if test="bMasterId != null" >
+      AND b_master_id = #{bMasterId,jdbcType=INTEGER}
+    </if>
+    <if test="bName != null" >
+      AND b_name = #{bName,jdbcType=VARCHAR}
+    </if>
+    <if test="bPrice != null" >
+      AND b_price = #{bPrice,jdbcType=INTEGER}
+    </if>
+    <if test="bDeals != null" >
+      AND b_deals = #{bDeals,jdbcType=BIGINT}
+    </if>
+    <if test="bCreateTime != null" >
+      AND b_create_time = #{bCreateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="bUpdateTime != null" >
+      AND b_update_time = #{bUpdateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="bIntroduction != null" >
+      AND b_introduction = #{bIntroduction,jdbcType=LONGVARCHAR}
+    </if>
+     <if test="bTypeArray != null" >
+      AND  
+      <foreach item="item" index="index" collection="bTypeArray" open="(" separator="or" close=")">
+      	FIND_IN_SET(#{item},b_type)
+      </foreach>
+    </if>
+    ORDER BY business_id DESC
+  </select>
+
+
+  <select id="findLowerBusiness" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_business where b_master_id = #{bMasterId,jdbcType=INTEGER} ORDER BY b_price ASC limit 0, 2
+  </select>
+
+
+</mapper>

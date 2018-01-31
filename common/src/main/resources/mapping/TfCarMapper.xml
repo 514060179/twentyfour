@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfCarMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfCar" >
+    <id column="car_id" property="carId" jdbcType="INTEGER" />
+    <result column="c_user_id" property="cUserId" jdbcType="INTEGER" />
+    <result column="c_product_id" property="cProductId" jdbcType="INTEGER" />
+    <result column="c_qty" property="cQty" jdbcType="INTEGER" />
+    <result column="c_create_time" property="cCreateTime" jdbcType="TIMESTAMP" />
+    <result column="c_update_time" property="cUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="AppResultMap" type="com.yinghai.twentyfour.common.model.TfCarHelper" >
+    <id column="car_id" property="carId" jdbcType="INTEGER" />
+    <result column="c_user_id" property="cUserId" jdbcType="INTEGER" />
+    <result column="c_product_id" property="cProductId" jdbcType="INTEGER" />
+    <result column="c_qty" property="cQty" jdbcType="INTEGER" />
+    <result column="c_create_time" property="cCreateTime" jdbcType="TIMESTAMP" />
+    <result column="c_update_time" property="cUpdateTime" jdbcType="TIMESTAMP" />
+    <association property="product" javaType="com.yinghai.twentyfour.common.model.TfProduct">
+    	<id column="product_id" property="productId" jdbcType="INTEGER" />
+	    <result column="p_master_id" property="pMasterId" jdbcType="INTEGER" />
+	    <result column="p_name" property="pName" jdbcType="VARCHAR" />
+	    <result column="p_price" property="pPrice" jdbcType="DOUBLE" />
+	    <result column="p_total" property="pTotal" jdbcType="INTEGER" />
+	    <result column="p_size" property="pSize" jdbcType="VARCHAR" />
+	    <result column="p_img" property="pImg" jdbcType="VARCHAR" />
+	    <result column="p_type" property="pType" jdbcType="VARCHAR" />
+	    <result column="p_deals" property="pDeals" jdbcType="BIGINT" />
+	    <result column="p_attribution" property="pAttribution" jdbcType="VARCHAR" />
+	    <result column="p_free_shipping" property="pFreeShipping" jdbcType="BIT" />
+	    <result column="p_hot" property="pHot" jdbcType="BIGINT" />
+	    <result column="p_offline" property="pOffline" jdbcType="BIT" />
+	    <result column="p_delete" property="pDelete" jdbcType="BIT" />
+	    <result column="p_create_time" property="pCreateTime" jdbcType="TIMESTAMP" />
+	    <result column="p_update_time" property="pUpdateTime" jdbcType="TIMESTAMP" />
+	    <collection property="imgList"  ofType="com.yinghai.twentyfour.common.model.TfImgTmp">
+	     	<id column="img_tmp_id" property="imgTmpId" jdbcType="INTEGER" />
+	        <result column="it_type" property="itType" jdbcType="INTEGER" />
+		    <result column="it_url" property="itUrl" jdbcType="VARCHAR" />
+		    <result column="it_app_path" property="itAppPath" jdbcType="VARCHAR" />
+		    <result column="it_is_userd" property="itIsUser" jdbcType="BIT" />
+		    <result column="it_size" property="itSize" jdbcType="VARCHAR" />
+	    </collection>
+    </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    car_id, c_user_id, c_product_id, c_qty, c_create_time, c_update_time
+  </sql>
+  <sql id="App_Column_List">
+  	c.car_id, c.c_user_id, c.c_product_id, c.c_qty, c.c_create_time, c.c_update_time,
+  	p.product_id, p.p_master_id, p.p_name, p.p_price, p.p_total, p.p_size, p.p_img,p.p_type,p.p_deals, p.p_attribution, 
+    p.p_free_shipping, p.p_hot, p.p_offline, p.p_delete, p.p_create_time, p.p_update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_car
+    where car_id = #{carId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserAndProduct" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_car
+    where c_user_id = #{userId,jdbcType=INTEGER} AND c_product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectCarRecordByPage" resultMap="AppResultMap" parameterType="java.lang.Integer">
+  	select
+  	<include refid="App_Column_List" />,it.img_tmp_id,it.it_type,
+    it.it_url,it.it_app_path,it.it_is_userd
+  	from 
+  	(select <include refid="Base_Column_List"></include> from tf_car where c_user_id = #{userId,jdbcType=INTEGER} 
+  	order by c_create_time desc LIMIT #{start,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}) c 
+  	LEFT JOIN tf_product p ON c.c_product_id = p.product_id
+  	LEFT JOIN tf_img_tmp it ON it.it_key_id = c.c_product_id
+  </select>
+  <select id="findCarInfoByCarId" resultMap="AppResultMap" parameterType="java.lang.Integer">
+  	select
+  	<include refid="App_Column_List" />
+  	from tf_car c LEFT JOIN tf_product p ON c.c_product_id = p.product_id
+  	where c.car_id = #{carId,jdbcType=INTEGER}
+  </select>
+  
+<!--   <select id="findCarInfoByCarIdAndUserId" resultMap="AppResultMap" parameterType="java.lang.Integer">
+  	select
+  	<include refid="App_Column_List" />
+  	from tf_car c LEFT JOIN tf_product p ON c.c_product_id = p.product_id
+  	where c.car_id = #{carId,jdbcType=INTEGER} and c.c_user_id = #{userId,jdbcType=INTEGER}
+  </select> -->
+  <select id="findCarInfoBySelective" resultMap="AppResultMap" parameterType="com.yinghai.twentyfour.common.model.TfCar">
+  	select
+  	<include refid="App_Column_List" />
+  	from tf_car c LEFT JOIN tf_product p ON c.c_product_id = p.product_id
+  	WHERE 1=1
+  	<if test="carId != null">
+  		AND car_id =#{carId,jdbcType=INTEGER}
+  	</if>
+  	<if test="cUserId != null">
+  		AND c_user_id = #{cUserId,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_car
+    where car_id = #{carId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfCar" >
+    insert into tf_car (car_id, c_user_id, c_product_id, 
+      c_qty, c_create_time, c_update_time
+      )
+    values (#{carId,jdbcType=INTEGER}, #{cUserId,jdbcType=INTEGER}, #{cProductId,jdbcType=INTEGER}, 
+      #{cQty,jdbcType=INTEGER}, #{cCreateTime,jdbcType=TIMESTAMP}, #{cUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfCar" useGeneratedKeys="true" keyProperty="carId">
+    insert into tf_car
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carId != null" >
+        car_id,
+      </if>
+      <if test="cUserId != null" >
+        c_user_id,
+      </if>
+      <if test="cProductId != null" >
+        c_product_id,
+      </if>
+      <if test="cQty != null" >
+        c_qty,
+      </if>
+      <if test="cCreateTime != null" >
+        c_create_time,
+      </if>
+      <if test="cUpdateTime != null" >
+        c_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carId != null" >
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="cUserId != null" >
+        #{cUserId,jdbcType=INTEGER},
+      </if>
+      <if test="cProductId != null" >
+        #{cProductId,jdbcType=INTEGER},
+      </if>
+      <if test="cQty != null" >
+        #{cQty,jdbcType=INTEGER},
+      </if>
+      <if test="cCreateTime != null" >
+        #{cCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cUpdateTime != null" >
+        #{cUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfCar" >
+    update tf_car
+    <set >
+      <if test="cUserId != null" >
+        c_user_id = #{cUserId,jdbcType=INTEGER},
+      </if>
+      <if test="cProductId != null" >
+        c_product_id = #{cProductId,jdbcType=INTEGER},
+      </if>
+      <if test="cQty != null" >
+        c_qty = #{cQty,jdbcType=INTEGER},
+      </if>
+      <if test="cCreateTime != null" >
+        c_create_time = #{cCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cUpdateTime != null" >
+        c_update_time = #{cUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where car_id = #{carId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfCar" >
+    update tf_car
+    set c_user_id = #{cUserId,jdbcType=INTEGER},
+      c_product_id = #{cProductId,jdbcType=INTEGER},
+      c_qty = #{cQty,jdbcType=INTEGER},
+      c_create_time = #{cCreateTime,jdbcType=TIMESTAMP},
+      c_update_time = #{cUpdateTime,jdbcType=TIMESTAMP}
+    where car_id = #{carId,jdbcType=INTEGER}
+  </update>
+</mapper>

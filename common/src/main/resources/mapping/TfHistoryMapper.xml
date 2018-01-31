@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfHistory" >
+    <id column="history_id" property="historyId" jdbcType="INTEGER" />
+    <result column="h_user_id" property="hUserId" jdbcType="INTEGER" />
+    <result column="h_product_id" property="hProductId" jdbcType="INTEGER" />
+    <result column="h_article_id" property="hArticleId" jdbcType="INTEGER" />
+    <result column="h_master_id" property="hMasterId" jdbcType="INTEGER" />
+    <result column="h_create_time" property="hCreateTime" jdbcType="TIMESTAMP" />
+    <result column="h_type" property="hType" jdbcType="INTEGER" />
+    <result column="h_update_time" property="hUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="AppResultMap" type="com.yinghai.twentyfour.common.model.TfHistoryHelper" >
+    <id column="history_id" property="historyId" jdbcType="INTEGER" />
+    <result column="h_user_id" property="hUserId" jdbcType="INTEGER" />
+    <result column="h_product_id" property="hProductId" jdbcType="INTEGER" />
+    <result column="h_article_id" property="hArticleId" jdbcType="INTEGER" />
+    <result column="h_master_id" property="hMasterId" jdbcType="INTEGER" />
+    <result column="h_create_time" property="hCreateTime" jdbcType="TIMESTAMP" />
+    <result column="h_type" property="hType" jdbcType="INTEGER" />
+    <result column="h_update_time" property="hUpdateTime" jdbcType="TIMESTAMP" />
+    <association property="master" javaType="com.yinghai.twentyfour.common.model.TfMaster">
+    	<id column="master_id" property="masterId" jdbcType="INTEGER" />
+	    <result column="m_nick" property="mNick" jdbcType="VARCHAR" />
+	    <result column="m_sex" property="mSex" jdbcType="BIT" />
+	    <result column="m_status" property="mStatus" jdbcType="INTEGER" />
+	    <result column="m_head_img" property="mHeadImg" jdbcType="VARCHAR" />
+	    <result column="m_constellation" property="mConstellation" jdbcType="INTEGER" />
+	    <result column="m_country_code" property="mCountryCode" jdbcType="VARCHAR" />
+	    <result column="m_tel" property="mTel" jdbcType="VARCHAR" />
+	    <result column="m_password" property="mPassword" jdbcType="VARCHAR" />
+	    <result column="m_address" property="mAddress" jdbcType="VARCHAR" />
+	    <result column="m_business_type" property="mBusinessType" jdbcType="VARCHAR" />
+	    <result column="m_label" property="mLabel" jdbcType="VARCHAR" />
+	    <result column="m_bargain" property="mBargain" jdbcType="INTEGER" />
+	    <result column="m_introduction" property="mIntroduction" jdbcType="VARCHAR" />
+	    <result column="m_follows" property="mFollows" jdbcType="BIGINT" />
+	    <result column="m_deals" property="mDeals" jdbcType="BIGINT" />
+	    <result column="m_score" property="mScore" jdbcType="DOUBLE" />
+	    <result column="m_create_time" property="mCreateTime" jdbcType="TIMESTAMP" />
+	    <result column="m_update_time" property="mUpdateTime" jdbcType="TIMESTAMP" />
+	    <result column="m_deleted" property="mDeleted" jdbcType="BIT" />
+	    <result column="m_is_collection" property="isCollection" jdbcType="BIT" />
+	    <result column="m_is_subscribe" property="isSubscribe" jdbcType="BIT" />
+    </association>
+    <association property="article" javaType="com.yinghai.twentyfour.common.model.TfArticle">
+    	<id column="article_id" property="articleId" jdbcType="INTEGER" />
+	    <result column="a_master_id" property="aMasterId" jdbcType="INTEGER" />
+	    <result column="a_type" property="aType" jdbcType="VARCHAR" />
+	    <result column="a_publish_date" property="aPublishDate" jdbcType="DATE" />
+	    <result column="a_abort_date" property="aAbortDate" jdbcType="DATE" />
+	    <result column="a_content" property="aContent" jdbcType="VARCHAR" />
+	    <result column="a_img" property="aImg" jdbcType="VARCHAR" />
+	    <result column="a_url" property="aUrl" jdbcType="VARCHAR" />
+	    <result column="a_create_time" property="aCreateTime" jdbcType="TIMESTAMP" />
+	    <result column="a_update_time" property="aUpdateTime" jdbcType="TIMESTAMP" />
+	    <result column="a_read_amount" property="aReadAmount" jdbcType="BIGINT" />
+	    <result column="a_title" property="aTitle" jdbcType="VARCHAR" />
+	    <result column="a_is_collection" property="isCollection" jdbcType="BIT" />
+	    <collection property="imgList"  ofType="com.yinghai.twentyfour.common.model.TfImgTmp">
+	     	<id column="a_img_tmp_id" property="imgTmpId" jdbcType="INTEGER" />
+	        <result column="a_it_type" property="itType" jdbcType="INTEGER" />
+		    <result column="a_it_url" property="itUrl" jdbcType="VARCHAR" />
+		    <result column="a_it_app_path" property="itAppPath" jdbcType="VARCHAR" />
+		    <result column="a_it_is_userd" property="itIsUser" jdbcType="BIT" />
+		    <result column="a_it_size" property="itSize" jdbcType="VARCHAR" />
+    	</collection>
+    </association>
+    <association property="product" javaType="com.yinghai.twentyfour.common.model.TfProduct">
+    	<id column="product_id" property="productId" jdbcType="INTEGER" />
+	    <result column="p_master_id" property="pMasterId" jdbcType="INTEGER" />
+	    <result column="p_name" property="pName" jdbcType="VARCHAR" />
+	    <result column="p_price" property="pPrice" jdbcType="DOUBLE" />
+	    <result column="p_total" property="pTotal" jdbcType="INTEGER" />
+	    <result column="p_size" property="pSize" jdbcType="VARCHAR" />
+	    <result column="p_introduction" property="pIntroduction" jdbcType="VARCHAR" />
+	    <result column="p_img" property="pImg" jdbcType="VARCHAR" />
+	    <result column="p_type" property="pType" jdbcType="VARCHAR" />
+	    <result column="p_deals" property="pDeals" jdbcType="BIGINT" />
+	    <result column="p_attribution" property="pAttribution" jdbcType="VARCHAR" />
+	    <result column="p_free_shipping" property="pFreeShipping" jdbcType="BIT" />
+	    <result column="p_hot" property="pHot" jdbcType="BIGINT" />
+	    <result column="p_offline" property="pOffline" jdbcType="BIT" />
+	    <result column="p_delete" property="pDelete" jdbcType="BIT" />
+	    <result column="p_create_time" property="pCreateTime" jdbcType="TIMESTAMP" />
+	    <result column="p_update_time" property="pUpdateTime" jdbcType="TIMESTAMP" />
+	    <result column="p_is_collection" property="isCollection" jdbcType="BIT" />
+	    <collection property="imgList"  ofType="com.yinghai.twentyfour.common.model.TfImgTmp">
+	     	<id column="p_img_tmp_id" property="imgTmpId" jdbcType="INTEGER" />
+	        <result column="p_it_type" property="itType" jdbcType="INTEGER" />
+		    <result column="p_it_url" property="itUrl" jdbcType="VARCHAR" />
+		    <result column="p_it_app_path" property="itAppPath" jdbcType="VARCHAR" />
+		    <result column="p_it_is_userd" property="itIsUser" jdbcType="BIT" />
+		    <result column="p_it_size" property="itSize" jdbcType="VARCHAR" />
+    	</collection>
+    </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    history_id, h_user_id, h_product_id, h_article_id, h_master_id, h_create_time, h_type,h_update_time
+  </sql>
+  <sql id="App_Column_List">
+  	h.history_id, h.h_user_id, h.h_product_id, h.h_article_id, h.h_master_id, h.h_create_time, h.h_type,h.h_update_time,
+  	m.master_id, m.m_nick, m.m_sex, m.m_status, m.m_head_img, m.m_constellation, m.m_country_code, 
+    	m.m_tel, m.m_password, m.m_address, m.m_business_type, m.m_label, m.m_bargain,m.m_introduction, m.m_follows, m.m_deals, 
+    	m.m_score, m.m_create_time, m.m_update_time, m.m_deleted,
+    a.article_id, a.a_master_id, a.a_type, a.a_publish_date, a.a_abort_date,a.a_content, a.a_img, a.a_url, a.a_create_time, 
+    	a.a_update_time,a.a_read_amount,a.a_title,
+    p.product_id, p.p_master_id, p.p_name, p.p_price, p.p_total, p.p_size,p.p_introduction,p.p_img,p.p_type, p.p_deals, p.p_attribution, 
+    	p.p_free_shipping, p.p_hot, p.p_offline, p.p_delete, p.p_create_time, p.p_update_time,
+    	ifnull(it1.img_tmp_id,null) AS p_img_tmp_id,ifnull(it1.it_type,null) AS p_it_type,ifnull(it1.it_url,null) AS p_it_url,
+    	ifnull(it1.it_app_path,null) AS p_it_app_path,ifnull(it1.it_is_userd,null) AS p_it_is_userd,
+    	ifnull(it2.img_tmp_id,null) AS a_img_tmp_id,ifnull(it2.it_type,null) AS a_it_type,ifnull(it2.it_url,null) AS a_it_url,
+    	ifnull(it2.it_app_path,null) AS a_it_app_path,ifnull(it2.it_is_userd,null) AS a_it_is_userd
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_history
+    where history_id = #{historyId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="AppResultMap">
+  	select
+  	<include refid="App_Column_List"/>
+  	, ifnull(sn.s_user_id,null) AS m_is_subscribe,ifnull(cn1.cn_user_id,null) AS m_is_collection,
+  	ifnull(cn2.cn_user_id,null) AS a_is_collection,ifnull(cn3.cn_user_id,null) AS p_is_collection
+  	from (select <include refid="Base_Column_List"/> from tf_history where h_user_id = #{userId,jdbcType=INTEGER} 
+  	order by h_update_time desc,h_create_time desc limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}) h 
+  	LEFT JOIN tf_master m ON h.h_master_id = m.master_id
+  	LEFT JOIN tf_article a ON h.h_article_id = a.article_id
+  	LEFT JOIN tf_product p ON h.h_product_id = p.product_id
+  	LEFT JOIN tf_img_tmp it1 ON h.h_product_id = it1.it_key_id AND it1.it_type=1
+  	LEFT JOIN tf_img_tmp it2 ON h.h_article_id = it2.it_key_id AND it2.it_type=2
+  	LEFT JOIN (SELECT s_user_id,s_master_id FROM tf_subscribe s WHERE s.s_user_id = #{userId,jdbcType=INTEGER}) sn ON sn.s_master_id = h.h_master_id
+  	LEFT JOIN (SELECT cn_user_id,cn_master_id FROM tf_collection c where c.cn_user_id = #{userId,jdbcType=INTEGER}) cn1 ON cn1.cn_master_id = h.h_master_id
+  	LEFT JOIN (SELECT cn_user_id,cn_article_id FROM tf_collection c where c.cn_user_id = #{userId,jdbcType=INTEGER}) cn2 ON cn2.cn_article_id = h.h_article_id
+  	LEFT JOIN (SELECT cn_user_id,cn_product_id FROM tf_collection c where c.cn_user_id = #{userId,jdbcType=INTEGER}) cn3 ON cn3.cn_product_id = h.h_product_id
+  	order by h_update_time desc,h_create_time desc
+  </select>
+  <select id="selectByUserAndTypeId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select
+  	<include refid="Base_Column_List" />
+    from tf_history
+    where h_user_id = #{userId,jdbcType=INTEGER} AND h_type = #{type,jdbcType=INTEGER}
+    <if test="type==1">
+    	AND h_master_id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="type==2">
+    	AND h_article_id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="type==3">
+    	AND h_product_id = #{id,jdbcType=INTEGER}
+    </if>
+    order by h_create_time desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_history
+    where history_id = #{historyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfHistory" >
+    insert into tf_history (history_id, h_user_id, h_product_id, 
+      h_article_id, h_master_id, h_create_time, 
+      h_type,h_update_time)
+    values (#{historyId,jdbcType=INTEGER}, #{hUserId,jdbcType=INTEGER}, #{hProductId,jdbcType=INTEGER}, 
+      #{hArticleId,jdbcType=INTEGER}, #{hMasterId,jdbcType=INTEGER}, #{hCreateTime,jdbcType=TIMESTAMP}, 
+      #{hType,jdbcType=INTEGER}, #{hUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfHistory" >
+    insert into tf_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="historyId != null" >
+        history_id,
+      </if>
+      <if test="hUserId != null" >
+        h_user_id,
+      </if>
+      <if test="hProductId != null" >
+        h_product_id,
+      </if>
+      <if test="hArticleId != null" >
+        h_article_id,
+      </if>
+      <if test="hMasterId != null" >
+        h_master_id,
+      </if>
+      <if test="hCreateTime != null" >
+        h_create_time,
+      </if>
+      <if test="hType != null" >
+        h_type,
+      </if>
+      <if test="hUpdateTime != null" >
+        h_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="historyId != null" >
+        #{historyId,jdbcType=INTEGER},
+      </if>
+      <if test="hUserId != null" >
+        #{hUserId,jdbcType=INTEGER},
+      </if>
+      <if test="hProductId != null" >
+        #{hProductId,jdbcType=INTEGER},
+      </if>
+      <if test="hArticleId != null" >
+        #{hArticleId,jdbcType=INTEGER},
+      </if>
+      <if test="hMasterId != null" >
+        #{hMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="hCreateTime != null" >
+        #{hCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hType != null" >
+        #{hType,jdbcType=INTEGER},
+      </if>
+      <if test="hUpdateTime != null" >
+        #{hUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfHistory" >
+    update tf_history
+    <set >
+      <if test="hUserId != null" >
+        h_user_id = #{hUserId,jdbcType=INTEGER},
+      </if>
+      <if test="hProductId != null" >
+        h_product_id = #{hProductId,jdbcType=INTEGER},
+      </if>
+      <if test="hArticleId != null" >
+        h_article_id = #{hArticleId,jdbcType=INTEGER},
+      </if>
+      <if test="hMasterId != null" >
+        h_master_id = #{hMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="hCreateTime != null" >
+        h_create_time = #{hCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hType != null" >
+        h_type = #{hType,jdbcType=INTEGER},
+      </if>
+      <if test="hUpdateTime != null" >
+        h_update_time = #{hUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where history_id = #{historyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfHistory" >
+    update tf_history
+    set h_user_id = #{hUserId,jdbcType=INTEGER},
+      h_product_id = #{hProductId,jdbcType=INTEGER},
+      h_article_id = #{hArticleId,jdbcType=INTEGER},
+      h_master_id = #{hMasterId,jdbcType=INTEGER},
+      h_create_time = #{hCreateTime,jdbcType=TIMESTAMP},
+      h_type = #{hType,jdbcType=INTEGER},
+      h_update_time = #{hUpdateTime,jdbcType=TIMESTAMP}
+    where history_id = #{historyId,jdbcType=INTEGER}
+  </update>
+</mapper>

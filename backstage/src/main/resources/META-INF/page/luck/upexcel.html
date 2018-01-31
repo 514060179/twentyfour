@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form id="form1" enctype="multipart/form-data" method="post" action="${base!}/admin/luck/import">
+	<div class="row">
+		<label for="fileToUpload">请选择一个文件上传：</label>
+ 		<input type="file" name="upload" id="fileToUpload" onchange="fileSelected();"/>
+ 	</div>
+ 	<div id="fileName"></div>
+ 	<div id="fileSize"></div>
+	<div id="fileType"></div>
+ 	<div id="progressNumber"></div>
+ 	<div class="row">
+ 		<input type="button" onclick="uploadFile()" value="上传" />
+	</div>
+	<div>温馨提示：请使用模板格式文件导入</div>
+ 	
+</form>
+</body>
+
+<script>
+function fileSelected() {
+	  var file = document.getElementById('fileToUpload').files[0];
+	  if (file) {
+	    var fileSize = 0;
+	    if (file.size > 1024 * 1024)
+	      fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+	    else
+	      fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+
+	    document.getElementById('fileName').innerHTML = '文件名: ' + file.name;
+	    document.getElementById('fileSize').innerHTML = '文件大小: ' + fileSize;
+	    document.getElementById('fileType').innerHTML = '文件类型: ' + file.type;
+	  }
+}
+function uploadFile() {
+	  var xhr = new XMLHttpRequest();
+	  var form = document.getElementById('form1')
+	  var fd = new FormData(form);
+	  /* event listners */
+	  xhr.upload.addEventListener("progress", uploadProgress, false);
+	  xhr.addEventListener("load", uploadComplete, false);
+	  xhr.addEventListener("error", uploadFailed, false);
+	  xhr.addEventListener("abort", uploadCanceled, false);
+	  /* Be sure to change the url below to the url of your upload server side script */
+	  xhr.open("POST", "${base!}/admin/luck/import");
+	  xhr.onreadystatechange=function(){
+	    if (xhr.readyState==4 && xhr.status==200){
+	    	var res = eval('('+this.responseText+')');
+	    	if(res.code=="1"){
+	    		alert("数据导入成功");
+	    	}else if(res.code=="101"){
+	    		alert("数据为空");
+	    	}else{
+	    		alert(res.msg);
+	    	}
+	    	//关闭弹出窗
+	    	/* var index=parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index); */
+	    }
+	  }
+	  xhr.send(fd);
+}
+function uploadProgress(evt) {
+	  if (evt.lengthComputable) {
+	    var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+	    document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+	  }
+	  else {
+	    document.getElementById('progressNumber').innerHTML = 'unable to compute';
+	  }
+}
+function uploadComplete(evt) {
+	  /* This event is raised when the server send back a response */
+	  //alert(evt.target.responseText);
+	  var index=parent.layer.getFrameIndex(window.name);
+	  parent.layer.close(index);
+}
+
+function uploadFailed(evt) {
+alert("There was an error attempting to upload the file.");
+}
+
+function uploadCanceled(evt) {
+alert("The upload has been canceled by the user or the browser dropped the connection.");
+}
+</script>
+</html>

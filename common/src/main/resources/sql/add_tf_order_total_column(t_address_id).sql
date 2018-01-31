@@ -1,0 +1,1 @@
+ALTER TABLE tf_order_total add t_address_id INT(11) NOT NULL COMMENT '收货地址Id';

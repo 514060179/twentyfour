@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfImClientMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfImClient" >
+    <id column="accid" property="accid" jdbcType="INTEGER" />
+    <result column="ic_id" property="icId" jdbcType="INTEGER" />
+    <result column="ic_name" property="icName" jdbcType="VARCHAR" />
+    <result column="ic_token" property="icToken" jdbcType="VARCHAR" />
+    <result column="ic_email" property="icEmail" jdbcType="VARCHAR" />
+    <result column="ic_birth" property="icBirth" jdbcType="TIMESTAMP" />
+    <result column="ic_gender" property="icGender" jdbcType="BIT" />
+    <result column="ic_type" property="icType" jdbcType="INTEGER" />
+    <result column="ic_create_time" property="icCreateTime" jdbcType="TIMESTAMP" />
+    <result column="ic_update_time" property="icUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    accid, ic_id, ic_name, ic_token, ic_email, ic_birth, ic_gender, ic_type, ic_create_time, 
+    ic_update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_im_client
+    where accid = #{accid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_im_client
+    where accid = #{accid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfImClient" >
+    insert into tf_im_client (accid, ic_id, ic_name, 
+      ic_token, ic_email, ic_birth, 
+      ic_gender, ic_type, ic_create_time, 
+      ic_update_time)
+    values (#{accid,jdbcType=INTEGER}, #{icId,jdbcType=INTEGER}, #{icName,jdbcType=VARCHAR}, 
+      #{icToken,jdbcType=VARCHAR}, #{icEmail,jdbcType=VARCHAR}, #{icBirth,jdbcType=TIMESTAMP}, 
+      #{icGender,jdbcType=BIT}, #{icType,jdbcType=INTEGER}, #{icCreateTime,jdbcType=TIMESTAMP}, 
+      #{icUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfImClient" >
+    insert into tf_im_client
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accid != null" >
+        accid,
+      </if>
+      <if test="icId != null" >
+        ic_id,
+      </if>
+      <if test="icName != null" >
+        ic_name,
+      </if>
+      <if test="icToken != null" >
+        ic_token,
+      </if>
+      <if test="icEmail != null" >
+        ic_email,
+      </if>
+      <if test="icBirth != null" >
+        ic_birth,
+      </if>
+      <if test="icGender != null" >
+        ic_gender,
+      </if>
+      <if test="icType != null" >
+        ic_type,
+      </if>
+      <if test="icCreateTime != null" >
+        ic_create_time,
+      </if>
+      <if test="icUpdateTime != null" >
+        ic_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accid != null" >
+        #{accid,jdbcType=INTEGER},
+      </if>
+      <if test="icId != null" >
+        #{icId,jdbcType=INTEGER},
+      </if>
+      <if test="icName != null" >
+        #{icName,jdbcType=VARCHAR},
+      </if>
+      <if test="icToken != null" >
+        #{icToken,jdbcType=VARCHAR},
+      </if>
+      <if test="icEmail != null" >
+        #{icEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="icBirth != null" >
+        #{icBirth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icGender != null" >
+        #{icGender,jdbcType=BIT},
+      </if>
+      <if test="icType != null" >
+        #{icType,jdbcType=INTEGER},
+      </if>
+      <if test="icCreateTime != null" >
+        #{icCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icUpdateTime != null" >
+        #{icUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfImClient" >
+    update tf_im_client
+    <set >
+      <if test="icId != null" >
+        ic_id = #{icId,jdbcType=INTEGER},
+      </if>
+      <if test="icName != null" >
+        ic_name = #{icName,jdbcType=VARCHAR},
+      </if>
+      <if test="icToken != null" >
+        ic_token = #{icToken,jdbcType=VARCHAR},
+      </if>
+      <if test="icEmail != null" >
+        ic_email = #{icEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="icBirth != null" >
+        ic_birth = #{icBirth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icGender != null" >
+        ic_gender = #{icGender,jdbcType=BIT},
+      </if>
+      <if test="icType != null" >
+        ic_type = #{icType,jdbcType=INTEGER},
+      </if>
+      <if test="icCreateTime != null" >
+        ic_create_time = #{icCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icUpdateTime != null" >
+        ic_update_time = #{icUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where accid = #{accid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfImClient" >
+    update tf_im_client
+    set ic_id = #{icId,jdbcType=INTEGER},
+      ic_name = #{icName,jdbcType=VARCHAR},
+      ic_token = #{icToken,jdbcType=VARCHAR},
+      ic_email = #{icEmail,jdbcType=VARCHAR},
+      ic_birth = #{icBirth,jdbcType=TIMESTAMP},
+      ic_gender = #{icGender,jdbcType=BIT},
+      ic_type = #{icType,jdbcType=INTEGER},
+      ic_create_time = #{icCreateTime,jdbcType=TIMESTAMP},
+      ic_update_time = #{icUpdateTime,jdbcType=TIMESTAMP}
+    where accid = #{accid,jdbcType=INTEGER}
+  </update>
+</mapper>

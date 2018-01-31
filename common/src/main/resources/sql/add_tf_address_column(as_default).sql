@@ -1,0 +1,1 @@
+ALTER TABLE tf_address add as_default TINYINT(1) NULL default 0 COMMENT '是否为默认地址，1是0否';

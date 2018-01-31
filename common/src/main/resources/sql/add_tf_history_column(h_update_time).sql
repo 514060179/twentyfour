@@ -1,0 +1,1 @@
+ALTER TABLE tf_history add h_update_time DATETIME NULL COMMENT '更新时间';

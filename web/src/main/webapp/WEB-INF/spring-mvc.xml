@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"  xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+                        http://www.springframework.org/schema/cache
+                        http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+                          http://www.springframework.org/schema/task 
+       					http://www.springframework.org/schema/task/spring-task.xsd">
+                        
+    <!-- 自动扫描  @Controller-->
+    <context:component-scan base-package="com.yinghai.twentyfour.*.controller;com.yinghai.twentyfour.common.job"/>
+    <!--避免IE执行AJAX时，返回JSON出现下载文件 -->
+    <bean id="mappingJacksonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="mappingJacksonHttpMessageConverter"/> <!-- JSON转换器 -->
+            </list>
+        </property>
+    </bean>
+
+	
+    <!-- 定义跳转的文件的前后缀 ，视图模式配置 -->
+<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp"/>
+    </bean>-->
+
+    <!-- 文件上传配置 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 默认编码 -->
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!-- 上传文件大小限制为31M，31*1024*1024 -->
+        <property name="maxUploadSize" value="32505856"/>
+        <!-- 内存中的最大值 -->
+        <property name="maxInMemorySize" value="4096"/>
+    </bean>
+    
+    <bean id="accessAop" class="com.yinghai.twentyfour.aop.AccessTokenAop"/>
+	<aop:config>
+		<aop:aspect ref="accessAop">
+			<aop:around method="execute"
+					 pointcut="execution(* com.yinghai.twentyfour.*.controller.*.*(..))"/>
+		</aop:aspect> 
+	</aop:config>
+    <bean id="freemarkerViewResolver" class="com.yinghai.twentyfour.freemarker.RichFreeMarkerViewResolver">
+        <property name="prefix" value="/page/"/>
+        <property name="suffix" value=".html"/>
+        <property name="contentType" value="text/html; charset=UTF-8"/>
+        <property name="exposeRequestAttributes" value="false"/>
+        <property name="exposeSessionAttributes" value="false"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+    </bean>
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPaths">
+            <list>
+                <value>classpath:/META-INF/</value>
+                <value>classpath:/META-INF/assets</value>
+            </list>
+        </property>
+
+        <property name="freemarkerVariables">
+            <map>
+            </map>
+        </property>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">-1</prop>
+                <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="url_escaping_charset">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="boolean_format">true,false</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="number_format">0.######</prop>
+                <prop key="whitespace_stripping">true</prop>
+            </props>
+        </property>
+    </bean>
+	<!--<mvc:interceptors>
+	    &lt;!&ndash; 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 &ndash;&gt;
+		    <mvc:interceptor>  
+		        <mvc:mapping path="/manager/**"/> 
+		        &lt;!&ndash; 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 &ndash;&gt;
+			    <bean class="com.yinghai.wok.backstage.interceptor.LoginRequestInterceptor"/>  
+		    </mvc:interceptor>  
+	</mvc:interceptors> -->
+	 <!-- 在applicationContext.xml中进行配置，使用定时器
+        ref : pojo类的名称
+        method : 调用的方式名称
+        cron : cronExpression表达式
+        cron="0 0 0 * * ?"  //每天凌晨0点触发 0/10 * * * * ?
+     -->
+     
+     <task:scheduled-tasks>
+        <task:scheduled ref="taskCool" method="orderJob" initial-delay="5000" fixed-delay="300000"/>
+    </task:scheduled-tasks>
+	<mvc:interceptors>
+	    <!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
+		    <mvc:interceptor>
+		        <mvc:mapping path="/app/**"/>
+		         <!--<mvc:mapping path="/personal/**"/> -->
+		          <!--<mvc:mapping path="/news/**"/> -->
+		           <!--<mvc:mapping path="/driver/**" /> -->
+		           <!--<mvc:mapping path="/comment/**" />-->
+		           <!--<mvc:mapping path="/attendance/**" />-->
+		           <!--<mvc:exclude-mapping path="/order/submit" />-->
+		        <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+			    <bean class="com.yinghai.twentyfour.app.interceptor.AppRequestInterceptor"/>
+		    </mvc:interceptor>
+	</mvc:interceptors>
+
+    <!--单点登录验证  /app/tfmaster-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/app/**"/>
+            <mvc:exclude-mapping path="/app/tfuser/**" />
+            <mvc:exclude-mapping path="/app/tfmaster/**" />
+            <mvc:exclude-mapping path="/app/comment/list" />
+            <bean class="com.yinghai.twentyfour.app.interceptor.AccessTokenInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- 默认的注解映射的支持 -->
+
+   <!-- <bean id="cacheManagerFactory"  class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+          p:configLocation="file:src/main/webapp/WEB-INF/ehcache.xml"></bean>
+    <import resource="spring-mybatis.xml"/>
+
+    &lt;!&ndash; 声明cacheManager &ndash;&gt;
+    <bean id="shiroEhcacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
+          p:cacheManager-ref="cacheManagerFactory" ></bean>
+    <cache:annotation-driven cache-manager="shiroEhcacheManager"/>
+    <context:component-scan base-package="com.yinghai.twentyfourour.test" />-->
+
+
+
+
+
+     <!--shiro的缓存管理器，然后需要将缓存管理器注入到安全管理其中-->
+   <!-- <bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        &lt;!&ndash;classpath是缓存属性的配置文件  &ndash;&gt;
+        <property name="cacheManagerConfigFile" value="classpath:config/ehcache-shiro.xml" />
+    </bean>-->
+    <!--服务开启调用-->
+    <bean id="cacheInitializingBean" class="com.yinghai.twentyfour.init.CacheInitializingBean"></bean>
+
+    <bean class="com.yinghai.twentyfour.common.util.SpringContextUtils"></bean>
+</beans>

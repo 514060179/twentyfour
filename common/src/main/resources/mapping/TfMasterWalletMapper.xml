@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfMasterWalletMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfMasterWallet" >
+    <id column="wallet_id" property="walletId" jdbcType="INTEGER" />
+    <result column="w_master_id" property="wMasterId" jdbcType="INTEGER" />
+    <result column="w_balance" property="wBalance" jdbcType="INTEGER" />
+    <result column="w_create_time" property="wCreateTime" jdbcType="TIMESTAMP" />
+    <result column="w_cash_time" property="wCashTime" jdbcType="TIMESTAMP" />
+    <result column="w_update_time" property="wUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wallet_id, w_master_id, w_balance, w_create_time, w_cash_time, w_update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_master_wallet
+    where wallet_id = #{walletId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_master_wallet
+    where wallet_id = #{walletId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfMasterWallet" >
+    insert into tf_master_wallet (wallet_id, w_master_id, w_balance, 
+      w_create_time, w_cash_time, w_update_time
+      )
+    values (#{walletId,jdbcType=INTEGER}, #{wMasterId,jdbcType=INTEGER}, #{wBalance,jdbcType=INTEGER}, 
+      #{wCreateTime,jdbcType=TIMESTAMP}, #{wCashTime,jdbcType=TIMESTAMP}, #{wUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfMasterWallet" >
+    insert into tf_master_wallet
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="walletId != null" >
+        wallet_id,
+      </if>
+      <if test="wMasterId != null" >
+        w_master_id,
+      </if>
+      <if test="wBalance != null" >
+        w_balance,
+      </if>
+      <if test="wCreateTime != null" >
+        w_create_time,
+      </if>
+      <if test="wCashTime != null" >
+        w_cash_time,
+      </if>
+      <if test="wUpdateTime != null" >
+        w_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="walletId != null" >
+        #{walletId,jdbcType=INTEGER},
+      </if>
+      <if test="wMasterId != null" >
+        #{wMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="wBalance != null" >
+        #{wBalance,jdbcType=INTEGER},
+      </if>
+      <if test="wCreateTime != null" >
+        #{wCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wCashTime != null" >
+        #{wCashTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wUpdateTime != null" >
+        #{wUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfMasterWallet" >
+    update tf_master_wallet
+    <set >
+      <if test="wMasterId != null" >
+        w_master_id = #{wMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="wBalance != null" >
+        w_balance = #{wBalance,jdbcType=INTEGER},
+      </if>
+      <if test="wCreateTime != null" >
+        w_create_time = #{wCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wCashTime != null" >
+        w_cash_time = #{wCashTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wUpdateTime != null" >
+        w_update_time = #{wUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where wallet_id = #{walletId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfMasterWallet" >
+    update tf_master_wallet
+    set w_master_id = #{wMasterId,jdbcType=INTEGER},
+      w_balance = #{wBalance,jdbcType=INTEGER},
+      w_create_time = #{wCreateTime,jdbcType=TIMESTAMP},
+      w_cash_time = #{wCashTime,jdbcType=TIMESTAMP},
+      w_update_time = #{wUpdateTime,jdbcType=TIMESTAMP}
+    where wallet_id = #{walletId,jdbcType=INTEGER}
+  </update>
+
+  <select id="findWalletByMasterId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tf_master_wallet
+    where w_master_id = #{masterId,jdbcType=INTEGER}
+  </select>
+
+  <update id="updateMasterBalance" parameterType="com.yinghai.twentyfour.common.model.TfMasterWallet" >
+    update tf_master_wallet
+    <set >
+      <if test="wBalance != null" >
+        w_balance = w_balance+#{wBalance,jdbcType=INTEGER},
+      </if>
+      <if test="wUpdateTime != null" >
+        w_update_time = #{wUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where w_master_id = #{wMasterId,jdbcType=INTEGER}
+  </update>
+</mapper>

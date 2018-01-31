@@ -1,0 +1,154 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />-->
+    <!-- 凭证匹配器 -->
+    <!-- 缓存管理器 使用Ehcache实现 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
+    </bean>
+
+    <bean id="credentialsMatcher" class="com.yinghai.twentyfour.shiro.RetryLimitHashedCredentialsMatcher">
+        <constructor-arg ref="cacheManager" />
+        <!--没有默认值。可以有MD5或者SHA-1，如果对密码安全有更高要求可以用SHA-256或者更高。这里使用MD5-->
+        <property name="hashAlgorithmName" value="md5" />
+        <!--迭代次数，默认值是1 加密次数-->
+        <property name="hashIterations" value="2" />
+        <!--此时用的是密码加密用的是Hex编码；false时用Base64编码-->
+        <property name="storedCredentialsHexEncoded" value="true" />
+    </bean>
+
+    <!-- Realm实现 -->
+    <bean id="userRealm" class="com.yinghai.twentyfour.shiro.UserRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher" />
+    </bean>
+
+    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>-->
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="userRealm" />
+    </bean>
+
+    <aop:config proxy-target-class="true"/>
+    <!-- Shiro的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager" />
+        <!--要求登录时的链接,未登录之跳转-->
+        <property name="loginUrl" value="/" />
+        <!--登录成功后要跳转的链接-->
+        <property name="successUrl" value="/loginsuccess.jhtml" />
+        <!--用户访问未对其授权的资源时,所显示的链接-->
+        <property name="unauthorizedUrl" value="/test" />
+        <property name="filterChainDefinitions">
+            <value>
+                 /admin/** = authc
+            </value>
+        </property>
+    </bean>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+<!--
+
+
+    &lt;!&ndash; Shiro's main business-tier object for web-enabled applications &ndash;&gt;
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myShiroRealm" />
+        <property name="cacheManager" ref="cacheManager" />
+    </bean>
+
+    &lt;!&ndash; 項目自定义的Realm &ndash;&gt;
+    <bean id="myShiroRealm" class="com.yinghai.twentyfourour.test.UserRealm">
+        <property name="cacheManager" ref="cacheManager" />
+    </bean>
+
+    &lt;!&ndash; Shiro Filter &ndash;&gt;
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        &lt;!&ndash; Shiro的核心安全接口,这个属性是必须的 &ndash;&gt;
+        <property name="securityManager" ref="securityManager" />
+        &lt;!&ndash; 要求登录时的链接 &ndash;&gt;
+        <property name="loginUrl" value="/login.jhtml" />
+        &lt;!&ndash; 登录成功后要跳转的链接 &ndash;&gt;
+        <property name="successUrl" value="/loginsuccess.jhtml" />
+        &lt;!&ndash; 用户访问未对其授权的资源时,所显示的链接 &ndash;&gt;
+        <property name="unauthorizedUrl" value="/error.jhtml" />
+        <property name="filterChainDefinitions">
+            <value>
+                /index.jhtml = authc
+                /login.jhtml = anon
+                /checkLogin.json = anon
+                /loginsuccess.jhtml = anon
+                /logout.json = anon
+                /** = changedPassword
+            </value>
+        </property>
+        <property name="filters">
+            <map>
+                <entry key="changedPassword" value-ref="changedPassword" />
+            </map>
+        </property>
+    </bean>
+    &lt;!&ndash; 自定义shiro的filter &ndash;&gt;
+    <bean id="changedPassword" class="com.yinghai.twentyfourour.test.ChangePasswordFilter" />
+    &lt;!&ndash; 用户授权信息Cache &ndash;&gt;
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+
+    &lt;!&ndash; 保证实现了Shiro内部lifecycle函数的bean执行 &ndash;&gt;
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+    &lt;!&ndash; AOP式方法级权限检查 &ndash;&gt;
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+-->
+
+
+    <!--
+   filterChainDefinitions参数说明,注意其验证顺序是自上而下
+   =================================================================================================
+   anon        org.apache.shiro.web.filter.authc.AnonymousFilter
+   authc       org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+   authcBasic  org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
+   perms       org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter
+   port        org.apache.shiro.web.filter.authz.PortFilter
+   rest        org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter
+   roles       org.apache.shiro.web.filter.authz.RolesAuthorizationFilter
+   ssl         org.apache.shiro.web.filter.authz.SslFilter
+   user        org.apache.shiro.web.filter.authc.UserFilter
+   =================================================================================================
+   anon: 例子/admins/**=anon 没有参数，表示可以匿名使用。
+   authc: 例如/admins/user/**=authc表示需要认证(登录)才能使用，没有参数
+   roles： 例子/admins/user/**=roles[admin],参数可以写多个，多个时必须加上引号，
+                   并且参数之间用逗号分割，当有多个参数时，例如admins/user/**=roles["admin,guest"],
+                   每个参数通过才算通过，相当于hasAllRoles()方法。
+   perms： 例子/admins/user/**=perms[user:add:*],参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，
+                   例如/admins/user/**=perms["user:add:*,user:modify:*"]，当有多个参数时必须每个参数都通过才通过，
+                   想当于isPermitedAll()方法。
+   rest：  例子/admins/user/**=rest[user],根据请求的方法，相当于/admins/user/**=perms[user:method] ,
+                  其中method为post，get，delete等。
+   port：  例子/admins/user/**=port[8081],当请求的url的端口不是8081是跳转到schemal://serverName:8081?queryString,
+                  其中schmal是协议http或https等，serverName是你访问的host,8081是url配置里port的端口，queryString是你访问的url里的？后面的参数。
+   authcBasic：例如/admins/user/**=authcBasic没有参数表示httpBasic认证
+   ssl:  例子/admins/user/**=ssl没有参数，表示安全的url请求，协议为https
+   user: 例如/admins/user/**=user没有参数表示必须存在用户，当登入操作时不做检查
+   注：anon，authcBasic，auchc，user是认证过滤器，
+   perms，roles，ssl，rest，port是授权过滤器
+   =================================================================================================
+   -->
+</beans>

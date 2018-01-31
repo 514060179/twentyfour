@@ -1,0 +1,1 @@
+ALTER TABLE tf_order_total add t_qty  INT(11) NOT NULL DEFAULT 1 COMMENT '总订单包含商品的数量';

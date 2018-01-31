@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfImUserMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfImUser" >
+    <id column="iu_id" property="iuId" jdbcType="INTEGER" />
+    <id column="iu_type" property="iuType" jdbcType="INTEGER" />
+    <result column="iu_user_id" property="iuUserId" jdbcType="VARCHAR" />
+    <result column="iu_name" property="iuName" jdbcType="VARCHAR" />
+    <result column="iu_img" property="iuImg" jdbcType="VARCHAR" />
+    <result column="iu_token" property="iuToken" jdbcType="VARCHAR" />
+    <result column="iu_create_time" property="iuCreateTime" jdbcType="TIMESTAMP" />
+    <result column="iu_update_time" property="iuUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="UserResultMap" type="com.yinghai.twentyfour.common.model.TfUserFriend" >
+  	<id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="u_nick" property="uNick" jdbcType="VARCHAR" />
+    <result column="u_img_url" property="uImgUrl" jdbcType="VARCHAR" />
+    <result column="u_country_code" property="uCountryCode" jdbcType="VARCHAR" />
+    <result column="u_tel" property="uTel" jdbcType="VARCHAR" />
+    <result column="u_password" property="uPassword" jdbcType="VARCHAR" />
+    <result column="u_status" property="uStatus" jdbcType="INTEGER" />
+    <result column="u_birthday" property="uBirthday" jdbcType="DATE" />
+    <result column="u_sex" property="uSex" jdbcType="BIT" />
+    <result column="u_constellation" property="uConstellation" jdbcType="INTEGER" />
+    <result column="u_create_time" property="uCreateTime" jdbcType="TIMESTAMP" />
+    <result column="u_update_time" property="uUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="u_deleted" property="uDeleted" jdbcType="BIT" />
+    <result column="u_device_id" property="uDeviceId" jdbcType="VARCHAR" />
+    <result column="u_device_type" property="uDeviceType" jdbcType="INTEGER" />
+    <result column="u_im" property="uIm" jdbcType="VARCHAR" />
+    <result column="u_token" property="uToken" jdbcType="VARCHAR" />
+    <result column="u_is_friend" property="uIsFriend" jdbcType="BIT" />
+  </resultMap>
+  <resultMap id="MasterResultMap" type="com.yinghai.twentyfour.common.model.TfMaster" >
+    <id column="master_id" property="masterId" jdbcType="INTEGER" />
+    <result column="m_nick" property="mNick" jdbcType="VARCHAR" />
+    <result column="m_sex" property="mSex" jdbcType="BIT" />
+    <result column="m_status" property="mStatus" jdbcType="INTEGER" />
+    <result column="m_head_img" property="mHeadImg" jdbcType="VARCHAR" />
+    <result column="m_constellation" property="mConstellation" jdbcType="INTEGER" />
+    <result column="m_country_code" property="mCountryCode" jdbcType="VARCHAR" />
+    <result column="m_tel" property="mTel" jdbcType="VARCHAR" />
+    <result column="m_password" property="mPassword" jdbcType="VARCHAR" />
+    <result column="m_address" property="mAddress" jdbcType="VARCHAR" />
+    <result column="m_business_type" property="mBusinessType" jdbcType="VARCHAR" />
+    <result column="m_label" property="mLabel" jdbcType="VARCHAR" />
+    <result column="m_bargain" property="mBargain" jdbcType="INTEGER" />
+    <result column="m_device_id" property="mDeviceId" jdbcType="VARCHAR" />
+    <result column="m_im" property="mIm" jdbcType="VARCHAR" />
+    <result column="m_token" property="mToken" jdbcType="VARCHAR" />
+    <result column="m_device_type" property="mDeviceType" jdbcType="INTEGER" />
+    <result column="m_follows" property="mFollows" jdbcType="BIGINT" />
+    <result column="m_deals" property="mDeals" jdbcType="BIGINT" />
+    <result column="m_score" property="mScore" jdbcType="DOUBLE" />
+    <result column="m_create_time" property="mCreateTime" jdbcType="TIMESTAMP" />
+    <result column="m_update_time" property="mUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="m_deleted" property="mDeleted" jdbcType="BIT" />
+    <result column="isCollection" property="isCollection" jdbcType="BIT" />
+    <result column="isSubscribe" property="isSubscribe" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    iu_id,iu_type, iu_user_id, iu_name, iu_img,iu_token, iu_create_time, iu_update_time
+  </sql>
+  <sql id="User_Column_List">
+  	user_id, u_nick,u_img_url, u_country_code, u_tel, u_password, u_status, u_birthday, u_sex,
+    u_constellation, u_create_time, u_update_time, u_deleted,u_device_id,u_device_type,u_im,u_token
+  </sql>
+  <sql id="Master_Column_List">
+  	master_id, m_nick,m_sex, m_status, m_head_img, m_constellation, m_country_code,
+    m_tel, m_password, m_address, m_business_type, m_label, m_bargain, m_follows, m_deals, 
+    m_score, m_create_time, m_update_time, m_deleted,m_device_id,m_im,m_token,m_device_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_im_user
+    where iu_id = #{iuId,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.yinghai.twentyfour.common.model.TfImUser">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from tf_im_user
+  	where 1=1
+  	<if test="iuUserId != null">
+  		AND iu_user_id = #{iuUserId,jdbcType=VARCHAR}
+  	</if>
+  	<if test="iuName !=null">
+  		AND iu_name LIKE CONCAT(CONCAT('%',#{iuName,jdbcType=VARCHAR}),'%')
+  	</if>
+  	<if test="iuId != null">
+  		AND iu_id = #{iuId,jdbcType=INTEGER}
+  	</if>
+  	
+  </select>
+  <select id="findUser" resultMap="UserResultMap">
+  	select
+  	<include refid="User_Column_List" />,ifnull(tr.relation_id,0) AS u_is_friend
+  	from tf_user
+  	LEFT JOIN 
+  	((select * from tf_relation where r_user_id = CONCAT('user',#{userId,jdbcType=INTEGER}) 
+  	AND r_friend_id = CONCAT('user',#{sourceId,jdbcType=INTEGER}) AND r_is_validate=1 AND r_delete=0)
+  	UNION
+  	(select * from tf_relation where r_user_id = CONCAT('user',#{sourceId,jdbcType=INTEGER}) 
+  	AND r_friend_id = CONCAT('user',#{userId,jdbcType=INTEGER}) AND r_is_validate=1 AND r_delete=0)
+  	) tr ON user_id = tr.r_user_id OR user_id = tr.r_friend_id
+  	WHERE 1=1
+  	<if test="userId != null">
+	  AND	user_id = #{userId,jdbcType=INTEGER} 
+  	</if>
+  	<if test="nick != null">
+  	  AND	CONCAT('user',user_id) IN(select iu_user_id from tf_im_user where iu_name LIKE CONCAT(CONCAT('%',#{nick,jdbcType=VARCHAR}),'%'))
+  	</if>
+  </select>
+  <select id="findMaster" resultMap="MasterResultMap">
+  	select
+  	<include refid="Master_Column_List" />
+  	from tf_master
+  	WHERE 1=1
+  	<if test="masterId != null">
+	  AND	master_id = #{masterId,jdbcType=INTEGER} 
+  	</if>
+  	<if test="nick != null">
+  	  AND	CONCAT('master',master_id) IN(select iu_user_id from tf_im_user where iu_name LIKE CONCAT(CONCAT('%',#{nick,jdbcType=VARCHAR}),'%'))
+  	</if>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_im_user
+    where iu_id = #{iuId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfImUser" >
+    insert into tf_im_user (iu_id,iu_type, iu_user_id, iu_name,
+      iu_img,iu_token, iu_create_time, iu_update_time
+      )
+    values (#{iuId,jdbcType=INTEGER},#{iuType,jdbcType=INTEGER}, #{iuUserId,jdbcType=VARCHAR}, #{iuName,jdbcType=VARCHAR},
+      #{iuImg,jdbcType=VARCHAR},#{iuToken,jdbcType=VARCHAR}, #{iuCreateTime,jdbcType=TIMESTAMP}, #{iuUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfImUser" >
+    insert into tf_im_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="iuId != null" >
+        iu_id,
+      </if>
+      <if test="iuType != null" >
+        iu_type,
+      </if>
+      <if test="iuUserId != null" >
+        iu_user_id,
+      </if>
+      <if test="iuName != null" >
+        iu_name,
+      </if>
+      <if test="iuImg != null" >
+        iu_img,
+      </if>
+      <if test="iuToken != null" >
+        iu_token,
+      </if>
+      <if test="iuCreateTime != null" >
+        iu_create_time,
+      </if>
+      <if test="iuUpdateTime != null" >
+        iu_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="iuId != null" >
+        #{iuId,jdbcType=INTEGER},
+      </if>
+      <if test="iuType != null" >
+        #{iuType,jdbcType=INTEGER},
+      </if>
+      <if test="iuUserId != null" >
+        #{iuUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="iuName != null" >
+        #{iuName,jdbcType=VARCHAR},
+      </if>
+      <if test="iuImg != null" >
+        #{iuImg,jdbcType=VARCHAR},
+      </if>
+      <if test="iuToken != null" >
+        #{iuToken,jdbcType=VARCHAR},
+      </if>
+      <if test="iuCreateTime != null" >
+        #{iuCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="iuUpdateTime != null" >
+        #{iuUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfImUser" >
+    update tf_im_user
+    <set >
+      <if test="iuUserId != null" >
+        iu_user_id = #{iuUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="iuName != null" >
+        iu_name = #{iuName,jdbcType=VARCHAR},
+      </if>
+      <if test="iuImg != null" >
+        iu_img = #{iuImg,jdbcType=VARCHAR},
+      </if>
+      <if test="iuToken != null" >
+        iu_token = #{iuToken,jdbcType=VARCHAR},
+      </if>
+      <if test="iuCreateTime != null" >
+        iu_create_time = #{iuCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="iuUpdateTime != null" >
+        iu_update_time = #{iuUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where iu_id = #{iuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfImUser" >
+    update tf_im_user
+    set iu_user_id = #{iuUserId,jdbcType=VARCHAR},
+      iu_name = #{iuName,jdbcType=VARCHAR},
+      iu_img = #{iuImg,jdbcType=VARCHAR},
+      iu_token = #{iuToken,jdbcType=VARCHAR},
+      iu_create_time = #{iuCreateTime,jdbcType=TIMESTAMP},
+      iu_update_time = #{iuUpdateTime,jdbcType=TIMESTAMP}
+    where iu_id = #{iuId,jdbcType=INTEGER}
+  </update>
+</mapper>

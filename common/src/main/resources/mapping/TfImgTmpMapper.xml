@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfImgTmpMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfImgTmp" >
+    <id column="img_tmp_id" property="imgTmpId" jdbcType="INTEGER" />
+    <result column="it_master_id" property="itMasterId" jdbcType="INTEGER" />
+    <result column="it_key_id" property="itKeyId" jdbcType="INTEGER" />
+    <result column="it_type" property="itType" jdbcType="INTEGER" />
+    <result column="it_url" property="itUrl" jdbcType="VARCHAR" />
+    <result column="it_create_time" property="itCreateTime" jdbcType="TIMESTAMP" />
+    <result column="it_update_time" property="itUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="it_absolute" property="itAbsolute" jdbcType="VARCHAR" />
+    <result column="it_app_path" property="itAppPath" jdbcType="VARCHAR" />
+    <result column="it_size" property="itSize" jdbcType="VARCHAR" />
+    <result column="it_is_userd" property="itIsUser" jdbcType="BIT" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    img_tmp_id, it_master_id, it_key_id, it_type, it_url, it_create_time, it_update_time, it_absolute, 
+    it_is_userd,it_app_path,it_size
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+
+    from tf_img_tmp
+    where img_tmp_id = #{imgTmpId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="getListByArticle" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+
+    from tf_img_tmp
+    where it_key_id = #{keyId,jdbcType=INTEGER} and it_type = #{type,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getTfImgTmpRecord" resultMap="BaseResultMap">
+       select 
+    <include refid="Base_Column_List" />
+
+    from tf_img_tmp where 1=1
+
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_img_tmp
+    where img_tmp_id = #{imgTmpId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfImgTmp" >
+    insert into tf_img_tmp ( img_tmp_id, it_master_id, it_key_id, it_type, it_url, it_create_time, it_update_time, it_absolute, 
+    it_is_userd,it_app_path,it_size)
+    values (#{imgTmpId,jdbcType=INTEGER}, #{itMasterId,jdbcType=INTEGER}, 
+      #{itKeyId,jdbcType=INTEGER}, #{itType,jdbcType=INTEGER}, #{itUrl,jdbcType=VARCHAR}, 
+      #{itCreateTime,jdbcType=TIMESTAMP}, #{itUpdateTime,jdbcType=TIMESTAMP}, #{itAbsolute,jdbcType=VARCHAR},
+      #{itIsUser,jdbcType=BIT}, #{itAppPath,jdbcType=VARCHAR}, #{itSize,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfImgTmp" useGeneratedKeys="true" keyProperty="imgTmpId"   >
+    insert into tf_img_tmp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="imgTmpId != null" >
+        img_tmp_id,
+      </if>
+      <if test="itMasterId != null" >
+        it_master_id,
+      </if>
+      <if test="itKeyId != null" >
+        it_key_id,
+      </if>
+      <if test="itType != null" >
+        it_type,
+      </if>
+      <if test="itUrl != null" >
+        it_url,
+      </if>
+      <if test="itCreateTime != null" >
+        it_create_time,
+      </if>
+      <if test="itUpdateTime != null" >
+        it_update_time,
+      </if>
+      <if test="itAbsolute != null" >
+        it_absolute,
+      </if>
+      <if test="itIsUser != null" >
+        it_is_userd,
+      </if>
+	  <if test="itAppPath != null" >
+        it_app_path,
+      </if>
+      <if test="itSize != null" >
+        it_size,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="imgTmpId != null" >
+        #{imgTmpId,jdbcType=INTEGER},
+      </if>
+      <if test="itMasterId != null" >
+        #{itMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="itKeyId != null" >
+        #{itKeyId,jdbcType=INTEGER},
+      </if>
+      <if test="itType != null" >
+        #{itType,jdbcType=INTEGER},
+      </if>
+      <if test="itUrl != null" >
+        #{itUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="itCreateTime != null" >
+        #{itCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itUpdateTime != null" >
+        #{itUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itAbsolute != null" >
+        #{itAbsolute,jdbcType=VARCHAR},
+      </if>
+      <if test="itIsUser != null" >
+        #{itIsUser,jdbcType=BIT},
+      </if>
+      <if test="itAppPath != null" >
+        #{itAppPath,jdbcType=VARCHAR},
+      </if>
+      <if test="itSize != null" >
+        #{itSize,jdbcType=VARCHAR},
+      </if>
+   
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfImgTmp" >
+    update tf_img_tmp
+    <set >
+      <if test="itMasterId != null" >
+        it_master_id = #{itMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="itKeyId != null" >
+        it_key_id = #{itKeyId,jdbcType=INTEGER},
+      </if>
+      <if test="itType != null" >
+        it_type = #{itType,jdbcType=INTEGER},
+      </if>
+      <if test="itUrl != null" >
+        it_url = #{itUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="itCreateTime != null" >
+        it_create_time = #{itCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itUpdateTime != null" >
+        it_update_time = #{itUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itAbsolute != null" >
+        it_absolute = #{itAbsolute,jdbcType=VARCHAR},
+      </if>
+      <if test="itIsUser != null" >
+        it_is_userd = #{itIsUser,jdbcType=BIT},
+      </if>
+      <if test="itAppPath != null" >
+        it_app_path = #{itAppPath,jdbcType=VARCHAR},
+      </if>
+      <if test="itSize != null" >
+        it_size = #{itSize,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where img_tmp_id = #{imgTmpId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfImgTmp" >
+    update tf_img_tmp
+    set 
+      	it_master_id = #{itMasterId,jdbcType=INTEGER},
+     	it_key_id = #{itKeyId,jdbcType=INTEGER},
+     	it_type = #{itType,jdbcType=INTEGER},
+        it_url = #{itUrl,jdbcType=VARCHAR},
+      	it_create_time = #{itCreateTime,jdbcType=TIMESTAMP},
+      	it_update_time = #{itUpdateTime,jdbcType=TIMESTAMP},
+       	it_absolute = #{itAbsolute,jdbcType=VARCHAR},
+       	it_app_path = #{itAppPath,jdbcType=VARCHAR},
+       	 it_size = #{itSize,jdbcType=VARCHAR},
+       	it_is_userd = #{itIsUser,jdbcType=BIT}
+    where img_tmp_id = #{imgTmpId,jdbcType=INTEGER}
+  </update>
+  
+    <update id="updateKeyIdById" >
+    update tf_img_tmp
+    set 
+     	it_key_id = #{keyId,jdbcType=INTEGER},
+       	it_is_userd = 1
+    where img_tmp_id in <foreach item="item" index="index" collection="ids" open="("
+            	separator="," close=")">
+            	#{item}  
+         	</foreach>
+  </update>
+  
+</mapper>

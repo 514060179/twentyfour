@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+    <style type="text/css">
+    	table td,table th {text-align: center;vertical-align: middle!important;}
+    </style>
+	<link rel="stylesheet" href="${base!}/assets/plugins/layer/skin/default/layer.css">
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<!-- head 头 -->
+<#include "../common/head.html"/>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- 菜单 -->
+    <#include "/ftl/menu.ftl"/>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+
+                <ul class="page-breadcrumb breadcrumb">
+
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">首頁</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">提现管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <div class="col-md-12">
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+                <!-- END EXAMPLE TABLE PORTLET-->
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box #fff">
+                    <div class="portlet-title">
+                        <div class="caption" style="color: black"><i class="icon-globe"></i>提现记录列表</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn default" href="#" data-toggle="dropdown">
+                                    更多
+                                    <i class="icon-angle-down"></i>
+                                </a>
+                                <div id="sample_2_column_toggler"
+                                     class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
+                                    <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"></span></div>
+                                        导出</label>
+                                    <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"><a href="javascript:void(0)"></span></div>
+                                        新增<a/></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div id="sample_2_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                            <div class="row form-horizontal">
+                              <form action="" method="post" id="form1">
+	                              	<div class="col-md-3 col-sm-12">
+	                              		<div>
+	                              			<label>提现记录ID&nbsp;&nbsp;:
+	                              				<input  id="recordId" name="recordId" type="text" class="form-control input-small"  value="<#escape x as x?xml>${record.recordId!}</#escape>" onkeyup="value=value.replace(/[^\d]/g,'')"/>
+	                              			</label>
+	                              		</div>
+	                              	</div>
+	                              	<div class="col-md-3 col-sm-12">
+	                              		<div>
+	                              			<label>大师&nbsp;&nbsp;ID&nbsp;&nbsp;:
+	                              				<input  id="masterId" name="masterId" type="text" class="form-control input-small"  value="<#escape x as x?xml>${record.rMasterId!}</#escape>" onkeyup="value=value.replace(/[^\d]/g,'')"/>
+	                              			</label>
+	                              		</div>
+	                              	</div>
+	                                <div class="col-md-3 col-sm-12">
+	                              		<div>
+	                              			<label>提现状态:
+	                              				<select id="status" name="status" class="form-control input-small">
+	                              					<option value=""></option>
+	                              					<option value="1" <#if record.rStatus??><#if record.rStatus=1>selected</#if></#if>>提现申请</option>
+	                              					<option value="2" <#if record.rStatus??><#if record.rStatus=2>selected</#if></#if>>申请通过</option>
+	                              					<option value="3" <#if record.rStatus??><#if record.rStatus=3>selected</#if></#if>>提现完成</option>
+	                              				</select>
+	                              			</label>
+	                              		</div>
+	                              	</div>
+	                                <div class="col-md-3 col-sm-12">
+	                                    <a href="javascript:void(0)" onclick="searchs()" class="btn default"><i class="icon-search"></i></a>
+	                                </div>
+								</form>
+                            </div>
+                            <div class="table-scrollable">
+                                <table class="table table-striped table-bordered table-hover table-full-width dataTable"
+                                       id="sample_2" aria-describedby="sample_2_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample_2"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending"
+                                            style="word-break: break-all;">提现记录ID
+                                        </th>
+                                        <th class="sorting_asc" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1" aria-sort="ascending"
+                                            aria-label="Browser: activate to sort column descending"
+                                            style="word-break: break-all;">大师ID
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="word-break: break-all;">提现金额
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="word-break: break-all;">提现时间
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="word-break: break-all;">提现记录状态
+                                        </th>
+                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Engine version: activate to sort column ascending"
+                                            style="word-break: break-all;">更多操作
+                                        </th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                     <#list page as item>
+                                    <tr class="odd" id="${item.recordId!}Tr">
+                                        <td class=" " style="word-break: break-all;"><a href="${base!}/admin/cashRecord/detail?recordId=${item.recordId!}">${item.recordId!}</a></td>
+                                        <td style="word-break: break-all;">${item.rMasterId!}</td>
+                                        <td class=" " style="word-break: break-all;">
+                                        	<#if item.rAmount??>${(item.rAmount/100.0)!}</#if>
+                                        </td>
+                                        <td class=" " style="word-break: break-all;">
+                                        	<#if item.rCreateTime??>${item.rCreateTime?string("yyyy-MM-dd HH:mm:ss")}</#if>
+                                        </td>
+                                        <td class=" " style="word-break: break-all;">
+                                        	<#if item.rStatus??>
+                                        		<#if item.rStatus=1>提现申请</#if>
+                                        		<#if item.rStatus=2>申请通过</#if>
+                                        		<#if item.rStatus=3>提现完成</#if>
+                                        	</#if>
+                                        </td>
+                                        <td style="word-break: break-all;white-space:normal;">                 
+                                        	<label>
+                                        		<a href="javascript:void();" onclick="audit('${item.recordId!}','${item.rMasterId!}','${(item.rAmount/100.0)!}')" style="<#if item.rStatus??><#if item.rStatus=1>display:inline<#else>display:none</#if><#else>display:none</#if>">提现审核</a>
+                                        		<a href="javascript:void();" onclick="confi('${item.recordId!}','${item.rMasterId!}')" style="<#if item.rStatus??><#if item.rStatus=2>display:inline<#else>display:none</#if><#else>display:none</#if>">确定已转账</a>
+                                        		<a href="${base!}/admin/cashRecord/detail?recordId=${item.recordId!}">查看</a>
+                                        	</label>
+                                        </td>
+                                    </tr>
+                                    </#list>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="row">
+                                    <#import "/ftl/pager.ftl" as p/> <#if page??> <@p.pager
+                                    pageNo=pageNo pageSize=pageSize recordCount=recordCount
+                                    pageCount=pageCount toURL="${base!}/admin/cashRecord/list"
+                                    method="post"/> </#if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<#include "../common/footer.html"/>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+
+<!-- END CORE PLUGINS -->
+<script>
+	
+</script>
+<script>
+    var first = true;
+    jQuery(document).ready(function () {
+        App.init();
+        $("#layout").click(function(){
+            if(first){
+                layout();
+                first = false;
+            }else{
+                resetLayout();
+                first = true;
+            }
+
+        });
+    });
+	
+    function searchs(){
+    	     document.getElementById("form1").action="${base!}/admin/cashRecord/list";
+    	   	 $("#form1").submit();
+    }
+    
+    function layout() {
+        $("body").addClass("page-boxed");
+
+        // set header
+        $('.header > .header-inner').addClass("container");
+        var cont = $('body > .clearfix').after('<div class="container"></div>');
+
+        // set content
+        $('.page-container').appendTo('body > .container');
+
+        // set footer
+        $('.footer').html('<div class="container">' + $('.footer').html() + '</div>');
+    }
+    var resetLayout = function () {
+        $("body").
+        removeClass("page-boxed").
+        removeClass("page-footer-fixed").
+        removeClass("page-sidebar-fixed").
+        removeClass("page-header-fixed");
+
+        $('.header > .header-inner').removeClass("container");
+
+        if ($('.page-container').parent(".container").size() === 1) {
+            $('.page-container').insertAfter('body > .clearfix');
+        }
+
+        if ($('.footer > .container').size() === 1) {
+            $('.footer').html($('.footer > .container').html());
+        } else if ($('.footer').parent(".container").size() === 1) {
+            $('.footer').insertAfter('.page-container');
+        }
+
+        $('body > .container').remove();
+    }
+    
+</script>
+<script src="../../assets/plugins/layer/layer.js"></script>
+<script>
+	function audit(record,master,amount){
+		//查询大师上一次提现时间那个月到上个月期间所有完成订单的金额
+		var recordId = record;
+		var masterId = master;
+		var amount = amount;
+        var index = layer.open({
+            title:"提现审核",
+            shift:1,
+            skin:'demo-class',
+            area:['400px','300px'],
+            type: 2,
+            shadeClose :false,
+            content: ['${base}/admin/cashRecord/audit?recordId='+recordId+'&masterId='+masterId+"&amount="+amount],
+            scrollbar:false,
+            btn: ['确定','取消'],
+            yes:function(index,layero){
+            	$.post("${base!}/admin/cashRecord/confirm",
+        				{"recordId":recordId
+        				},
+        				function(result){
+        					if(result.code==1){//审核成功，返回主页面，刷新页面
+        						alert("操作成功")
+        					}else{//未审核成功
+        						alert("操作失败")
+        					}
+        					location.href="${base}/admin/cashRecord/list";
+        				}
+        		);
+            },
+            bt2:function(index){
+            	layer.close(index);
+            }
+        });
+        layer.iframeAuto(index);
+		
+	}
+	function confi(record,master){
+		var recordId = record;
+		var masterId = master;
+		var r=confirm("是否确认已完成提现?");
+		console.log(r);
+		if(r==true){//执行完成提现请求
+			$.post("${base}/admin/cashRecord/confirm",
+					{"recordId":recordId,"masterId":masterId},
+					function(result){
+						if(result.code==1){
+							alert("操作成功");
+							location.href="${base}/admin/cashRecord/list";
+						}else{
+							alert("操作失败");
+						}
+						
+					});
+		}
+	}
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

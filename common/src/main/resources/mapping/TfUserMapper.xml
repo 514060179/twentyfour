@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfUserMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfUser" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="u_nick" property="uNick" jdbcType="VARCHAR" />
+    <result column="u_img_url" property="uImgUrl" jdbcType="VARCHAR" />
+    <result column="u_country_code" property="uCountryCode" jdbcType="VARCHAR" />
+    <result column="u_tel" property="uTel" jdbcType="VARCHAR" />
+    <result column="u_password" property="uPassword" jdbcType="VARCHAR" />
+    <result column="u_status" property="uStatus" jdbcType="INTEGER" />
+    <result column="u_birthday" property="uBirthday" jdbcType="DATE" />
+    <result column="u_sex" property="uSex" jdbcType="BIT" />
+    <result column="u_constellation" property="uConstellation" jdbcType="INTEGER" />
+    <result column="u_create_time" property="uCreateTime" jdbcType="TIMESTAMP" />
+    <result column="u_update_time" property="uUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="u_deleted" property="uDeleted" jdbcType="BIT" />
+    <result column="u_device_id" property="uDeviceId" jdbcType="VARCHAR" />
+    <result column="u_device_type" property="uDeviceType" jdbcType="INTEGER" />
+    <result column="u_im" property="uIm" jdbcType="VARCHAR" />
+    <result column="u_token" property="uToken" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, u_nick,u_img_url, u_country_code, u_tel, u_password, u_status, u_birthday, u_sex,
+    u_constellation, u_create_time, u_update_time, u_deleted,u_device_id,u_device_type,u_im,u_token
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="findByTel" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_user
+    where u_tel = #{tel,jdbcType=VARCHAR} and u_country_code = #{countryCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getTfUserRecord" resultMap="BaseResultMap" >
+       select 
+    <include refid="Base_Column_List" />
+    from tf_user where 1=1
+        <if test="uConstellation!=null">
+    	and u_constellation = #{uConstellation,jdbcType=INTEGER}
+    	</if>
+    	<if test="uCountryCode!=null">
+    	and u_country_code = #{uCountryCode,jdbcType=VARCHAR}
+    	</if>
+    	<if test="uTel!=null">
+    	and u_tel like #{uTel,jdbcType=VARCHAR}
+    	</if>
+    	<if test="uNick!=null">
+    	and u_nick like #{uNick,jdbcType=VARCHAR}
+    	</if>
+    	<if test="uImgUrl!=null">
+    	and u_img_url = #{uImgUrl,jdbcType=VARCHAR}
+    	</if>
+    	<if test="uDeleted!=null">
+    	and u_deleted = #{uDeleted,jdbcType=BIT}
+    	</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfUser" >
+    insert into tf_user (user_id, u_nick,u_nick, u_country_code,
+      u_tel, u_password, u_status,
+      u_birthday, u_sex, u_constellation, 
+      u_create_time, u_update_time, u_deleted,u_device_id,u_device_type,u_im,u_token
+      )
+    values (#{userId,jdbcType=INTEGER}, #{uNick,jdbcType=VARCHAR},#{uImgUrl,jdbcType=VARCHAR}, #{uCountryCode,jdbcType=VARCHAR},
+      #{uTel,jdbcType=VARCHAR}, #{uPassword,jdbcType=VARCHAR}, #{uStatus,jdbcType=INTEGER},
+      #{uBirthday,jdbcType=DATE}, #{uSex,jdbcType=BIT}, #{uConstellation,jdbcType=INTEGER}, 
+      #{uCreateTime,jdbcType=TIMESTAMP}, #{uUpdateTime,jdbcType=TIMESTAMP}, #{uDeleted,jdbcType=BIT}, #{uDeviceId,jdbcType=VARCHAR}, 
+      #{uDeviceType,jdbcType=INTEGER},#{uIm,jdbcType=VARCHAR},#{uToken,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfUser"  useGeneratedKeys="true" keyProperty="userId">
+    insert into tf_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="uNick != null" >
+        u_nick,
+      </if>
+      <if test="uImgUrl != null" >
+        u_img_url,
+      </if>
+      <if test="uCountryCode != null" >
+        u_country_code,
+      </if>
+      <if test="uTel != null" >
+        u_tel,
+      </if>
+      <if test="uPassword != null" >
+        u_password,
+      </if>
+      <if test="uStatus != null" >
+        u_status,
+      </if>
+      <if test="uBirthday != null" >
+        u_birthday,
+      </if>
+      <if test="uSex != null" >
+        u_sex,
+      </if>
+      <if test="uConstellation != null" >
+        u_constellation,
+      </if>
+      <if test="uCreateTime != null" >
+        u_create_time,
+      </if>
+      <if test="uUpdateTime != null" >
+        u_update_time,
+      </if>
+      <if test="uDeleted != null" >
+        u_deleted,
+      </if>
+      <if test="uDeviceId != null" >
+        u_device_id,
+      </if>
+      <if test="uDeviceType != null" >
+        u_device_type,
+      </if>
+      <if test="uIm != null" >
+        u_im,
+      </if>
+      <if test="uToken != null" >
+        u_token,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="uNick != null" >
+        #{uNick,jdbcType=VARCHAR},
+      </if>
+      <if test="uImgUrl != null" >
+        #{uImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="uCountryCode != null" >
+        #{uCountryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="uTel != null" >
+        #{uTel,jdbcType=VARCHAR},
+      </if>
+      <if test="uPassword != null" >
+        #{uPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="uStatus != null" >
+        #{uStatus,jdbcType=INTEGER},
+      </if>
+      <if test="uBirthday != null" >
+        #{uBirthday,jdbcType=DATE},
+      </if>
+      <if test="uSex != null" >
+        #{uSex,jdbcType=BIT},
+      </if>
+      <if test="uConstellation != null" >
+        #{uConstellation,jdbcType=INTEGER},
+      </if>
+      <if test="uCreateTime != null" >
+        #{uCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uUpdateTime != null" >
+        #{uUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uDeleted != null" >
+        #{uDeleted,jdbcType=BIT},
+      </if>
+      <if test="uDeviceId != null" >
+        #{uDeviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="uDeviceType != null" >
+        #{uDeviceType,jdbcType=INTEGER},
+      </if>
+      <if test="uIm != null" >
+        #{uIm,jdbcType=VARCHAR},
+      </if>
+      <if test="uToken != null" >
+        #{uToken,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfUser" >
+    update tf_user
+    <set >
+      <if test="uNick != null" >
+        u_nick = #{uNick,jdbcType=VARCHAR},
+      </if>
+      <if test="uImgUrl != null" >
+        u_img_url = #{uImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="uCountryCode != null" >
+        u_country_code = #{uCountryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="uTel != null" >
+        u_tel = #{uTel,jdbcType=VARCHAR},
+      </if>
+      <if test="uPassword != null" >
+        u_password = #{uPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="uStatus != null" >
+        u_status = #{uStatus,jdbcType=INTEGER},
+      </if>
+      <if test="uBirthday != null" >
+        u_birthday = #{uBirthday,jdbcType=DATE},
+      </if>
+      <if test="uSex != null" >
+        u_sex = #{uSex,jdbcType=BIT},
+      </if>
+      <if test="uConstellation != null" >
+        u_constellation = #{uConstellation,jdbcType=INTEGER},
+      </if>
+      <if test="uCreateTime != null" >
+        u_create_time = #{uCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uUpdateTime != null" >
+        u_update_time = #{uUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uDeleted != null" >
+        u_deleted = #{uDeleted,jdbcType=BIT},
+      </if>
+        <if test="uDeviceId != null" >
+        u_device_id = #{uDeviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="uDeviceType != null" >
+        u_device_type = #{uDeviceType,jdbcType=INTEGER},
+      </if>
+      <if test="uIm != null" >
+        u_im = #{uIm,jdbcType=VARCHAR},
+      </if>
+      <if test="uToken != null" >
+        u_token = #{uToken,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfUser" >
+    update tf_user
+    set u_nick = #{uNick,jdbcType=VARCHAR},
+      u_img_url = #{uImgUrl,jdbcType=VARCHAR},
+      u_country_code = #{uCountryCode,jdbcType=VARCHAR},
+      u_tel = #{uTel,jdbcType=VARCHAR},
+      u_password = #{uPassword,jdbcType=VARCHAR},
+      u_status = #{uStatus,jdbcType=INTEGER},
+      u_birthday = #{uBirthday,jdbcType=DATE},
+      u_sex = #{uSex,jdbcType=BIT},
+      u_constellation = #{uConstellation,jdbcType=INTEGER},
+      u_create_time = #{uCreateTime,jdbcType=TIMESTAMP},
+      u_update_time = #{uUpdateTime,jdbcType=TIMESTAMP},
+      u_deleted = #{uDeleted,jdbcType=BIT},
+      u_device_id = #{uDeviceId,jdbcType=VARCHAR},
+      u_device_type = #{uDeviceType,jdbcType=INTEGER}
+      u_im = #{uIm,jdbcType=VARCHAR}
+      u_token = #{uToken,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <select id="findTopId" resultType="int" >
+    SELECT IFNULL(MAX(user_id),0)+1 AS m FROM tf_user
+  </select>
+</mapper>

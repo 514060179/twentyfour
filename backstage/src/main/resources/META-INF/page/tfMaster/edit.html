@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+<script src="${base!}/assets/jquery-3.1.1.min.js"></script>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<!-- head 头 -->
+<#include "../common/head.html"/>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- 菜单 -->
+    <#include "/ftl/menu.ftl"/>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+
+                <ul class="page-breadcrumb breadcrumb">
+                    <li class="btn-group">
+                        <a href="${base!}/admin/master/list"><button type="button" class="btn grey dropdown-toggle"  data-hover="dropdown" data-delay="1000" data-close-others="true">
+                            返回列表
+                        </button></a>
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">首页</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="${base!}/admin/master/list">大師</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#"><#if master??>编辑大師#${master.masterId}<#else>新增大師</#if></a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN VALIDATION STATES-->
+                <div class="portlet box gainsboro">
+                    <div class="portlet-body form">
+                        <div class="form-body">
+                            <!-- BEGIN FORM-->
+                            <h3 class="form-section"><#if master??>编辑大師#${master.masterId}<#else>新增大師</#if>  <small></small></h3>
+                            <form action="#" id="registrationForm" class="form-horizontal" novalidate="novalidate">
+                            <input type="hidden" class="form-control" id="masterId" name="masterId" value="<#if master??>${master.masterId!}</#if>" />
+                            
+                            <!-- 
+                                <div class="alert alert-success display-show" style="color: red">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    保存失败!
+                                </div>
+                                <div class="alert alert-success display-show">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    保存成功!
+                                </div> -->
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">手機號<span class="required">*</span></label>
+                                    <div class="col-md-1">
+                                      <input name="mCountryCode" id="mCountryCode" value='<#if master??>${master.mCountryCode!}</#if>'type="text" onchange='checkTel()' class="form-control" <#if master??>disabled="disabled"</#if>>
+                                    </div>
+                                    <div class="col-md-2">
+                                      <input name="mTel" id="mTel" value='<#if master??>${master.mTel!}</#if>'type="text" onchange='checkTel()' class="form-control" <#if master??>disabled="disabled"</#if>>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">暱稱<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="mNick" id="mNick" value='<#if master??>${master.mNick!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">密碼<#if master??><#else><span class="required">*</span></#if></label>
+                                    <div class="col-md-4">
+                                     <input name="mPassword" id="mPassword" type="password" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">確認密碼<#if master??><#else><span class="required">*</span></#if></label>
+                                    <div class="col-md-4">
+                                     <input name="mPassword2" id="mPassword2" type="password" class="form-control">
+                                	</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">性別<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <select style="height: 32px;" id="mSex" name="mSex" >
+                                     	<option value='false' <#if master??><#if
+														master.mSex?string("1","0")='0'>selected</#if></#if>
+														>女</option>
+                                     	<option value='true' <#if master??><#if
+														master.mSex?string("1","0")='1'>selected</#if></#if>
+														>男</option>
+                                     
+                                     </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">星座<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <select style="height: 32px;" id="mConstellation" name="mConstellation" >
+                                     	<option value='1' <#if master??><#if master.mConstellation=1>selected</#if></#if>>水平座</option>
+                                     	<option value='2' <#if master??><#if master.mConstellation=2>selected</#if></#if>>双鱼座</option>
+                                     	<option value='3' <#if master??><#if master.mConstellation=3>selected</#if></#if>>白羊座</option>
+                                     	<option value='4' <#if master??><#if master.mConstellation=4>selected</#if></#if>>金牛座</option>
+                                     	<option value='5' <#if master??><#if master.mConstellation=5>selected</#if></#if>>双子座</option>
+                                     	<option value='6' <#if master??><#if master.mConstellation=6>selected</#if></#if>>巨蟹座</option>
+                                     	<option value='7' <#if master??><#if master.mConstellation=7>selected</#if></#if>>狮子座</option>
+                                     	<option value='8' <#if master??><#if master.mConstellation=8>selected</#if></#if>>处女座</option>
+                                     	<option value='9' <#if master??><#if master.mConstellation=9>selected</#if></#if>>天秤座</option>
+                                     	<option value='10' <#if master??><#if master.mConstellation=10>selected</#if></#if>>天蝎座</option>
+                                     	<option value='11' <#if master??><#if master.mConstellation=11>selected</#if></#if>>射手座</option>
+                                     	<option value='12' <#if master??><#if master.mConstellation=12>selected</#if></#if>>摩羯座</option>
+                                     </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+									<!-- Search input-->
+									<label class="control-label col-md-3">大师简介<span class="required">*</span></label>
+									<div class="col-md-4">
+										<textarea id="mIntroduction"name='mIntroduction'style="margin: 0px; width: 573px; height: 174px;"><#if master??>${master.mIntroduction!}</#if></textarea>
+										 <input type="hidden" class="form-control" id="introduction" name="introduction" value="<#if master??>${master.mIntroduction!}</#if>" />
+										
+										<p class="help-block" style="color:red;font-size:10px;" id="textareaIip"></p>
+									</div>
+								</div>
+                                <!--  <div class="form-group">
+                                    <label class="control-label col-md-3">業務類型<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="mBusinessType" id="mBusinessType" value='<#if master??>${master.mBusinessType!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">大師標籤<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="mLabel" id="mLabel" value='<#if master??>${master.mLabel!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>-->
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">住址</label>
+                                    <div class="col-md-4">
+                                      <input name="mAddress" id="mAddress" value='<#if master??>${master.mAddress!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">拉黑<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <select style="height: 32px;" id="mDeleted" name="mDeleted" >
+                                     	<option value='false' <#if master??><#if
+														master.mDeleted?string("1","0")='0'>selected</#if></#if>
+														>否</option>
+                                     	<option value='true' <#if master??><#if
+														master.mDeleted?string("1","0")='1'>selected</#if></#if>
+														>是</option>
+                                     
+                                     </select>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+											<label class="control-label col-md-3">大師頭像<span class="required">*</span></label>
+											<div class="col-lg-8">
+												<img
+													src="<#if master??>${master.mHeadImg!}</#if>"
+													id="previewFile"
+													style="height: 150px; width: 150px; border: 1px solid #ddd;" />
+												<a href="javascript:;" class="a-upload"> 
+													<input type="file" id="file" name="file"> 
+													<input type="hidden" id="boochange" name="boochange" value='false'>
+												</a>
+											</div>
+										</div>
+                                <div class="form-group"">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" id = 'submit' class="btn default">保存</button>
+                                        <button type="button" class="btn default">取消</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                    <!-- END VALIDATION STATES-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<#include "../common/footer.html"/>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+
+<!-- END CORE PLUGINS -->
+ 
+<script>
+var first = true;
+jQuery(document).ready(function () {
+    App.init();
+    $("#layout").click(function(){
+        if(first){
+            layout();
+            first = false;
+        }else{
+            resetLayout();
+            first = true;
+        }
+
+    });
+});
+
+
+$("#submit")
+.click(
+		function() {
+			var introduction = $("#mIntroduction").val();;
+			var nick = document.getElementById('mNick').value;
+			var password = document.getElementById('mPassword').value;
+			var password2 = document.getElementById('mPassword2').value;
+			var tel = document.getElementById('mTel').value;
+			var countryCode = $('#mCountryCode option:selected').val();
+			var constellation = document.getElementById('mConstellation').value;
+			var sex = $('#mSex option:selected').val();
+			var deleted = $('#mDeleted option:selected').val();
+			var  act = "add";
+			var jsonUser = {};
+			var masterId = $("#masterId").val();
+			if (nick == "") {
+				alert("請輸入暱稱!");
+				return false;
+			}
+			if (tel == "") {
+				alert("請輸入手機號!");
+				return false;
+			}
+			if(masterId!=''){
+				 act = "upd";
+				 jsonUser["masterId"] = masterId;
+			}else{
+				if (password == "") {
+					alert("請輸入密碼 ！");
+					return false;
+				}
+				if (password2 == "") {
+					alert("請輸入確認密碼 ！");
+					return false;
+				}
+				if(password!=password2){
+					alert("兩次密碼不一致，請重新輸入 ！");
+					return false;
+				}
+			}
+			if(tel!=""&&countryCode!=""&&(countryCode=='853'|| countryCode == '86'|| countryCode == '852')){
+			var reg1 = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+			if (countryCode == 853 || countryCode == 852) {
+				var reg = /^0?6\d{7}$/;
+				if (!reg.test(tel)) {
+					alert("該手機號不合法！");
+					return false;
+				} 
+			} else {
+				if (!reg1.test(tel)) {
+					alert("該手機號不合法！");
+					return false;
+				}
+			}
+			}
+			if(introduction!=""){
+				document.getElementById('introduction').value=introduction;
+			}
+				//判斷文件是否符合類型
+				var filePath = $("#file").val();
+				if ("" != filePath) {
+					var fileType = getFileType(filePath);
+					//判断上传的附件是否为图片  
+					if ("jpg" != fileType
+							&& "jpeg" != fileType
+							&& "bmp" != fileType
+							&& "png" != fileType
+							&& "gif" != fileType) {
+						alert("请上传JPG,JPEG,BMP,PNG,GIF格式的图片");
+						return false;
+					} else {
+						//获取附件大小（单位：KB）  
+						var fileSize = document
+								.getElementById("file").files[0].size / 1024;
+						if (fileSize > 2048) {
+							alert("图片大小不能超过2MB");
+							return false;
+						}
+					}
+				}
+			var formData = new FormData(
+					$("#registrationForm")[0]);
+			$.ajax({
+				url : '${base}/admin/master/save',
+				type : 'POST',
+				data : formData,
+				async : false,
+				cache : false,
+				contentType : false,
+				processData : false,
+				success : function(returndata) {
+					if (returndata.code == "1"||returndata.code == "2") {
+						alert(returndata.msg);
+						window.location.href = '${base}/admin/master/list';
+					}else{
+						alert(returndata.msg);
+					}
+				},
+				error : function(returndata) {
+					alert(returndata);
+				}
+			});
+			 return false;
+		});
+			
+			
+	function checkTel(){
+		var jsonUser = {};
+		var tel = document.getElementById('mTel').value;
+		var countryCode = document.getElementById('mCountryCode').value;
+		if(tel!=""&&countryCode!=""&&(countryCode=='853'|| countryCode == '86'|| countryCode == '852')){
+			//先判斷該賬號是否合法
+			var reg1 = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+			if (countryCode == 853 || countryCode == 852) {
+				var reg = /^0?6\d{7}$/;
+				if (!reg.test(tel)) {
+					alert("該手機號不合法！");
+					return false;
+				} 
+			} else {
+				if (!reg1.test(tel)) {
+					alert("該手機號不合法！");
+					return false;
+				}
+			}
+			//如果合法，再判斷該賬號是否存在
+			jsonUser["tel"] = tel;
+			jsonUser["countryCode"] = countryCode;
+			$
+			.post(
+					"${base}/admin/master/checkTel?a="
+							+ 1,jsonUser,
+					function(data) {
+						if (data.code == "1020") {
+							alert(data.msg);
+							return false;
+						}
+					});
+		}
+	}
+function resetFormInput() { //清空表单
+	$("form input").each(function() {
+		$(this).val("");
+	});
+}
+
+function getFileType(filePath) {
+	var startIndex = filePath.lastIndexOf(".");
+	if (startIndex != -1)
+		return filePath.substring(startIndex + 1, filePath.length)
+				.toLowerCase();
+	else
+		return "";
+}
+
+$('#date-picker').datepicker();
+$(document)
+		.ready(
+				function() {
+					document.getElementById('file').onchange = function(
+							evt) {
+						// 如果浏览器不支持FileReader，则不处理
+						if (!window.FileReader)
+							return;
+						document.getElementById("boochange").value = 'true';
+						var files = evt.target.files;
+						for (var i = 0, f; f = files[i]; i++) {
+							if (!f.type.match('image.*')) {
+								continue;
+							}
+							var reader = new FileReader();
+							reader.onload = (function(theFile) {
+								return function(e) {
+									// img 元素
+									document
+											.getElementById('previewFile').style.display = 'block';
+									document
+											.getElementById('previewFile').src = e.target.result;
+								};
+							})(f);
+							reader.readAsDataURL(f);
+						}
+					}
+
+				})
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

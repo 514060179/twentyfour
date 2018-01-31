@@ -1,0 +1,1 @@
+ALTER TABLE tf_article add a_read_amount BIGINT(50) NULL COMMENT '文章阅读量';

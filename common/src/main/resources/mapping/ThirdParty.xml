@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.ThirdPartyMapper">
+	<resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.ThirdParty">
+		<id column="third_party_id" property="thirdPartyId" jdbcType="INTEGER" />
+		<result column="open_id" property="openId" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="tf_id" property="tfId" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="sex" property="sex" jdbcType="BIT" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="country" property="country" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="nick" property="nick" jdbcType="VARCHAR" />
+		<result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
+		<result column="tf_type" property="tfType" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		third_party_id, open_id, create_time, tf_id, type,sex,city,country,province,nick,tf_type,imgUrl
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from third_party
+		where third_party_id = #{thirdPartyId,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectByOpenId" resultMap="BaseResultMap"
+		>
+		select
+		<include refid="Base_Column_List" />
+		from third_party
+		where open_id = #{openId,jdbcType=VARCHAR} AND tf_type=#{tfType,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByTfIdAndType" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from third_party
+		where tf_id = #{tfId,jdbcType=INTEGER} and type=#{type,jdbcType=INTEGER}  and tf_type=#{tfType,jdbcType=INTEGER} 
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		third_party
+		where third_party_id = #{thirdPartyId,jdbcType=INTEGER}
+	</delete>
+	<update id="updatePrimaryKey" parameterType="com.yinghai.twentyfour.common.model.ThirdParty">
+		update third_party
+		<set>
+			<if test="openId != null">
+				open_id = #{openId,jdbcType=VARCHAR},
+			</if>
+			<if test="tfId != null">
+				tf_id = #{tfId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="tfType != null">
+				tf_type = #{tfType,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=BIT},
+			</if>
+			<if test="city != null">
+				city = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="country != null">
+				country = #{country,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="nick != null">
+				nick = #{nick,jdbcType=VARCHAR},
+			</if>
+			<if test="imgUrl != null">
+				imgUrl = #{imgUrl,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where third_party_id = #{thirdPartyId,jdbcType=VARCHAR}
+	</update>
+
+
+	<insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.ThirdParty" useGeneratedKeys="true" keyProperty="thirdPartyId">
+		insert into third_party
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="thirdPartyId != null">
+				third_party_id,
+			</if>
+			<if test="openId != null">
+				open_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="tfId != null">
+				tf_id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="tfType != null">
+				tf_type,
+			</if>
+			
+			<if test="sex != null">
+				sex,
+			</if>
+
+			<if test="city != null">
+				city,
+			</if>
+			<if test="country != null">
+				country,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="nick != null">
+				nick,
+			</if>
+			<if test="imgUrl != null">
+				imgUrl,
+			</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="thirdPartyId != null">
+				#{thirdPartyId,jdbcType=INTEGER},
+			</if>
+			<if test="openId != null">
+				#{openId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="tfId != null">
+				#{tfId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="tfType != null">
+				  #{tfType,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=BIT},
+			</if>
+			
+			<if test="city != null">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="country != null">
+				 #{country,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				 #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="nick != null">
+				 #{nick,jdbcType=VARCHAR},
+			</if>
+			<if test="imgUrl != null">
+				 #{imgUrl,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+	</insert>
+</mapper>

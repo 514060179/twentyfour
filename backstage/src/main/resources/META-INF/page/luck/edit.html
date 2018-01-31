@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+<script src="${base!}/assets/jquery-3.1.1.min.js"></script>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<!-- head 头 -->
+<#include "../common/head.html"/>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- 菜单 -->
+    <#include "/ftl/menu.ftl"/>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+
+                <ul class="page-breadcrumb breadcrumb">
+                    <li class="btn-group">
+                        <a href="${base!}/admin/luck/list"><button type="button" class="btn grey dropdown-toggle"  data-hover="dropdown" data-delay="1000" data-close-others="true">
+                            返回列表
+                        </button></a>
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">首页</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="${base!}/admin/luck/list">运势管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#"><#if look??>查看运势信息<#else><#if l??>编辑运势信息#${l.luckId}<#else>新增运势信息</#if></#if></a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN VALIDATION STATES-->
+                <div class="portlet box gainsboro">
+                    <div class="portlet-body form">
+                        <div class="form-body">
+                            <!-- BEGIN FORM-->
+                            <h3 class="form-section"><#if look??>查看运势信息<#else><#if l??>编辑运势信息#${l.luckId}<#else>新增运势信息</#if> </#if> <small></small></h3>
+                            <form action="#" id="form1" class="form-horizontal" novalidate="novalidate">
+                            <#if look??>
+                            <div class="row-fluid">
+                            <div class="row">
+                            <div class="span3 col-sm-2" ></div>
+							<div class="span6 col-sm-8">
+                            	<span style="display: none" class="form-control"><#if l??>${l.luckId!}</#if></span>
+                            	<fieldset>
+                            		<legend style="font-weight: bold;">运势信息</legend>
+									<div class="form-group">
+									   	<label class="col-sm-2 control-label;font-weight: bold;">运势日期</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${(l.lDate?string("yyyy-MM-dd"))!}</#if>
+									   	</div>
+								    </div>
+								    <div class="form-group">
+								    	<label class="col-sm-2 control-label;font-weight: bold;">幸运星座</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>
+	                                     		<#if l.lConstellation??>
+		                                     	<#if l.lConstellation=1>水平座</#if>
+		                                     	<#if l.lConstellation=2>双鱼座</#if>
+		                                     	<#if l.lConstellation=3>白羊座</#if>
+		                                     	<#if l.lConstellation=4>金牛座</#if>
+		                                     	<#if l.lConstellation=5>双子座</#if>
+		                                     	<#if l.lConstellation=6>巨蟹座</#if>
+		                                     	<#if l.lConstellation=7>狮子座</#if>
+		                                     	<#if l.lConstellation=8>处女座</#if>
+		                                     	<#if l.lConstellation=9>天秤座</#if>
+		                                     	<#if l.lConstellation=10>天蝎座</#if>
+		                                     	<#if l.lConstellation=11>射手座</#if>
+		                                     	<#if l.lConstellation=12>摩羯座</#if>
+                                     			</#if>
+                                     		</#if>
+									   	</div>
+								    </div>
+									<div class="form-group">
+									   	<label class="col-sm-2 control-label;font-weight: bold;">幸运感情</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${l.lEmotion!}</#if>
+									   	</div>
+								    </div>
+								    <div class="form-group">
+								    	<label class="col-sm-2 control-label;font-weight: bold;">幸运数字</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${l.lNumber!}</#if>
+									   	</div>
+								    </div>
+								    <div class="form-group">
+								    	<label class="col-sm-2 control-label;font-weight: bold;">幸运颜色</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${l.lColor!}</#if>
+									   	</div>
+								    </div>
+								    <div class="form-group">
+								    	<label class="col-sm-2 control-label;font-weight: bold;">宜</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${l.lSuit!}</#if>
+									   	</div>
+								    </div>
+								    <div class="form-group">
+								    	<label class="col-sm-2 control-label;font-weight: bold;">忌</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${l.lUnsuitable!}</#if>
+									   	</div>
+								    </div>
+								    <div class="form-group">
+								    	<label class="col-sm-2 control-label;font-weight: bold;">更多</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${l.lMore!}</#if>
+									   	</div>
+								    </div>
+									<div class="form-group">
+									   	<label class="col-sm-2 control-label;font-weight: bold;">创建时间</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${(l.lCreateTime?string("yyyy-MM-dd HH:mm:ss"))!}</#if>
+									   	</div>
+								    </div>
+									<div class="form-group">
+									   	<label class="col-sm-2 control-label;font-weight: bold;">更新时间</label>
+									   	<div class="col-sm-4">
+									   		<#if l??>${(l.lUpdateTime?string("yyyy-MM-dd HH:mm:ss"))!}</#if>
+									   	</div>
+								    </div>
+								</fieldset>
+                            </div>
+                            </div>
+                            </div>
+                            <#else>
+                            
+                            <input type="hidden" class="form-control" id="luckId" name="luckId" value="<#if l??>${l.luckId!}</#if>" >
+                            <!-- 
+                                <div class="alert alert-success display-show" style="color: red">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    保存失败!
+                                </div>
+                                <div class="alert alert-success display-show">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    保存成功!
+                                </div> -->
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">运势日期<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="lDate" id="lDate" value='<#if l??>${(l.lDate?string("yyyy-MM-dd"))!}</#if>' type="text" class="form-control <#if l??><#else>luckdate</#if>" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">幸运星座<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <!-- <input name="lConstellation" id="lConstellation" value='<#if l??>${l.lConstellation!}</#if>' type="text" class="form-control" <#if l??>readonly<#else></#if>> -->
+                                     <select style="height: 32px;" id="lConstellation" name="lConstellation" <#if l??>disabled</#if>>
+                                     	<option value='1' <#if l??><#if l.lConstellation=1>selected</#if></#if>>水平座</option>
+                                     	<option value='2' <#if l??><#if l.lConstellation=2>selected</#if></#if>>双鱼座</option>
+                                     	<option value='3' <#if l??><#if l.lConstellation=3>selected</#if></#if>>白羊座</option>
+                                     	<option value='4' <#if l??><#if l.lConstellation=4>selected</#if></#if>>金牛座</option>
+                                     	<option value='5' <#if l??><#if l.lConstellation=5>selected</#if></#if>>双子座</option>
+                                     	<option value='6' <#if l??><#if l.lConstellation=6>selected</#if></#if>>巨蟹座</option>
+                                     	<option value='7' <#if l??><#if l.lConstellation=7>selected</#if></#if>>狮子座</option>
+                                     	<option value='8' <#if l??><#if l.lConstellation=8>selected</#if></#if>>处女座</option>
+                                     	<option value='9' <#if l??><#if l.lConstellation=9>selected</#if></#if>>天秤座</option>
+                                     	<option value='10' <#if l??><#if l.lConstellation=10>selected</#if></#if>>天蝎座</option>
+                                     	<option value='11' <#if l??><#if l.lConstellation=11>selected</#if></#if>>射手座</option>
+                                     	<option value='12' <#if l??><#if l.lConstellation=12>selected</#if></#if>>摩羯座</option>
+                                     </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">幸运事业<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <input name="lUndertaking" id="lUndertaking" type="text" value='<#if l??><#escape x as x?xml>${l.lUndertaking!}</#escape></#if>' class="form-control">
+                                	</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">幸运感情</label>
+                                    <div class="col-md-4">
+                                        <input name="lEmotion" id="lEmotion" type="text" value='<#if l??><#escape x as x?xml>${l.lEmotion!}</#escape></#if>'class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">幸运数字</label>
+                                    <div class="col-md-4">
+                                        <input name="lNumber" style="width: 122px;" id="lNumber" type="number" onchange="datachange(this);" value='<#if l??>${l.lNumber!}</#if>'class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">幸运颜色</label>
+                                    <div class="col-md-4">
+                                        <input name="lColor" id="lColor" type="text" value='<#if l??><#escape x as x?xml>${l.lColor!}</#escape></#if>'class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">宜&nbsp;&nbsp;&nbsp;</label>
+                                    <div class="col-md-4">
+                                        <input name="lSuit" id="lSuit" type="text" value='<#if l??><#escape x as x?xml>${l.lSuit!}</#escape></#if>'class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">忌&nbsp;&nbsp;&nbsp;</label>
+                                    <div class="col-md-4">
+                                        <input name="lUnsuitable" id="lUnsuitable" type="text" value='<#if l??><#escape x as x?xml>${l.lUnsuitable!}</#escape></#if>'class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">更多&nbsp;&nbsp;</label>
+                                    <div class="col-md-4">
+                                        <input name="lMore" id="lMore" type="text" value='<#if l??><#escape x as x?xml>${l.lMore!}</#escape></#if>'class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group"">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" id = 'submit' class="btn default">保存</button>
+                                        <button type="button" id ='cancel' class="btn default">取消</button>
+                                    </div>
+                                </div>
+                            </#if>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                    <!-- END VALIDATION STATES-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<#include "../common/footer.html"/>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+
+<!-- END CORE PLUGINS -->
+ 
+<script>
+var first = true;
+jQuery(document).ready(function () {
+    App.init();
+    $("#layout").click(function(){
+        if(first){
+            layout();
+            first = false;
+        }else{
+            resetLayout();
+            first = true;
+        }
+
+    });
+    $(".luckdate").datepicker({format: 'yyyy-mm-dd',
+    	numberOfMonths:1,
+		showButtonPanel:true,
+		clearText:"清除",
+		closeText:"关闭",
+		changeMonth: true,
+        changeYear: true,
+        autoclose:true,
+        clearBtn:true,
+        todayBtn:true,
+        monthNames:['1','2','3','4','5','6','7','8','9','10','11','12'],
+        dayNamesMin: ['日','一','二','三','四','五','六'],
+		onSelect:function(){}	
+	});
+});
+
+
+$("#submit")
+.click(
+		function() {
+			var luckId = $('#luckId').val();
+			var act = "";
+			if(typeof(luckId)!='undefined'&&luckId!=''){
+				act = 'upd';
+			}else{
+				act = 'add';
+			}
+			var lDate = $('#lDate').val();
+			if(lDate==''&&act=='add'){
+				alert('请选择日期');
+				$('#lDate').focus();
+				return false;
+			}
+			var lConstellation = $('#lConstellation').val();
+			if(lConstellation==''&&act=='add'){
+				alert('请选择星座');
+				$('#lConstellation').focus();
+				return false;
+			}
+			var lUndertaking = $('#lUndertaking').val();
+			if(lUndertaking==''){
+				alert('请填写幸运事业');
+				$('#lUndertaking').focus();
+				return false;
+			}
+			var lEmotion = $('#lEmotion').val();
+			if(lEmotion==''){
+				alert('请填写幸运感情');
+				$('#lEmotion').focus();
+				return false;
+			}
+			var lNumber = $('#lNumber').val();
+			if(lNumber==''){
+				alert('请填写幸运数字');
+				$('#lNumber').focus();
+				return false;
+			}
+			var lColor = $('#lColor').val();
+			if(lColor==''){
+				alert('请填写幸运颜色');
+				$('#lColor').focus();
+				return false;
+			}
+			var lSuit = $('#lSuit').val();
+			if(lSuit==''){
+				alert('请填写适宜之事');
+				$('#lSuit').focus();
+				return false;
+			}
+			var lUnsuitable = $('#lUnsuitable').val();
+			if(lUnsuitable==''){
+				alert('请填写不宜之事');
+				$('#lUnsuitable').focus();
+				return false;
+			}
+			var lMore = $('#lMore').val();
+			console.log("act:"+act+"date:"+lDate+"lConstellation:"+lConstellation+"lUndertaking:"+lUndertaking+"lEmotion:"+lEmotion+"lNumber:"+lNumber+"lSuit:"+lSuit+"lUnsuitable:"+lUnsuitable+"lMore:"+lMore);
+			
+			$.ajax({
+				url : '${base}/admin/luck/save',
+				type : 'POST',
+				data : {
+					"act":act,
+					'lDate':lDate,
+					'lConstellation':lConstellation,
+					'lUndertaking':lUndertaking,
+					'lEmotion':lEmotion,
+					'lNumber':lNumber,
+					'lColor':lColor,
+					'lSuit':lSuit,
+					'lUnsuitable':lUnsuitable,
+					'lMore':lMore
+				},
+				dataType:'json',
+				success : function(returndata) {
+					if (returndata.code == "1"||returndata.code == "2") {
+						alert(returndata.msg);
+						window.location.href = '${base}/admin/luck/list';
+					}else{
+						alert(returndata.msg+"_"+returndata.code);
+					}
+				},
+				error : function(returndata) {
+					alert(returndata);
+				}
+			});
+		});
+$('#cancel').click(function(){
+	window.location.href = '${base}/admin/luck/list';
+});
+function resetFormInput() { //清空表单
+	$("form input").each(function() {
+		$(this).val("");
+	});
+}
+
+function datachange(obj){
+	var n = $(obj).val();
+	if(n<0){
+		$(obj).val(0-n);
+	}
+}
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

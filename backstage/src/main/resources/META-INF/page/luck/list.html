@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+    <script src="${base!}/assets/plugins/jquery-1.10.2.min.js"></script>
+	<script src="${base!}/assets/plugins/layer/layer.js"></script>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<!-- head 头 -->
+<#include "../common/head.html"/>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- 菜单 -->
+    <#include "/ftl/menu.ftl"/>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+
+                <ul class="page-breadcrumb breadcrumb">
+
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">首頁</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">运势管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <div class="col-md-12">
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+                <!-- END EXAMPLE TABLE PORTLET-->
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box #fff">
+                    <div class="portlet-title">
+                        <div class="caption" style="color: black"><i class="icon-globe"></i>运势列表</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn default" href="#" data-toggle="dropdown">
+                                    更多
+                                    <i class="icon-angle-down"></i>
+                                </a>
+                                <div id="sample_2_column_toggler"
+                                     class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
+                                    <label>
+                                        <!-- <div class="checker"> -->
+                                        	<span class="checked">
+                                        		<!-- <input type="checkbox" checked="" data-column="0"/> -->
+                                        		<a href="javascript:void(0)">导出<a/>
+                                            </span>
+                                        <!-- </div> -->
+                                    </label>
+                                    <label>
+                                        <!-- <div class="checker"> -->
+                                        	<span class="checked">
+                                        		<!-- <input type="checkbox" checked="" data-column="0"/> -->
+                                        		<a href="${base!}/admin/luck/edit">新增<a/>
+                                        	</span>
+                                        <!-- </div> -->
+                                    </label>
+                                    <label>
+                                        <!-- <div class="checker"> -->
+                                        	<span class="checked">
+                                        		<a href="${base!}/admin/luck/download">下载模板<a/>
+                                        	</span>
+                                        <!-- </div> -->
+                                    </label>
+                                    <label>
+                                        <!-- <div class="checker"> -->
+                                        	<span class="checked">
+                                        		<!-- <input type="checkbox" checked="" data-column="0"/> -->
+                                        		<a href="javascript:void(0);" onclick="upExcel()">导入<a/>
+                                        	</span>
+                                        <!-- </div> -->
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div id="sample_2_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                            <div class="row">
+                              <form action="" method="post" id="form1">
+   								     <div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter"><label>运势日期: <input name='date' id='date'
+                                            type="text" aria-controls="sample_2" value='<#if luckKey??>${(luckKey.lDate?string("yyyy-MM-dd"))!}</#if>'
+                                            class="form-control input-small luckdate" readonly></label></div>
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter">
+                                    	<label>幸运星座: 
+                                            <select id="constellation" name="constellation" class="form-control input-small">
+                                            	<option value=''></option>
+                                     			<option value='1' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=1>selected</#if></#if></#if>>水瓶座</option>
+                                     			<option value='2' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=2>selected</#if></#if></#if>>双鱼座</option>
+                                     			<option value='3' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=3>selected</#if></#if></#if>>白羊座</option>
+                                     			<option value='4' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=4>selected</#if></#if></#if>>金牛座</option>
+                                     			<option value='5' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=5>selected</#if></#if></#if>>双子座</option>
+                                     			<option value='6' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=6>selected</#if></#if></#if>>巨蟹座</option>
+                                     			<option value='7' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=7>selected</#if></#if></#if>>狮子座</option>
+                                     			<option value='8' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=8>selected</#if></#if></#if>>处女座</option>
+                                     			<option value='9' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=9>selected</#if></#if></#if>>天秤座</option>
+                                     			<option value='10' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=10>selected</#if></#if></#if>>天蝎座</option>
+                                     			<option value='11' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=11>selected</#if></#if></#if>>射手座</option>
+                                     			<option value='12' <#if luckKey??><#if luckKey.lConstellation??><#if luckKey.lConstellation=12>selected</#if></#if></#if>>摩羯座</option>
+                                     		</select>
+                                       </label>
+                                   </div>
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <a href="javascript:void(0)" onclick="searchs()" class="btn default"><i class="icon-search"></i></a>
+                                </div>
+								</form>
+                            </div>
+                            <div class="table-scrollable">
+                                <table class="table table-striped table-bordered table-hover table-full-width dataTable"
+                                       id="sample_2" aria-describedby="sample_2_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample_2"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending"
+                                            style="width: 5%;">編號
+                                        </th>
+                                        <th class="sorting_asc" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1" aria-sort="ascending"
+                                            aria-label="Browser: activate to sort column descending"
+                                            style="width: 10%;">运势日期
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">幸运星座
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 20%;">幸运事业
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 20%;">幸运感情
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">幸运数字
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Engine version: activate to sort column ascending"
+                                            style="width: 10%;">创建时间
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Engine version: activate to sort column ascending"
+                                            style="width: 10%;">更新時間
+                                        </th>
+                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Engine version: activate to sort column ascending"
+                                            style="width: 15%;">更多操作
+                                        </th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                     <#list page as item>
+                                    <tr class="odd" id="${item.luckId!}Tr">
+                                        <td class=" ">${item.luckId!}</td>
+                                        <td class=" sorting_1">${(item.lDate?string("yyyy-MM-dd"))!}</td>
+                                        <td class=" "> 
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=1>水瓶座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=2>双鱼座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=3>白羊座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=4>金牛座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=5>双子座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=6>巨蟹座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=7>狮子座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=8>处女座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=9>天秤座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=10>天蝎座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=11>射手座</#if></#if></#if>
+                                        <#if item??><#if item.lConstellation??><#if item.lConstellation=12>摩羯座</#if></#if></#if>
+                                        </td>
+                                        <td class=" " width="20%">
+                                        	<#if item.lUndertaking??>
+                                        		<#if item.lUndertaking?length gt 20>${item.lUndertaking[0..18]}...<a href="#" data-container="body"  data-toggle="popover"  data-content="${item.lUndertaking!}" data-placement="auto">详情</a>
+                                        		<#else>
+                                        			${item.lUndertaking!}
+                                        		</#if>
+			                                </#if>
+                                        </td>
+                                        <td class=" " width="20%">
+                                        	<#if item.lEmotion??>
+                                        		<#if item.lEmotion?length gt 20>${item.lEmotion[0..18]}...<a href="#" data-container="body"  data-toggle="popover"  data-content="${item.lEmotion!}" data-placement="auto">详情</a>
+                                        		<#else>
+                                        			${item.lEmotion!}
+                                        		</#if>
+			                                </#if>
+                                        </td>
+                                        <td class=" ">${item.lNumber!}</td>
+                                        <td class=" ">${(item.lCreateTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
+                                        <td class=" ">${(item.lUpdateTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
+                                        <td>                 <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"><a href="${base!}/admin/luck/edit?id=${item.luckId!}"></span></div><!-- &lDate=${(item.lDate?string('yyyy-MM-dd'))!}&lConstellation=${item.lConstellation!} -->
+                                        	編輯<a/>
+                                        	<a href="javascript:void(0)"
+														onclick="delManager('${item.luckId!}')">删除</a>
+                                        	</label>
+                                        	<a href="${base!}/admin/luck/edit?id=${item.luckId!}&look=look" >查看</a><!-- &look=look&lDate=${(item.lDate?string('yyyy-MM-dd'))!}&lConstellation=${item.lConstellation!} -->
+                                        	</td>
+                                    </tr>
+                                    </#list>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <!--<div class="col-md-5 col-sm-12">-->
+                                <!--</div>-->
+                                <!--<div class="col-md-7 col-sm-12">-->
+                                    <!--<div class="dataTables_paginate paging_bootstrap">-->
+                                        <!--<ul class="pagination">-->
+                                            <!--<li class="prev disabled"><a href="#" title="Previous"><i-->
+                                                    <!--class="icon-angle-left"></i></a></li>-->
+                                            <!--<li class="active"><a href="#">1</a></li>-->
+                                            <!--<li><a href="#">2</a></li>-->
+                                            <!--<li><a href="#">3</a></li>-->
+                                            <!--<li><a href="#">4</a></li>-->
+                                            <!--<li><a href="#">5</a></li>-->
+                                            <!--<li class="next"><a href="#" title="Next"><i-->
+                                                    <!--class="icon-angle-right"></i></a></li>-->
+                                        <!--</ul>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <div class="row">
+                                    <#import "/ftl/pager.ftl" as p/> <#if page??> <@p.pager
+                                    pageNo=pageNo pageSize=pageSize recordCount=recordCount
+                                    pageCount=pageCount toURL="${base!}/admin/luck/list"
+                                    method="post"/> </#if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<#include "../common/footer.html"/>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+
+<!-- END CORE PLUGINS -->
+<script>
+	
+</script>
+<script>
+    var first = true;
+    jQuery(document).ready(function () {
+        App.init();
+        $("#layout").click(function(){
+            if(first){
+                layout();
+                first = false;
+            }else{
+                resetLayout();
+                first = true;
+            }
+
+        });
+        $(".luckdate").datepicker({format: 'yyyy-mm-dd',
+        	numberOfMonths:1,
+    		showButtonPanel:true,
+    		clearText:"清除",
+    		closeText:"关闭",
+    		changeMonth: true,
+            changeYear: true,
+            autoclose:true,
+            clearBtn:true,
+            todayBtn:true,
+            monthNames:['1','2','3','4','5','6','7','8','9','10','11','12'],
+            dayNamesMin: ['日','一','二','三','四','五','六'],
+    		onSelect:function(){}	
+    	});
+    });
+	
+    function searchs(){
+    	     document.getElementById("form1").action="${base!}/admin/luck/list";
+    	   	 $("#form1").submit();
+    }
+    
+    function layout() {
+        $("body").addClass("page-boxed");
+
+        // set header
+        $('.header > .header-inner').addClass("container");
+        var cont = $('body > .clearfix').after('<div class="container"></div>');
+
+        // set content
+        $('.page-container').appendTo('body > .container');
+
+        // set footer
+        $('.footer').html('<div class="container">' + $('.footer').html() + '</div>');
+    }
+    var resetLayout = function () {
+        $("body").
+        removeClass("page-boxed").
+        removeClass("page-footer-fixed").
+        removeClass("page-sidebar-fixed").
+        removeClass("page-header-fixed");
+
+        $('.header > .header-inner').removeClass("container");
+
+        if ($('.page-container').parent(".container").size() === 1) {
+            $('.page-container').insertAfter('body > .clearfix');
+        }
+
+        if ($('.footer > .container').size() === 1) {
+            $('.footer').html($('.footer > .container').html());
+        } else if ($('.footer').parent(".container").size() === 1) {
+            $('.footer').insertAfter('.page-container');
+        }
+
+        $('body > .container').remove();
+    }
+    
+    function delManager(id) {
+        var sure = confirm("確定刪除?");
+        if(sure) {
+            $.post("${base}/admin/luck/delete", {
+                    "id" : id
+                },
+                function(data) {
+                    if (data.code == "1") {
+                        alert("刪除成功!");
+                        $("#" + id + "Tr").remove();
+                    } else {
+                        alert("刪除失敗!");
+                        console.log(data.code+"——"+data.msg);
+                    }
+                });
+        }
+	}
+</script>
+
+<script>
+	$(function(){
+		$('[data-toggle="popover"]').popover({trigger: 'focus'});
+	});
+	
+	function upExcel(){
+		var index = layer.open({
+			title:"导入数据",
+			shift:1,
+            skin:'demo-class',
+            area:['400px','300px'],
+            type: 2,
+            shadeClose :false,
+            content:'${base!}/admin/luck/uploadExcel',
+            scrollbar:false
+		});
+	}
+	
+	function fileSelected() {
+		  var file = document.getElementById('fileToUpload').files[0];
+		  if (file) {
+		    var fileSize = 0;
+		    if (file.size > 1024 * 1024)
+		      fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+		    else
+		      fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+
+		    document.getElementById('fileName').innerHTML = 'Name: ' + file.name;
+		    document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
+		    document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
+		  }
+	}
+	function uploadFile() {
+		  var xhr = new XMLHttpRequest();
+		  var fd = document.getElementById('form1').getFormData();
+		  /* event listners */
+		  xhr.upload.addEventListener("progress", uploadProgress, false);
+		  xhr.addEventListener("load", uploadComplete, false);
+		  xhr.addEventListener("error", uploadFailed, false);
+		  xhr.addEventListener("abort", uploadCanceled, false);
+		  /* Be sure to change the url below to the url of your upload server side script */
+		  xhr.open("POST", "${base!}/admin/luck/import");
+		  xhr.send(fd);
+	}
+	function uploadProgress(evt) {
+		  if (evt.lengthComputable) {
+		    var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+		    document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+		  }
+		  else {
+		    document.getElementById('progressNumber').innerHTML = 'unable to compute';
+		  }
+	}
+	function uploadComplete(evt) {
+		  /* This event is raised when the server send back a response */
+		  alert(evt.target.responseText);
+	}
+
+	function uploadFailed(evt) {
+	  alert("There was an error attempting to upload the file.");
+	}
+
+	function uploadCanceled(evt) {
+	  alert("The upload has been canceled by the user or the browser dropped the connection.");
+	}
+	
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

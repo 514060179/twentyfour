@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfAddressMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfAddress" >
+    <id column="address_id" property="addressId" jdbcType="INTEGER" />
+    <result column="as_user_id" property="asUserId" jdbcType="INTEGER" />
+    <result column="as_consignee_name" property="asConsigneeName" jdbcType="VARCHAR" />
+    <result column="as_country_code" property="asCountryCode" jdbcType="VARCHAR" />
+    <result column="as_tel" property="asTel" jdbcType="VARCHAR" />
+    <result column="as_details" property="asDetails" jdbcType="VARCHAR" />
+    <result column="as_create_time" property="asCreateTime" jdbcType="TIMESTAMP" />
+    <result column="as_update_time" property="asUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="as_default" property="asDefault" jdbcType="TINYINT" />
+    <result column="as_street" property="asStreet" jdbcType="VARCHAR" />
+    <result column="as_sex" property="asSex" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    address_id, as_user_id, as_consignee_name, as_country_code, as_tel, as_details, as_create_time, 
+    as_update_time,as_default,as_street,as_sex
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_address
+    where address_id = #{addressId,jdbcType=INTEGER}
+  </select>
+  <select id="findAddressByUserId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_address
+    where address_id = #{addressId,jdbcType=INTEGER} AND as_user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByAddressAndUser" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_address
+    where address_id = #{addressId,jdbcType=INTEGER} AND as_user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select
+  	<include refid="Base_Column_List" />
+    from tf_address
+    where as_user_id = #{userId,jdbcType=INTEGER}
+    order by as_default desc,as_create_time desc
+  </select>
+  <select id="selectOtherByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select
+  	<include refid="Base_Column_List" />
+    from tf_address
+    where as_user_id = #{userId,jdbcType=INTEGER} AND address_id != #{addressId,jdbcType=INTEGER}
+    order by as_default desc,as_create_time desc
+  </select>
+  <select id="selectByUserIdAndDefault" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select
+  	<include refid="Base_Column_List" />
+    from tf_address
+    where as_user_id = #{userId,jdbcType=INTEGER} and as_default = 1
+    order by as_default desc,as_create_time desc
+  </select>
+  <select id="selectAddressByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select
+  	<include refid="Base_Column_List" />
+    from tf_address
+    where as_user_id = #{userId,jdbcType=INTEGER}
+    order by as_default desc,as_update_time desc,as_create_time desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_address
+    where address_id = #{addressId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfAddress" >
+    insert into tf_address (address_id, as_user_id, as_consignee_name, 
+      as_country_code, as_tel, as_details, 
+      as_create_time, as_update_time,as_default,as_street,as_sex)
+    values (#{addressId,jdbcType=INTEGER}, #{asUserId,jdbcType=INTEGER}, #{asConsigneeName,jdbcType=VARCHAR}, 
+      #{asCountryCode,jdbcType=VARCHAR}, #{asTel,jdbcType=VARCHAR}, #{asDetails,jdbcType=VARCHAR}, 
+      #{asCreateTime,jdbcType=TIMESTAMP}, #{asUpdateTime,jdbcType=TIMESTAMP},#{asDefault,jdbcType=TINYINT},#{asStreet,jdbcType=VARCHAR},#{asSex,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfAddress" useGeneratedKeys="true" keyProperty="addressId">
+    insert into tf_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="addressId != null" >
+        address_id,
+      </if>
+      <if test="asUserId != null" >
+        as_user_id,
+      </if>
+      <if test="asConsigneeName != null" >
+        as_consignee_name,
+      </if>
+      <if test="asCountryCode != null" >
+        as_country_code,
+      </if>
+      <if test="asTel != null" >
+        as_tel,
+      </if>
+      <if test="asDetails != null" >
+        as_details,
+      </if>
+      <if test="asCreateTime != null" >
+        as_create_time,
+      </if>
+      <if test="asUpdateTime != null" >
+        as_update_time,
+      </if>
+      <if test="asDefault != null" >
+        as_default,
+      </if>
+      <if test="asStreet != null" >
+        as_street,
+      </if>
+      <if test="asSex != null" >
+        as_sex,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="addressId != null" >
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="asUserId != null" >
+        #{asUserId,jdbcType=INTEGER},
+      </if>
+      <if test="asConsigneeName != null" >
+        #{asConsigneeName,jdbcType=VARCHAR},
+      </if>
+      <if test="asCountryCode != null" >
+        #{asCountryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="asTel != null" >
+        #{asTel,jdbcType=VARCHAR},
+      </if>
+      <if test="asDetails != null" >
+        #{asDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="asCreateTime != null" >
+        #{asCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asUpdateTime != null" >
+        #{asUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asDefault != null" >
+        #{asDefault,jdbcType=TINYINT},
+      </if>
+       <if test="asStreet != null" >
+        #{asStreet,jdbcType=VARCHAR},
+      </if>
+       <if test="asSex != null" >
+        #{asSex,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfAddress" >
+    update tf_address
+    <set >
+      <if test="asUserId != null" >
+        as_user_id = #{asUserId,jdbcType=INTEGER},
+      </if>
+      <if test="asConsigneeName != null" >
+        as_consignee_name = #{asConsigneeName,jdbcType=VARCHAR},
+      </if>
+      <if test="asCountryCode != null" >
+        as_country_code = #{asCountryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="asTel != null" >
+        as_tel = #{asTel,jdbcType=VARCHAR},
+      </if>
+      <if test="asDetails != null" >
+        as_details = #{asDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="asCreateTime != null" >
+        as_create_time = #{asCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asUpdateTime != null" >
+        as_update_time = #{asUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asDefault != null" >
+        as_default = #{asDefault,jdbcType=TINYINT},
+      </if>
+      <if test="asStreet != null" >
+        as_street = #{asStreet,jdbcType=VARCHAR},
+      </if>
+      <if test="asSex != null" >
+        as_sex = #{asSex,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where address_id = #{addressId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfAddress" >
+    update tf_address
+    set as_user_id = #{asUserId,jdbcType=INTEGER},
+      as_consignee_name = #{asConsigneeName,jdbcType=VARCHAR},
+      as_country_code = #{asCountryCode,jdbcType=VARCHAR},
+      as_tel = #{asTel,jdbcType=VARCHAR},
+      as_details = #{asDetails,jdbcType=VARCHAR},
+      as_create_time = #{asCreateTime,jdbcType=TIMESTAMP},
+      as_update_time = #{asUpdateTime,jdbcType=TIMESTAMP},
+      as_default = #{asDefault,jdbcType=TINYINT},
+      as_street = #{asStreet,jdbcType=VARCHAR},
+      as_sex = #{asSex,jdbcType=TINYINT}
+    where address_id = #{addressId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,55 @@
+<div class="header navbar navbar-inverse navbar-fixed-top">
+	<!-- BEGIN TOP NAVIGATION BAR -->
+	<div class="header-inner">
+		<!-- BEGIN LOGO -->
+		<a class="navbar-brand" href="#">
+			<img src="${base!}/assets/img/logo.png" alt="logo" class="img-responsive"/>
+		</a>
+		<!-- END LOGO -->
+		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+		<a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+			<img src="${base!}/assets/img/menu-toggler.png" alt=""/>
+		</a>
+		<!-- END RESPONSIVE MENU TOGGLER -->
+		<!-- BEGIN TOP NAVIGATION MENU -->
+		<ul class="nav navbar-nav pull-right">
+			<!-- BEGIN NOTIFICATION DROPDOWN -->
+			<!-- END LANGUAGE DROPDOWN -->
+			<!-- BEGIN USER LOGIN DROPDOWN -->
+			<li class="dropdown user">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+				   data-close-others="true">
+					<img alt="" src="${base!}/assets/img/avatar1_small.jpg"/>
+					<span class="username hidden-480">${Session.managerUser.username!}</span>
+					<i class="icon-angle-down"></i>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="javascript:void(0)" onclick="logout()"><i class="icon-key"></i> Log Out</a></li>
+				</ul>
+			</li>
+			<!-- END USER LOGIN DROPDOWN -->
+		</ul>
+		<!-- END TOP NAVIGATION MENU -->
+	</div>
+	<!-- END TOP NAVIGATION BAR -->
+</div>
+<!--header end-->
+<div class="clearfix"></div>
+
+<!-- **********************************************************************************************************************************************************
+MAIN SIDEBAR MENU
+*********************************************************************************************************************************************************** -->
+<!--sidebar start-->
+<#include "/ftl/javascript.ftl"/>
+
+<script>
+    function logout() {
+		$.post("${base!}/managerLogin/logout",{},function (res) {
+			if(res.code=="1"){
+			    location.href = "${base!}";
+			}else{
+			    alert("登出异常！稍后重试！");
+			}
+        })
+    }
+</script>

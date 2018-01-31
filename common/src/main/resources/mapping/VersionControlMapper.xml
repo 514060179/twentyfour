@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.VersionControlMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.VersionControl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="version_id" property="versionId" jdbcType="VARCHAR" />
+    <result column="force_update" property="forceUpdate" jdbcType="BIT" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="realm" property="realm" jdbcType="VARCHAR" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, version_id, force_update, device_type, realm,`describe`, create_time, update_time, priority
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from version_control
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from version_control
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.VersionControl" >
+    insert into version_control (id, version_id, force_update, 
+      device_type, realm,`describe`, create_time,
+      update_time, priority)
+    values (#{id,jdbcType=INTEGER}, #{versionId,jdbcType=VARCHAR}, #{forceUpdate,jdbcType=BIT}, 
+      #{deviceType,jdbcType=VARCHAR}, #{realm,jdbcType=VARCHAR},#{describe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{priority,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.VersionControl" >
+    insert into version_control
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="versionId != null" >
+        version_id,
+      </if>
+      <if test="forceUpdate != null" >
+        force_update,
+      </if>
+      <if test="deviceType != null" >
+        device_type,
+      </if>
+      <if test="realm != null" >
+        realm,
+      </if>
+      <if test="describe != null" >
+        `describe`,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="versionId != null" >
+        #{versionId,jdbcType=VARCHAR},
+      </if>
+      <if test="forceUpdate != null" >
+        #{forceUpdate,jdbcType=BIT},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="realm != null" >
+        #{realm,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null" >
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.VersionControl" >
+    update version_control
+    <set >
+      <if test="versionId != null" >
+        version_id = #{versionId,jdbcType=VARCHAR},
+      </if>
+      <if test="forceUpdate != null" >
+        force_update = #{forceUpdate,jdbcType=BIT},
+      </if>
+      <if test="deviceType != null" >
+        device_type = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="realm != null" >
+        realm = #{realm,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null" >
+        `describe` = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="priority != null" >
+        priority = priority+1,
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.VersionControl" >
+    update version_control
+    set version_id = #{versionId,jdbcType=VARCHAR},
+      force_update = #{forceUpdate,jdbcType=BIT},
+      device_type = #{deviceType,jdbcType=VARCHAR},
+      realm = #{realm,jdbcType=VARCHAR},
+      `describe` = #{describe,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      priority = #{priority,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="findVersion" resultMap="BaseResultMap" parameterType="com.yinghai.twentyfour.common.model.VersionControl" >
+    select
+    <include refid="Base_Column_List" />
+    from version_control
+    where 1=1
+    <if test="versionId != null" >
+     AND version_id = #{versionId,jdbcType=VARCHAR}
+    </if>
+    <if test="forceUpdate != null" >
+    AND  force_update = #{forceUpdate,jdbcType=BIT}
+    </if>
+    <if test="deviceType != null" >
+      AND  device_type = #{deviceType,jdbcType=VARCHAR}
+    </if>
+    <if test="realm != null" >
+      AND   realm = #{realm,jdbcType=VARCHAR}
+    </if>
+    <if test="describe != null" >
+      AND   `describe` = #{describe,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null" >
+      AND  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null" >
+      AND  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="priority != null" >
+      AND  priority = #{priority,jdbcType=INTEGER}
+    </if>
+    ORDER BY create_time DESC LIMIT 0,1
+  </select>
+  <select id="findByCondion" resultMap="BaseResultMap" parameterType="com.yinghai.twentyfour.common.model.VersionControl" >
+    select
+    <include refid="Base_Column_List" />
+    from version_control
+    where 1=1
+    <if test="versionId != null" >
+      AND version_id = #{versionId,jdbcType=VARCHAR}
+    </if>
+    <if test="forceUpdate != null" >
+      AND  force_update = #{forceUpdate,jdbcType=BIT}
+    </if>
+    <if test="deviceType != null" >
+      AND  device_type = #{deviceType,jdbcType=VARCHAR}
+    </if>
+    <if test="realm != null" >
+      AND   realm = #{realm,jdbcType=VARCHAR}
+    </if>
+    <if test="describe != null" >
+      AND   `describe` = #{describe,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null" >
+      AND  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null" >
+      AND  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="priority != null" >
+      AND  priority = #{priority,jdbcType=INTEGER}
+    </if>
+  </select>
+</mapper>

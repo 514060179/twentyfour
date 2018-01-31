@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfSubscribeMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfSubscribe" >
+    <id column="s_user_id" property="sUserId" jdbcType="INTEGER" />
+    <id column="s_master_id" property="sMasterId" jdbcType="INTEGER" />
+    <result column="subscribe_id" property="subscribeId" jdbcType="INTEGER" />
+    <result column="s_create_time" property="sCreateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="SubscribeResultMap" type="com.yinghai.twentyfour.common.model.TfSubscribeHelper" >
+    <id column="s_user_id" property="sUserId" jdbcType="INTEGER" />
+    <id column="s_master_id" property="sMasterId" jdbcType="INTEGER" />
+    <result column="subscribe_id" property="subscribeId" jdbcType="INTEGER" />
+    <result column="s_create_time" property="sCreateTime" jdbcType="TIMESTAMP" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="nick" property="nick" jdbcType="VARCHAR" />
+    <result column="follows" property="follows" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    s_user_id, s_master_id, subscribe_id, s_create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.yinghai.twentyfour.common.model.TfSubscribeKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from tf_subscribe
+    where s_user_id = #{sUserId,jdbcType=INTEGER}
+      and s_master_id = #{sMasterId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="SubscribeResultMap">
+  	select 
+    <include refid="Base_Column_List" />,
+    m.m_head_img AS img,m.m_nick AS nick
+    from tf_subscribe s LEFT JOIN tf_master m ON s.s_master_id = m.master_id
+    where s.s_user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectSubscribeById" parameterType="java.lang.Integer" resultMap="SubscribeResultMap">
+  	select 
+    <include refid="Base_Column_List" />,
+    m.m_head_img AS img,m.m_nick AS nick
+    from tf_subscribe s LEFT JOIN tf_master m ON s.s_master_id = m.master_id
+    where s.subscribe_id = #{subscribeId,jdbcType=INTEGER}
+  </select>
+  <select id="selectDetailSubscribe" parameterType="com.yinghai.twentyfour.common.model.TfSubscribe" resultMap="SubscribeResultMap">
+  	select 
+    <include refid="Base_Column_List" />,
+    m.m_head_img AS img,m.m_nick AS nick,m.m_follows AS follows
+    from tf_subscribe s LEFT JOIN tf_master m ON s.s_master_id = m.master_id
+    WHERE 1=1
+    <if test="sMasterId != null">
+    	AND s.s_master_id = #{sMasterId,jdbcType=INTEGER}
+    </if>
+    <if test="sUserId != null">
+    	AND s.s_user_id = #{sUserId,jdbcType=INTEGER}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfSubscribeKey" >
+    delete from tf_subscribe
+    where s_user_id = #{sUserId,jdbcType=INTEGER}
+      and s_master_id = #{sMasterId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfSubscribe" >
+    insert into tf_subscribe (s_user_id, s_master_id, subscribe_id, 
+      s_create_time)
+    values (#{sUserId,jdbcType=INTEGER}, #{sMasterId,jdbcType=INTEGER}, #{subscribeId,jdbcType=INTEGER}, 
+      #{sCreateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfSubscribe" useGeneratedKeys="true" keyProperty="subscribeId">
+    insert into tf_subscribe
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sUserId != null" >
+        s_user_id,
+      </if>
+      <if test="sMasterId != null" >
+        s_master_id,
+      </if>
+      <if test="subscribeId != null" >
+        subscribe_id,
+      </if>
+      <if test="sCreateTime != null" >
+        s_create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sUserId != null" >
+        #{sUserId,jdbcType=INTEGER},
+      </if>
+      <if test="sMasterId != null" >
+        #{sMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="subscribeId != null" >
+        #{subscribeId,jdbcType=INTEGER},
+      </if>
+      <if test="sCreateTime != null" >
+        #{sCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfSubscribe" >
+    update tf_subscribe
+    <set >
+      <if test="subscribeId != null" >
+        subscribe_id = #{subscribeId,jdbcType=INTEGER},
+      </if>
+      <if test="sCreateTime != null" >
+        s_create_time = #{sCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where s_user_id = #{sUserId,jdbcType=INTEGER}
+      and s_master_id = #{sMasterId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfSubscribe" >
+    update tf_subscribe
+    set subscribe_id = #{subscribeId,jdbcType=INTEGER},
+      s_create_time = #{sCreateTime,jdbcType=TIMESTAMP}
+    where s_user_id = #{sUserId,jdbcType=INTEGER}
+      and s_master_id = #{sMasterId,jdbcType=INTEGER}
+  </update>
+</mapper>

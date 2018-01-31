@@ -1,0 +1,1 @@
+alter table tf_product alter column p_size set default '1';

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfLuckMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfLuck" >
+    <id column="l_date" property="lDate" jdbcType="DATE" />
+    <id column="l_constellation" property="lConstellation" jdbcType="INTEGER" />
+    <result column="luck_id" property="luckId" jdbcType="INTEGER" />
+    <result column="l_undertaking" property="lUndertaking" jdbcType="VARCHAR" />
+    <result column="l_color" property="lColor" jdbcType="VARCHAR" />
+    <result column="l_emotion" property="lEmotion" jdbcType="VARCHAR" />
+    <result column="l_number" property="lNumber" jdbcType="INTEGER" />
+    <result column="l_create_time" property="lCreateTime" jdbcType="TIMESTAMP" />
+    <result column="l_update_time" property="lUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yinghai.twentyfour.common.model.TfLuckWithBLOBs" extends="BaseResultMap" >
+    <result column="l_suit" property="lSuit" jdbcType="LONGVARCHAR" />
+    <result column="l_unsuitable" property="lUnsuitable" jdbcType="LONGVARCHAR" />
+    <result column="l_more" property="lMore" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    l_date, l_constellation, luck_id, l_undertaking,l_color, l_emotion, l_number, l_create_time, 
+    l_update_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    l_suit, l_unsuitable, l_more
+  </sql>
+  <select id="selectById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+  	select
+  	<include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_luck
+    where luck_id = #{luckId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="com.yinghai.twentyfour.common.model.TfLuckKey" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_luck
+    where l_date = #{lDate,jdbcType=DATE}
+      and l_constellation = #{lConstellation,jdbcType=INTEGER}
+  </select>
+  <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.yinghai.twentyfour.common.model.TfLuckKey">
+  	select
+  	<include refid="Base_Column_List" />
+  	from tf_luck
+  	where 1=1
+  	<if test="lDate!=null">
+  		and l_date = #{lDate,jdbcType=DATE}
+  	</if>
+  	<if test="lConstellation!=null">
+  		and l_constellation = #{lConstellation,jdbcType=INTEGER}
+  	</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfLuckKey" >
+    delete from tf_luck
+    where l_date = #{lDate,jdbcType=DATE}
+      and l_constellation = #{lConstellation,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tf_luck
+    where luck_id = #{luckId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfLuckWithBLOBs" >
+    insert into tf_luck (l_date, l_constellation, luck_id, 
+      l_undertaking,l_color, l_emotion, l_number, 
+      l_create_time, l_update_time, l_suit, 
+      l_unsuitable, l_more)
+    values (#{lDate,jdbcType=DATE}, #{lConstellation,jdbcType=INTEGER}, #{luckId,jdbcType=INTEGER}, 
+      #{lUndertaking,jdbcType=VARCHAR},#{lColor,jdbcType=VARCHAR} ,#{lEmotion,jdbcType=VARCHAR}, #{lNumber,jdbcType=INTEGER}, 
+      #{lCreateTime,jdbcType=TIMESTAMP}, #{lUpdateTime,jdbcType=TIMESTAMP}, #{lSuit,jdbcType=LONGVARCHAR}, 
+      #{lUnsuitable,jdbcType=LONGVARCHAR}, #{lMore,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfLuckWithBLOBs" >
+    insert into tf_luck
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lDate != null" >
+        l_date,
+      </if>
+      <if test="lConstellation != null" >
+        l_constellation,
+      </if>
+      <if test="luckId != null" >
+        luck_id,
+      </if>
+      <if test="lUndertaking != null" >
+        l_undertaking,
+      </if>
+      <if test="lColor != null" >
+        l_color,
+      </if>
+      <if test="lEmotion != null" >
+        l_emotion,
+      </if>
+      <if test="lNumber != null" >
+        l_number,
+      </if>
+      <if test="lCreateTime != null" >
+        l_create_time,
+      </if>
+      <if test="lUpdateTime != null" >
+        l_update_time,
+      </if>
+      <if test="lSuit != null" >
+        l_suit,
+      </if>
+      <if test="lUnsuitable != null" >
+        l_unsuitable,
+      </if>
+      <if test="lMore != null" >
+        l_more,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lDate != null" >
+        #{lDate,jdbcType=DATE},
+      </if>
+      <if test="lConstellation != null" >
+        #{lConstellation,jdbcType=INTEGER},
+      </if>
+      <if test="luckId != null" >
+        #{luckId,jdbcType=INTEGER},
+      </if>
+      <if test="lUndertaking != null" >
+        #{lUndertaking,jdbcType=VARCHAR},
+      </if>
+      <if test="lColor != null" >
+        #{lColor,jdbcType=VARCHAR},
+      </if>
+      <if test="lEmotion != null" >
+        #{lEmotion,jdbcType=VARCHAR},
+      </if>
+      <if test="lNumber != null" >
+        #{lNumber,jdbcType=INTEGER},
+      </if>
+      <if test="lCreateTime != null" >
+        #{lCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lUpdateTime != null" >
+        #{lUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lSuit != null" >
+        #{lSuit,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="lUnsuitable != null" >
+        #{lUnsuitable,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="lMore != null" >
+        #{lMore,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfLuckWithBLOBs" >
+    update tf_luck
+    <set >
+      <if test="luckId != null" >
+        luck_id = #{luckId,jdbcType=INTEGER},
+      </if>
+      <if test="lUndertaking != null" >
+        l_undertaking = #{lUndertaking,jdbcType=VARCHAR},
+      </if>
+      <if test="lColor != null" >
+        l_color = #{lColor,jdbcType=VARCHAR},
+      </if>
+      <if test="lEmotion != null" >
+        l_emotion = #{lEmotion,jdbcType=VARCHAR},
+      </if>
+      <if test="lNumber != null" >
+        l_number = #{lNumber,jdbcType=INTEGER},
+      </if>
+      <if test="lCreateTime != null" >
+        l_create_time = #{lCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lUpdateTime != null" >
+        l_update_time = #{lUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lSuit != null" >
+        l_suit = #{lSuit,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="lUnsuitable != null" >
+        l_unsuitable = #{lUnsuitable,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="lMore != null" >
+        l_more = #{lMore,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where l_date = #{lDate,jdbcType=DATE}
+      and l_constellation = #{lConstellation,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yinghai.twentyfour.common.model.TfLuckWithBLOBs" >
+    update tf_luck
+    set luck_id = #{luckId,jdbcType=INTEGER},
+      l_undertaking = #{lUndertaking,jdbcType=VARCHAR},
+      l_color = #{lColor,jdbcType=VARCHAR},
+      l_emotion = #{lEmotion,jdbcType=VARCHAR},
+      l_number = #{lNumber,jdbcType=INTEGER},
+      l_create_time = #{lCreateTime,jdbcType=TIMESTAMP},
+      l_update_time = #{lUpdateTime,jdbcType=TIMESTAMP},
+      l_suit = #{lSuit,jdbcType=LONGVARCHAR},
+      l_unsuitable = #{lUnsuitable,jdbcType=LONGVARCHAR},
+      l_more = #{lMore,jdbcType=LONGVARCHAR}
+    where l_date = #{lDate,jdbcType=DATE}
+      and l_constellation = #{lConstellation,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfLuck" >
+    update tf_luck
+    set luck_id = #{luckId,jdbcType=INTEGER},
+      l_undertaking = #{lUndertaking,jdbcType=VARCHAR},
+      l_color = #{lColor,jdbcType=VARCHAR},
+      l_emotion = #{lEmotion,jdbcType=VARCHAR},
+      l_number = #{lNumber,jdbcType=INTEGER},
+      l_create_time = #{lCreateTime,jdbcType=TIMESTAMP},
+      l_update_time = #{lUpdateTime,jdbcType=TIMESTAMP}
+    where l_date = #{lDate,jdbcType=DATE}
+      and l_constellation = #{lConstellation,jdbcType=INTEGER}
+  </update>
+</mapper>

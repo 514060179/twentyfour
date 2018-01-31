@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfProductMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfProduct" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="p_master_id" property="pMasterId" jdbcType="INTEGER" />
+    <result column="p_name" property="pName" jdbcType="VARCHAR" />
+    <result column="p_price" property="pPrice" jdbcType="INTEGER" />
+    <result column="p_total" property="pTotal" jdbcType="INTEGER" />
+    <result column="p_size" property="pSize" jdbcType="VARCHAR" />
+    <result column="p_img" property="pImg" jdbcType="VARCHAR" />
+    <result column="p_type" property="pType" jdbcType="VARCHAR" />
+    <result column="p_deals" property="pDeals" jdbcType="BIGINT" />
+    <result column="p_attribution" property="pAttribution" jdbcType="VARCHAR" />
+    <result column="p_free_shipping" property="pFreeShipping" jdbcType="BIT" />
+    <result column="p_hot" property="pHot" jdbcType="BIGINT" />
+    <result column="p_offline" property="pOffline" jdbcType="BIT" />
+    <result column="p_delete" property="pDelete" jdbcType="BIT" />
+    <result column="p_create_time" property="pCreateTime" jdbcType="TIMESTAMP" />
+    <result column="p_update_time" property="pUpdateTime" jdbcType="TIMESTAMP" />
+        <collection property="imgList"  ofType="com.yinghai.twentyfour.common.model.TfImgTmp">
+     	<id column="img_tmp_id" property="imgTmpId" jdbcType="INTEGER" />
+        <result column="it_type" property="itType" jdbcType="INTEGER" />
+	    <result column="it_url" property="itUrl" jdbcType="VARCHAR" />
+	    <result column="it_app_path" property="itAppPath" jdbcType="VARCHAR" />
+	    <result column="it_is_userd" property="itIsUser" jdbcType="BIT" />
+	    <result column="it_size" property="itSize" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yinghai.twentyfour.common.model.TfProduct" extends="BaseResultMap" >
+    <result column="p_introduction" property="pIntroduction" jdbcType="LONGVARCHAR" />
+    <result column="p_is_collection" property="isCollection" jdbcType="BIT" />
+    <result column="p_user_id" property="userId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    product_id, p_master_id, p_name, p_price, p_total, p_size, p_img, p_deals, p_attribution, 
+    p_free_shipping, p_hot, p_offline, p_delete, p_create_time, p_update_time,p_type
+  </sql>
+  <sql id="Blob_Column_List" >
+    p_introduction
+  </sql>
+  
+  <sql id="Base_Img_Column_List" >
+    p.product_id, p.p_master_id, p.p_name, p.p_price, p.p_total, p.p_size, p.p_img, p.p_deals, p.p_attribution, p.p_type,
+    p.p_free_shipping, p.p_hot, p.p_offline, p.p_delete, p.p_create_time, p.p_update_time,it.img_tmp_id,it.it_type,
+    it.it_url,it.it_app_path,it.it_is_userd
+  </sql>
+  <sql id="Blob_Img_Column_List" >
+    p.p_introduction
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Img_Column_List" />
+    ,
+    <include refid="Blob_Img_Column_List" />
+    from tf_product p LEFT JOIN tf_img_tmp it ON p.product_id=it.it_key_id 
+    where p.product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="getTfProductAndImgRecord" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Img_Column_List" />,
+    <include refid="Blob_Img_Column_List" />
+    <if test="tfProduct.userId != null">
+    ,ifnull(cn.cn_user_id,null) AS p_is_collection,#{tfProduct.userId,jdbcType=INTEGER} AS p_user_id
+    </if>
+    from (SELECT * FROM 
+    	(SELECT * FROM tf_product  where  1=1
+	    	<if test="tfProduct.pMasterId != null" >
+	     	and p_master_id =  #{tfProduct.pMasterId,jdbcType=INTEGER}
+	      	</if>
+	      	<if test="tfProduct.pName != null" >
+	       	and p_name like #{tfProduct.pName,jdbcType=VARCHAR}
+	      	</if>
+	       	<if test="tfProduct.pOffline != null" >
+	       and  p_offline = #{tfProduct.pOffline,jdbcType=BIT}
+	      </if>
+	       <if test="tfProduct.pFreeShipping != null" >
+	        and p_free_shipping = #{tfProduct.pFreeShipping,jdbcType=BIT}
+      	</if>
+      	and p_delete=false  AND p_total>0
+      	order by p_create_time desc,p_deals desc,p_hot desc
+    	   ) p1 
+    	  <if test="tfProduct.pTypeArray != null" >
+	    	  WHERE  
+	    	  <foreach item="item" index="index" collection="tfProduct.pTypeArray" open="(" separator="or" close=")">
+	      			FIND_IN_SET(#{item},p_type)
+	      	  </foreach>
+      	  </if>
+      	  limit #{startNumber,jdbcType=INTEGER},#{pageStartSize,jdbcType=INTEGER}
+      	  ) p
+    	  LEFT JOIN tf_img_tmp it ON p.product_id=it.it_key_id
+    <if test="tfProduct.userId != null">
+    	LEFT JOIN (SELECT c.cn_product_id,c.cn_user_id FROM tf_collection c WHERE c.cn_user_id = #{tfProduct.userId,jdbcType=INTEGER} AND  c.cn_type=3) cn ON cn.cn_product_id = p.product_id
+    </if>
+     	order by p.p_create_time desc,p.p_deals desc,p.p_hot desc 
+     
+  </select>
+  
+  
+  <select id="getTfProductRecord" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />,
+    <include refid="Blob_Column_List" />
+    from 
+    	 tf_product  where  1=1
+      	 	<if test="pMasterId != null" >
+	     	and p_master_id =  #{pMasterId,jdbcType=INTEGER}
+	      	</if>
+	      	<if test="pName != null" >
+	       	and p_name like #{pName,jdbcType=VARCHAR}
+	      	</if>
+	       	<if test="pOffline != null" >
+	       	and  p_offline = #{pOffline,jdbcType=BIT}
+	      	</if>
+	      	<if test="pType != null" >
+	       	and  p_type = #{pType,jdbcType=VARCHAR}
+	      	</if>
+	       <if test="pFreeShipping != null" >
+	        and p_free_shipping = #{pFreeShipping,jdbcType=BIT}
+      		</if>
+      		and p_delete=false 
+    	 order by p_deals desc,p_hot desc,p_create_time desc 
+   
+     
+  </select>
+  
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_product
+    where product_id = #{productId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfProduct" >
+    insert into tf_product (product_id, p_master_id, p_name, 
+      p_price, p_total, p_size, 
+      p_img, p_deals, p_attribution, 
+      p_free_shipping, p_hot, p_offline, 
+      p_delete, p_create_time, p_update_time, 
+      p_introduction,p_type)
+    values (#{productId,jdbcType=INTEGER}, #{pMasterId,jdbcType=INTEGER}, #{pName,jdbcType=VARCHAR}, 
+      #{pPrice,jdbcType=INTEGER}, #{pTotal,jdbcType=INTEGER}, #{pSize,jdbcType=VARCHAR}, 
+      #{pImg,jdbcType=VARCHAR}, #{pDeals,jdbcType=BIGINT}, #{pAttribution,jdbcType=VARCHAR}, 
+      #{pFreeShipping,jdbcType=BIT}, #{pHot,jdbcType=BIGINT}, #{pOffline,jdbcType=BIT}, 
+      #{pDelete,jdbcType=BIT}, #{pCreateTime,jdbcType=TIMESTAMP}, #{pUpdateTime,jdbcType=TIMESTAMP}, 
+      #{pIntroduction,jdbcType=LONGVARCHAR},#{pType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfProduct"  useGeneratedKeys="true" keyProperty="productId">
+    insert into tf_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="pMasterId != null" >
+        p_master_id,
+      </if>
+      <if test="pName != null" >
+        p_name,
+      </if>
+      <if test="pPrice != null" >
+        p_price,
+      </if>
+      <if test="pTotal != null" >
+        p_total,
+      </if>
+      <if test="pSize != null" >
+        p_size,
+      </if>
+      <if test="pImg != null" >
+        p_img,
+      </if>
+      <if test="pDeals != null" >
+        p_deals,
+      </if>
+      <if test="pAttribution != null" >
+        p_attribution,
+      </if>
+      <if test="pFreeShipping != null" >
+        p_free_shipping,
+      </if>
+      <if test="pHot != null" >
+        p_hot,
+      </if>
+      <if test="pOffline != null" >
+        p_offline,
+      </if>
+      <if test="pDelete != null" >
+        p_delete,
+      </if>
+      <if test="pCreateTime != null" >
+        p_create_time,
+      </if>
+      <if test="pUpdateTime != null" >
+        p_update_time,
+      </if>
+      <if test="pIntroduction != null" >
+        p_introduction,
+      </if>
+      <if test="pType != null" >
+        p_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="pMasterId != null" >
+        #{pMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="pName != null" >
+        #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pPrice != null" >
+        #{pPrice,jdbcType=INTEGER},
+      </if>
+      <if test="pTotal != null" >
+        #{pTotal,jdbcType=INTEGER},
+      </if>
+      <if test="pSize != null" >
+        #{pSize,jdbcType=VARCHAR},
+      </if>
+      <if test="pImg != null" >
+        #{pImg,jdbcType=VARCHAR},
+      </if>
+      <if test="pDeals != null" >
+        #{pDeals,jdbcType=BIGINT},
+      </if>
+      <if test="pAttribution != null" >
+        #{pAttribution,jdbcType=VARCHAR},
+      </if>
+      <if test="pFreeShipping != null" >
+        #{pFreeShipping,jdbcType=BIT},
+      </if>
+      <if test="pHot != null" >
+        #{pHot,jdbcType=BIGINT},
+      </if>
+      <if test="pOffline != null" >
+        #{pOffline,jdbcType=BIT},
+      </if>
+      <if test="pDelete != null" >
+        #{pDelete,jdbcType=BIT},
+      </if>
+      <if test="pCreateTime != null" >
+        #{pCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pUpdateTime != null" >
+        #{pUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pIntroduction != null" >
+        #{pIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="pType != null" >
+        #{pType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfProduct" >
+    update tf_product
+    <set >
+      <if test="pMasterId != null" >
+        p_master_id = #{pMasterId,jdbcType=INTEGER},
+      </if>
+      <if test="pName != null" >
+        p_name = #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pPrice != null" >
+        p_price = #{pPrice,jdbcType=INTEGER},
+      </if>
+      <if test="pTotal != null" >
+        p_total = #{pTotal,jdbcType=INTEGER},
+      </if>
+      <if test="pSize != null" >
+        p_size = #{pSize,jdbcType=VARCHAR},
+      </if>
+      <if test="pImg != null" >
+        p_img = #{pImg,jdbcType=VARCHAR},
+      </if>
+      <if test="pDeals != null" >
+        p_deals = #{pDeals,jdbcType=BIGINT},
+      </if>
+      <if test="pAttribution != null" >
+        p_attribution = #{pAttribution,jdbcType=VARCHAR},
+      </if>
+      <if test="pFreeShipping != null" >
+        p_free_shipping = #{pFreeShipping,jdbcType=BIT},
+      </if>
+      <if test="pHot != null" >
+        p_hot = #{pHot,jdbcType=BIGINT},
+      </if>
+      <if test="pOffline != null" >
+        p_offline = #{pOffline,jdbcType=BIT},
+      </if>
+      <if test="pDelete != null" >
+        p_delete = #{pDelete,jdbcType=BIT},
+      </if>
+      <if test="pCreateTime != null" >
+        p_create_time = #{pCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pUpdateTime != null" >
+        p_update_time = #{pUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pIntroduction != null" >
+        p_introduction = #{pIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="pType != null" >
+        p_type = #{pType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yinghai.twentyfour.common.model.TfProduct" >
+    update tf_product
+    set p_master_id = #{pMasterId,jdbcType=INTEGER},
+      p_name = #{pName,jdbcType=VARCHAR},
+      p_price = #{pPrice,jdbcType=INTEGER},
+      p_total = #{pTotal,jdbcType=INTEGER},
+      p_size = #{pSize,jdbcType=VARCHAR},
+      p_img = #{pImg,jdbcType=VARCHAR},
+      p_deals = #{pDeals,jdbcType=BIGINT},
+      p_attribution = #{pAttribution,jdbcType=VARCHAR},
+      p_free_shipping = #{pFreeShipping,jdbcType=BIT},
+      p_hot = #{pHot,jdbcType=BIGINT},
+      p_offline = #{pOffline,jdbcType=BIT},
+      p_delete = #{pDelete,jdbcType=BIT},
+      p_create_time = #{pCreateTime,jdbcType=TIMESTAMP},
+      p_update_time = #{pUpdateTime,jdbcType=TIMESTAMP},
+      p_type = #{pType,jdbcType=VARCHAR},
+      p_introduction = #{pIntroduction,jdbcType=LONGVARCHAR}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfProduct" >
+    update tf_product
+    set p_master_id = #{pMasterId,jdbcType=INTEGER},
+      p_name = #{pName,jdbcType=VARCHAR},
+      p_price = #{pPrice,jdbcType=INTEGER},
+      p_total = #{pTotal,jdbcType=INTEGER},
+      p_size = #{pSize,jdbcType=VARCHAR},
+      p_img = #{pImg,jdbcType=VARCHAR},
+      p_deals = #{pDeals,jdbcType=BIGINT},
+      p_attribution = #{pAttribution,jdbcType=VARCHAR},
+      p_free_shipping = #{pFreeShipping,jdbcType=BIT},
+      p_hot = #{pHot,jdbcType=BIGINT},
+      p_offline = #{pOffline,jdbcType=BIT},
+      p_delete = #{pDelete,jdbcType=BIT},
+      p_create_time = #{pCreateTime,jdbcType=TIMESTAMP},
+      p_type = #{pType,jdbcType=VARCHAR},
+      p_update_time = #{pUpdateTime,jdbcType=TIMESTAMP}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+</mapper>

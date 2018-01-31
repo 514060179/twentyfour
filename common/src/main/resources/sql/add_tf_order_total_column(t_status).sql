@@ -1,0 +1,1 @@
+ALTER TABLE tf_order_total add t_status  INT(5) NOT NULL DEFAULT 1 COMMENT '总订单状态:1未支付2已支付3进行中4已完成998退款999已取消';

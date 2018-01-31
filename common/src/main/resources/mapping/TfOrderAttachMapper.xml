@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfOrderAttachMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfOrderAttach" >
+    <id column="attach_id" property="attachId" jdbcType="INTEGER" />
+    <result column="ah_order_id" property="ahOrderId" jdbcType="INTEGER" />
+    <result column="ah_name" property="ahName" jdbcType="VARCHAR" />
+    <result column="ah_sex" property="ahSex" jdbcType="BIT" />
+    <result column="ah_birthday" property="ahBirthday" jdbcType="DATE" />
+    <result column="ah_country_code" property="ahCountryCode" jdbcType="VARCHAR" />
+    <result column="ah_tel" property="ahTel" jdbcType="VARCHAR" />
+    <result column="ah_birthplace" property="ahBirthplace" jdbcType="VARCHAR" />
+    <result column="ah_create_time" property="ahCreateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yinghai.twentyfour.common.model.TfOrderAttach" extends="BaseResultMap" >
+    <result column="ah_describe" property="ahDescribe" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    attach_id, ah_order_id, ah_name, ah_sex, ah_birthday, ah_country_code, ah_tel, ah_birthplace, 
+    ah_create_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    ah_describe
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_order_attach
+    where attach_id = #{attachId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_order_attach
+    where attach_id = #{attachId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfOrderAttach" >
+    insert into tf_order_attach (attach_id, ah_order_id, ah_name, 
+      ah_sex, ah_birthday, ah_country_code, 
+      ah_tel, ah_birthplace, ah_create_time, 
+      ah_describe)
+    values (#{attachId,jdbcType=INTEGER}, #{ahOrderId,jdbcType=INTEGER}, #{ahName,jdbcType=VARCHAR}, 
+      #{ahSex,jdbcType=BIT}, #{ahBirthday,jdbcType=DATE}, #{ahCountryCode,jdbcType=VARCHAR}, 
+      #{ahTel,jdbcType=VARCHAR}, #{ahBirthplace,jdbcType=VARCHAR}, #{ahCreateTime,jdbcType=TIMESTAMP}, 
+      #{ahDescribe,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfOrderAttach" useGeneratedKeys="true" keyProperty="attachId">
+    insert into tf_order_attach
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="attachId != null" >
+        attach_id,
+      </if>
+      <if test="ahOrderId != null" >
+        ah_order_id,
+      </if>
+      <if test="ahName != null" >
+        ah_name,
+      </if>
+      <if test="ahSex != null" >
+        ah_sex,
+      </if>
+      <if test="ahBirthday != null" >
+        ah_birthday,
+      </if>
+      <if test="ahCountryCode != null" >
+        ah_country_code,
+      </if>
+      <if test="ahTel != null" >
+        ah_tel,
+      </if>
+      <if test="ahBirthplace != null" >
+        ah_birthplace,
+      </if>
+      <if test="ahCreateTime != null" >
+        ah_create_time,
+      </if>
+      <if test="ahDescribe != null" >
+        ah_describe,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="attachId != null" >
+        #{attachId,jdbcType=INTEGER},
+      </if>
+      <if test="ahOrderId != null" >
+        #{ahOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="ahName != null" >
+        #{ahName,jdbcType=VARCHAR},
+      </if>
+      <if test="ahSex != null" >
+        #{ahSex,jdbcType=BIT},
+      </if>
+      <if test="ahBirthday != null" >
+        #{ahBirthday,jdbcType=DATE},
+      </if>
+      <if test="ahCountryCode != null" >
+        #{ahCountryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ahTel != null" >
+        #{ahTel,jdbcType=VARCHAR},
+      </if>
+      <if test="ahBirthplace != null" >
+        #{ahBirthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="ahCreateTime != null" >
+        #{ahCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ahDescribe != null" >
+        #{ahDescribe,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfOrderAttach" >
+    update tf_order_attach
+    <set >
+      <if test="ahOrderId != null" >
+        ah_order_id = #{ahOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="ahName != null" >
+        ah_name = #{ahName,jdbcType=VARCHAR},
+      </if>
+      <if test="ahSex != null" >
+        ah_sex = #{ahSex,jdbcType=BIT},
+      </if>
+      <if test="ahBirthday != null" >
+        ah_birthday = #{ahBirthday,jdbcType=DATE},
+      </if>
+      <if test="ahCountryCode != null" >
+        ah_country_code = #{ahCountryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ahTel != null" >
+        ah_tel = #{ahTel,jdbcType=VARCHAR},
+      </if>
+      <if test="ahBirthplace != null" >
+        ah_birthplace = #{ahBirthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="ahCreateTime != null" >
+        ah_create_time = #{ahCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ahDescribe != null" >
+        ah_describe = #{ahDescribe,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where attach_id = #{attachId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yinghai.twentyfour.common.model.TfOrderAttach" >
+    update tf_order_attach
+    set ah_order_id = #{ahOrderId,jdbcType=INTEGER},
+      ah_name = #{ahName,jdbcType=VARCHAR},
+      ah_sex = #{ahSex,jdbcType=BIT},
+      ah_birthday = #{ahBirthday,jdbcType=DATE},
+      ah_country_code = #{ahCountryCode,jdbcType=VARCHAR},
+      ah_tel = #{ahTel,jdbcType=VARCHAR},
+      ah_birthplace = #{ahBirthplace,jdbcType=VARCHAR},
+      ah_create_time = #{ahCreateTime,jdbcType=TIMESTAMP},
+      ah_describe = #{ahDescribe,jdbcType=LONGVARCHAR}
+    where attach_id = #{attachId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfOrderAttach" >
+    update tf_order_attach
+    set ah_order_id = #{ahOrderId,jdbcType=INTEGER},
+      ah_name = #{ahName,jdbcType=VARCHAR},
+      ah_sex = #{ahSex,jdbcType=BIT},
+      ah_birthday = #{ahBirthday,jdbcType=DATE},
+      ah_country_code = #{ahCountryCode,jdbcType=VARCHAR},
+      ah_tel = #{ahTel,jdbcType=VARCHAR},
+      ah_birthplace = #{ahBirthplace,jdbcType=VARCHAR},
+      ah_create_time = #{ahCreateTime,jdbcType=TIMESTAMP}
+    where attach_id = #{attachId,jdbcType=INTEGER}
+  </update>
+</mapper>

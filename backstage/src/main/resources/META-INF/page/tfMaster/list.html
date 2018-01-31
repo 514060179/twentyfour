@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<!-- head 头 -->
+<#include "../common/head.html"/>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- 菜单 -->
+    <#include "/ftl/menu.ftl"/>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+
+                <ul class="page-breadcrumb breadcrumb">
+
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">首頁</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">大師管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <div class="col-md-12">
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+                <!-- END EXAMPLE TABLE PORTLET-->
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box #fff">
+                    <div class="portlet-title">
+                        <div class="caption" style="color: black"><i class="icon-globe"></i>大師列表</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn default" href="#" data-toggle="dropdown">
+                                    更多
+                                    <i class="icon-angle-down"></i>
+                                </a>
+                                <div id="sample_2_column_toggler"
+                                     class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
+                                    <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"></span></div>
+                                        导出</label>
+                                    <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"><a href="${base!}/admin/master/edit"></span></div>
+                                        新增<a/></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div id="sample_2_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                            <div class="row">
+                              <form action="" method="post" id="form1">
+   								<div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter"><label>暱稱: <input name='nick' id='nick'
+                                            type="text" aria-controls="sample_2" value='<#if master??>${master.mNick!}</#if>'
+                                            class="form-control input-small luckdate" ></label></div>
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <div class="dataTables_filter"><label>区号: 
+                                     	<input name='countryCode' id='countryCode'
+                                            type="text" aria-controls="sample_1" value='<#if master??>${master.mTel!}</#if>'
+                                            class="form-control input-small luckdate" >手机号:
+                                    		<input name='tel' id='tel'
+                                            type="text" aria-controls="sample_2" value='<#if master??>${master.mTel!}</#if>'
+                                            class="form-control input-small luckdate" ></label></div>
+                                            
+                                </div>
+                                  <div class="col-md-2 col-sm-12">
+                                    <div class="dataTables_filter"><label>星座:  
+                                            <select  style="height: 32px;" id="constellation" name="constellation">
+                                            	<option value=''></option>
+                                     			<option value='1' <#if master??><#if master.mConstellation??><#if master.mConstellation=1>selected</#if></#if></#if>>水平座</option>
+                                     			<option value='2' <#if master??><#if master.mConstellation??><#if master.mConstellation=2>selected</#if></#if></#if>>双鱼座</option>
+                                     			<option value='3' <#if master??><#if master.mConstellation??><#if master.mConstellation=3>selected</#if></#if></#if>>白羊座</option>
+                                     			<option value='4' <#if master??><#if master.mConstellation??><#if master.mConstellation=4>selected</#if></#if></#if>>金牛座</option>
+                                     			<option value='5' <#if master??><#if master.mConstellation??><#if master.mConstellation=5>selected</#if></#if></#if>>双子座</option>
+                                     			<option value='6' <#if master??><#if master.mConstellation??><#if master.mConstellation=6>selected</#if></#if></#if>>巨蟹座</option>
+                                     			<option value='7' <#if master??><#if master.mConstellation??><#if master.mConstellation=7>selected</#if></#if></#if>>狮子座</option>
+                                     			<option value='8' <#if master??><#if master.mConstellation??><#if master.mConstellation=8>selected</#if></#if></#if>>处女座</option>
+                                     			<option value='9' <#if master??><#if master.mConstellation??><#if master.mConstellation=9>selected</#if></#if></#if>>天秤座</option>
+                                     			<option value='10' <#if master??><#if master.mConstellation??><#if master.mConstellation=10>selected</#if></#if></#if>>天蝎座</option>
+                                     			<option value='11' <#if master??><#if master.mConstellation??><#if master.mConstellation=11>selected</#if></#if></#if>>射手座</option>
+                                     			<option value='12' <#if master??><#if master.mConstellation??><#if master.mConstellation=12>selected</#if></#if></#if>>摩羯座</option>
+                                     	</select>
+                                            </label></div>
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <a href="javascript:void(0)" onclick="searchs()" class="btn default"><i class="icon-search"></i></a>
+                                </div>
+								</form>
+                            </div>
+                            <div class="table-scrollable">
+                                <table class="table table-striped table-bordered table-hover table-full-width dataTable"
+                                       id="sample_2" aria-describedby="sample_2_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample_2"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending"
+                                            style="width: 5%;">編號
+                                        </th>
+                                        <th class="sorting_asc" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1" aria-sort="ascending"
+                                            aria-label="Browser: activate to sort column descending"
+                                            style="width: 5%;">名字
+                                        </th>
+                                         <th class="sorting_asc" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1" aria-sort="ascending"
+                                            aria-label="Browser: activate to sort column descending"
+                                            style="width: 5%;">區號
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 10%;">手機號
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">狀態
+                                        </th>
+                                  
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">性别
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">关注量
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">成交量
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">评分
+                                        </th>
+                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">星座
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">創建時間
+                                        </th>
+                                        <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 5%;">是否拉黑
+                                        </th>
+                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
+                                            aria-controls="sample_2" rowspan="1" colspan="1"
+                                            aria-label="Engine version: activate to sort column ascending"
+                                            style="width: 15%;">更多操作
+                                        </th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                     <#list page as item>
+                                    <tr class="odd" id="${item.masterId!}Tr">
+                                        <td class=" ">${item.masterId!}</td>
+                                        <td class=" ">${item.mNick!}</td>
+                                        <td class=" ">${item.mCountryCode!}</td>
+                                        <td class=" ">${item.mTel!}</td>
+                                        <td class=" ">
+                                        <#if item.mStatus=1>上線中
+										<#elseif item.mStatus=999>離線
+										</#if>
+                                        </td>
+                                        <td class=" ">${item.mSex?string("男","女")}</td>
+                                        <td class=" ">${item.mFollows!}</td>
+                                        <td class=" ">${item.mDeals!}</td>
+                                        <td class=" ">${item.mScore!}</td>
+                                       	<td class=" ">
+                                         	<#if item.mConstellation=1>水瓶座
+											<#elseif item.mConstellation=2>双鱼座
+											<#elseif item.mConstellation=3>白羊座
+											<#elseif item.mConstellation=4>金牛座
+											<#elseif item.mConstellation=5>双子座
+											<#elseif item.mConstellation=6>巨蟹座
+											<#elseif item.mConstellation=7>狮子座
+											<#elseif item.mConstellation=8>处女座
+											<#elseif item.mConstellation=9>天枰座
+											<#elseif item.mConstellation=10>天蝎座
+											<#elseif item.mConstellation=11>射手座
+											<#elseif item.mConstellation=12>摩羯座
+											</#if>
+                                        </td>
+                                       <td class=" ">${(item.mCreateTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
+                                        <td class=" "> ${item.mDeleted?string("拉黑","正常")}</td>
+                                        <td>                 <label>
+                                        <div class="checker"><span class="checked"><input type="checkbox" checked=""
+                                                                                          data-column="0"><a href="${base!}/admin/master/edit?masterId=${item.masterId!}">
+                                        	編輯<a/>
+                                        	<a href="javascript:void(0)"
+														onclick="delManager('${item.masterId!}')">删除</a>
+                                        	</label>
+                                        	</td>
+                                    </tr>
+                                    </#list>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                              
+
+                                <div class="row">
+                                    <#import "/ftl/pager.ftl" as p/> <#if page??> <@p.pager
+                                    pageNo=pageNo pageSize=pageSize recordCount=recordCount
+                                    pageCount=pageCount toURL="${base!}/admin/master/list"
+                                    method="post"/> </#if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<#include "../common/footer.html"/>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+
+<!-- END CORE PLUGINS -->
+<script>
+	
+</script>
+<script>
+    function searchs(){
+    	     document.getElementById("form1").action="${base!}/admin/master/list";
+    	   	 $("#form1").submit();
+    }
+    function delManager(masterId) {
+        var sure = confirm("確定刪除?");
+        if(sure) {
+            $.post("${base}/admin/master/del", {
+                    "masterId" : masterId
+                },
+                function(data) {
+                    if (data.code == "1") {
+                        alert("刪除成功!");
+                        $("#" + masterId + "Tr").remove();
+                    } else {
+                        alert("刪除失敗!");
+                        console.log(data.code+"——"+data.msg);
+                    }
+                });
+        }
+	}
+</script>
+
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

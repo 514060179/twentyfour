@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfRelationMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfRelation" >
+    <id column="relation_id" property="relationId" jdbcType="INTEGER" />
+    <result column="r_user_id" property="rUserId" jdbcType="VARCHAR" />
+    <result column="r_friend_id" property="rFriendId" jdbcType="VARCHAR" />
+    <result column="r_is_validate" property="rIsValidate" jdbcType="TINYINT" />
+    <result column="r_group_id" property="rGroupId" jdbcType="INTEGER" />
+    <result column="r_visible" property="rVisible" jdbcType="INTEGER" />
+    <result column="r_see" property="rSee" jdbcType="INTEGER" />
+    <result column="r_create_time" property="rCreateTime" jdbcType="TIMESTAMP" />
+    <result column="r_update_time" property="rUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="r_delete" property="rDelete" jdbcType="INTEGER" />
+    <result column="r_add" property="rAdd" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="UserResultMap" type="com.yinghai.twentyfour.common.model.TfUserFriend" >
+  	<id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="u_nick" property="uNick" jdbcType="VARCHAR" />
+    <result column="u_img_url" property="uImgUrl" jdbcType="VARCHAR" />
+    <result column="u_country_code" property="uCountryCode" jdbcType="VARCHAR" />
+    <result column="u_tel" property="uTel" jdbcType="VARCHAR" />
+    <result column="u_password" property="uPassword" jdbcType="VARCHAR" />
+    <result column="u_status" property="uStatus" jdbcType="INTEGER" />
+    <result column="u_birthday" property="uBirthday" jdbcType="DATE" />
+    <result column="u_sex" property="uSex" jdbcType="BIT" />
+    <result column="u_constellation" property="uConstellation" jdbcType="INTEGER" />
+    <result column="u_create_time" property="uCreateTime" jdbcType="TIMESTAMP" />
+    <result column="u_update_time" property="uUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="u_deleted" property="uDeleted" jdbcType="BIT" />
+    <result column="u_device_id" property="uDeviceId" jdbcType="VARCHAR" />
+    <result column="u_device_type" property="uDeviceType" jdbcType="INTEGER" />
+    <result column="u_im" property="uIm" jdbcType="VARCHAR" />
+    <result column="u_token" property="uToken" jdbcType="VARCHAR" />
+    <result column="u_is_friend" property="uIsFriend" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    relation_id,r_user_id,r_friend_id,r_is_validate,r_group_id,r_visible,r_see,r_create_time,r_update_time,r_delete,r_add
+  </sql>
+  <sql id="User_Column_List">
+  	user_id, u_nick,u_img_url, u_country_code, u_tel, u_password, u_status, u_birthday, u_sex,
+    u_constellation, u_create_time, u_update_time, u_deleted,u_device_id,u_device_type,u_im,u_token
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.yinghai.twentyfour.common.model.TfRelation">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from tf_relation
+  	where relation_id = #{relationId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserAndFriend" parameterType="string" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from tf_relation
+  	where (r_user_id = #{userId,jdbcType=VARCHAR} AND r_friend_id = #{friendId,jdbcType=VARCHAR}) 
+  	OR (r_user_id = #{friendId,jdbcType=VARCHAR} AND r_friend_id = #{userId,jdbcType=VARCHAR})
+  </select>
+  
+  <select id="findFriendList"  resultMap="UserResultMap">
+  	select 
+  	<include refid="User_Column_List"/>,1 AS u_is_friend
+  	from tf_user
+  	where user_id 
+  	IN(	select substring_index(r_friend_id,'user',-1) 
+  			from tf_relation 
+  			where r_user_id = #{userId,jdbcType=VARCHAR} AND r_is_validate=1 AND r_delete=0
+  		UNION
+  		select substring_index(r_user_id,'user',-1) 
+  			from tf_relation 
+  			where r_friend_id = #{userId,jdbcType=VARCHAR} AND r_is_validate=1 AND r_delete=0
+  	)
+  	<if test="nick != null">
+  		AND u_nick like CONCAT('%',CONCAT(#{nick,jdbcType=VARCHAR},'%'))
+  	</if>
+  	order by u_nick
+  </select>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfRelation">
+  	insert into tf_relation(relation_id,r_user_id,r_friend_id,r_is_validate,r_group_id,r_visible,
+  	r_see,r_create_time,r_update_time,r_delete,r_add) 
+  	VALUES (#{relationId,jdbcType=INTEGER},#{rUserId,jdbcType=VARCHAR},
+  	#{rFriendId,jdbcType=VARCHAR},#{rIsValidate,jdbcType=TINYINT},
+  	#{rGroupId,jdbcType=INTEGER},#{rVisible,jdbcType=INTEGER},
+  	#{rSee,jdbcType=INTEGER},#{rCreateTime,jdbcType=TIMESTAMP},
+  	#{rUpdateTime,jdbcType=TIMESTAMP},#{rDelete,jdbcType=INTEGER},#{rAdd,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfRelation">
+  	insert into tf_relation
+  	<trim prefix="(" suffix=")" suffixOverrides="," >
+  		<if test="relationId != null">
+  			relation_id,
+  		</if>
+  		<if test="rUserId != null">
+  			r_user_id,
+  		</if>
+  		<if test="rFriendId != null">
+  			r_friend_id,
+  		</if>
+  		<if test="rIsValidate != null">
+  			r_is_validate,
+  		</if>
+  		<if test="rGroupId != null">
+  			r_group_id,
+  		</if>
+  		<if test="rVisible != null">
+  			r_visible,
+  		</if>
+  		<if test="rSee != null">
+  			r_see,
+  		</if>
+  		<if test="rCreateTime != null">
+  			r_create_time,
+  		</if>
+  		<if test="rUpdateTime != null">
+  			r_update_time,
+  		</if>
+  		<if test="rDelete != null">
+  			r_delete,
+  		</if>
+  		<if test="rAdd != null">
+  			r_add,
+  		</if>
+  	</trim>
+  	<trim prefix="values (" suffix=")" suffixOverrides="," >
+  		<if test="relationId != null">
+ 			#{relationId,jdbcType=INTEGER},
+  		</if>
+  		<if test="rUserId != null">
+  			#{rUserId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="rFriendId != null">
+  			#{rFriendId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="rIsValidate != null">
+  			#{rIsValidate,jdbcType=TINYINT},
+  		</if>
+  		<if test="rGroupId != null">
+  			#{rGroupId,jdbcType=INTEGER},
+  		</if>
+  		<if test="rVisible != null">
+  			#{rVisible,jdbcType=INTEGER},
+  		</if>
+  		<if test="rSee != null">
+  			#{rSee,jdbcType=INTEGER},
+  		</if>
+  		<if test="rCreateTime != null">
+  			#{rCreateTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="rUpdateTime != null">
+  			#{rUpdateTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="rDelete != null">
+  			#{rDelete,jdbcType=INTEGER},
+  		</if>
+  		<if test="rAdd != null">
+  			#{rAdd,jdbcType=INTEGER},
+  		</if>
+  	</trim>
+  </insert>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  	delete from tf_relation
+  	where relation_id = #{relationId,jdbcType=INTEGER}
+  </delete>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfRelation">
+  	update tf_relation
+  	<set>
+  		<if test="rUserId != null">
+  			r_user_id = #{rUserId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="rFriendId != null">
+  			r_friend_id = #{rFriendId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="rIsValidate != null">
+  			r_is_validate = #{rIsValidate,jdbcType=TINYINT},
+  		</if>
+  		<if test="rGroupId != null">
+  			r_group_id = #{rGroupId,jdbcType=INTEGER},
+  		</if>
+  		<if test="rVisible != null">
+  			r_visible = #{rVisible,jdbcType=INTEGER},
+  		</if>
+  		<if test="rSee != null">
+  			r_see = #{rSee,jdbcType=INTEGER},
+  		</if>
+  		<if test="rCreateTime != null">
+  			r_create_time = #{rCreateTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="rUpdateTime != null">
+  			r_update_time = #{rUpdateTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="rDelete != null">
+  			r_delete = #{rDelete,jdbcType=INTEGER},
+  		</if>
+  		<if test="rAdd != null">
+  			r_add = #{rAdd,jdbcType=INTEGER},
+  		</if>
+  	</set>
+  	where relation_id = #{relationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfRelation">
+  	update tf_relation
+  	set r_user_id = #{rUserId,jdbcType=VARCHAR},
+  		r_friend_id = #{rFriendId,jdbcType=VARCHAR},
+  		r_is_validate = #{rIsValidate,jdbcType=TINYINT},
+  		r_group_id = #{rGroupId,jdbcType=INTEGER},
+  		r_visible = #{rVisible,jdbcType=INTEGER},
+  		r_see = #{rSee,jdbcType=INTEGER},
+  		r_create_time = #{rCreateTime,jdbcType=TIMESTAMP},
+  		r_update_time = #{rUpdateTime,jdbcType=TIMESTAMP},
+  		r_delete = #{rDelete,jdbcType=INTEGER},
+  		r_add = #{rAdd,jdbcType=INTEGER}
+  	where relation_id = #{relationId,jdbcType=INTEGER}
+  </update>
+</mapper>

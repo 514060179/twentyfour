@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinghai.twentyfour.common.dao.TfMasterMapper" >
+  <resultMap id="BaseResultMap" type="com.yinghai.twentyfour.common.model.TfMaster" >
+    <id column="master_id" property="masterId" jdbcType="INTEGER" />
+    <result column="m_nick" property="mNick" jdbcType="VARCHAR" />
+    <result column="m_sex" property="mSex" jdbcType="BIT" />
+    <result column="m_status" property="mStatus" jdbcType="INTEGER" />
+    <result column="m_head_img" property="mHeadImg" jdbcType="VARCHAR" />
+    <result column="m_constellation" property="mConstellation" jdbcType="INTEGER" />
+    <result column="m_country_code" property="mCountryCode" jdbcType="VARCHAR" />
+    <result column="m_tel" property="mTel" jdbcType="VARCHAR" />
+    <result column="m_password" property="mPassword" jdbcType="VARCHAR" />
+    <result column="m_address" property="mAddress" jdbcType="VARCHAR" />
+    <result column="m_business_type" property="mBusinessType" jdbcType="VARCHAR" />
+    <result column="m_label" property="mLabel" jdbcType="VARCHAR" />
+    <result column="m_bargain" property="mBargain" jdbcType="INTEGER" />
+    <result column="m_device_id" property="mDeviceId" jdbcType="VARCHAR" />
+    <result column="m_im" property="mIm" jdbcType="VARCHAR" />
+    <result column="m_token" property="mToken" jdbcType="VARCHAR" />
+    <result column="m_device_type" property="mDeviceType" jdbcType="INTEGER" />
+    <result column="m_follows" property="mFollows" jdbcType="BIGINT" />
+    <result column="m_deals" property="mDeals" jdbcType="BIGINT" />
+    <result column="m_score" property="mScore" jdbcType="DOUBLE" />
+    <result column="m_create_time" property="mCreateTime" jdbcType="TIMESTAMP" />
+    <result column="m_update_time" property="mUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="m_deleted" property="mDeleted" jdbcType="BIT" />
+    <result column="isCollection" property="isCollection" jdbcType="BIT" />
+    <result column="isSubscribe" property="isSubscribe" jdbcType="BIT" />
+  </resultMap>
+
+  <resultMap id="ResultMapWithBLOBs" type="com.yinghai.twentyfour.common.model.TfMaster" extends="BaseResultMap" >
+    <result column="m_introduction" property="mIntroduction" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    m.master_id, m.m_nick,m.m_sex, m.m_status, m.m_head_img, m.m_constellation, m.m_country_code,
+    m.m_tel, m.m_password, m.m_address, m.m_business_type, m.m_label, m.m_bargain, m.m_follows, m.m_deals, 
+    m.m_score, m.m_create_time, m.m_update_time, m.m_deleted,m.m_device_id,m.m_im,m.m_token,m.m_device_type
+  </sql>
+  <sql id="Blob_Column_List" >
+    m.m_introduction
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tf_master m
+    where m.master_id = #{masterId,jdbcType=INTEGER}
+  </select>
+  
+    <select id="findByTel" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+      ,
+    <include refid="Blob_Column_List" />
+    from tf_master m
+    where m.m_tel = #{tel,jdbcType=VARCHAR} and m.m_country_code = #{countryCode,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="getTfMasterAndConSubRecord" resultMap="ResultMapWithBLOBs">
+       select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    <if test="master.queryUserId!=null">
+    	 ,ifnull(cn.cn_user_id,0) as isCollection
+    	 ,ifnull(sn.s_user_id,0) as isSubscribe
+    </if>
+    from (SELECT * FROM tf_master  where  1=1
+	    	<if test="master.mCountryCode!=null">
+    	and m_country_code = #{master.mCountryCode,jdbcType=VARCHAR}
+    	</if>
+    	<if test="master.mTel!=null">
+    	and m_tel like #{master.mTel,jdbcType=VARCHAR}
+    	</if>
+    	<if test="master.mNick!=null">
+    	and m_nick like #{master.mNick,jdbcType=VARCHAR}
+    	</if>
+        <if test="master.mConstellation!=null">
+    	and m_constellation = #{master.mConstellation,jdbcType=INTEGER}
+    	</if>
+    	<if test="master.mBusinessType!=null">
+    	and master_id in(SELECT b_master_id FROM tf_business WHERE b_type=#{master.mBusinessType,jdbcType=VARCHAR} GROUP BY b_master_id) 
+    	</if>
+    	<if test="master.mLabel!=null">
+    	and m_label = #{master.mLabel,jdbcType=BIT}
+    	</if>
+    	and m_deleted=false 
+    	order by m_follows desc,m_score desc,m_deals desc limit #{startNumber,jdbcType=INTEGER},#{pageStartSize,jdbcType=INTEGER} )   m 
+     <if test="master.queryUserId!=null">
+    	  LEFT JOIN (SELECT * FROM tf_collection c WHERE c.`cn_user_id`=#{master.queryUserId,jdbcType=INTEGER}  AND  c.`cn_type`=1) cn ON cn.`cn_master_id`=m.`master_id`
+    	  LEFT JOIN (SELECT * FROM tf_subscribe s WHERE s.`s_user_id`=#{master.queryUserId,jdbcType=INTEGER}  ) sn ON sn.`s_master_id`=m.`master_id`
+    </if>
+    	
+		order by m.m_follows desc,m.m_score desc,m.m_deals desc
+  </select>
+  
+  <select id="getTfMasterRecord" resultMap="ResultMapWithBLOBs">
+       select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+	    from tf_master m 
+    	where 1=1
+    	<if test="mCountryCode!=null">
+    	and m.m_country_code = #{mCountryCode,jdbcType=VARCHAR}
+    	</if>
+    	<if test="mTel!=null">
+    	and m.m_tel like #{mTel,jdbcType=VARCHAR}
+    	</if>
+    	<if test="mNick!=null">
+    	and m.m_nick like #{mNick,jdbcType=VARCHAR}
+    	</if>
+        <if test="mConstellation!=null">
+    	and m.m_constellation = #{mConstellation,jdbcType=INTEGER}
+    	</if>
+    	<if test="mBusinessType!=null">
+    	and m.m_business_type = #{mBusiness_type,jdbcType=VARCHAR}
+    	</if>
+    	<if test="mDeleted!=null">
+    	and m.m_deleted = #{mDeleted,jdbcType=BIT}
+    	</if>
+    	<if test="mLabel!=null">
+    	and m.m_label = #{mLabel,jdbcType=BIT}
+    	</if>
+		order by m.m_follows desc,m.m_score desc,m.m_deals desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tf_master
+    where master_id = #{masterId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfMaster" >
+    insert into tf_master (master_id, m_nick, m_sex, 
+      m_status, m_head_img, m_constellation,
+      m_country_code, m_tel, m_password, 
+      m_address, m_business_type, m_label, 
+      m_bargain, m_follows, m_deals, 
+      m_score, m_create_time, m_update_time, 
+      m_deleted, m_introduction,m_device_id,m_im,m_token,m_device_type)
+    values (#{masterId,jdbcType=INTEGER}, #{mNick,jdbcType=VARCHAR}, #{mSex,jdbcType=BIT}, 
+      #{mStatus,jdbcType=INTEGER}, #{mHeadImg,jdbcType=VARCHAR}, #{mConstellation,jdbcType=INTEGER},
+      #{mCountryCode,jdbcType=VARCHAR}, #{mTel,jdbcType=VARCHAR}, #{mPassword,jdbcType=VARCHAR}, 
+      #{mAddress,jdbcType=VARCHAR}, #{mBusinessType,jdbcType=VARCHAR}, #{mLabel,jdbcType=VARCHAR}, 
+      #{mBargain,jdbcType=INTEGER}, #{mFollows,jdbcType=BIGINT}, #{mDeals,jdbcType=BIGINT}, 
+      #{mScore,jdbcType=DOUBLE}, #{mCreateTime,jdbcType=TIMESTAMP}, #{mUpdateTime,jdbcType=TIMESTAMP}, 
+      #{mDeleted,jdbcType=BIT}, #{mIntroduction,jdbcType=LONGVARCHAR}, #{mDeviceId,jdbcType=VARCHAR},#{mIm,jdbcType=VARCHAR},#{mToken,jdbcType=VARCHAR},
+      #{mDeviceType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfMaster" >
+    insert into tf_master
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="masterId != null" >
+        master_id,
+      </if>
+      <if test="mNick != null" >
+        m_nick,
+      </if>
+      <if test="mSex != null" >
+        m_sex,
+      </if>
+      <if test="mStatus != null" >
+        m_status,
+      </if>
+      <if test="mHeadImg != null" >
+        m_head_img,
+      </if>
+      <if test="mConstellation != null" >
+        m_constellation,
+      </if>
+      <if test="mCountryCode != null" >
+        m_country_code,
+      </if>
+      <if test="mTel != null" >
+        m_tel,
+      </if>
+      <if test="mPassword != null" >
+        m_password,
+      </if>
+      <if test="mAddress != null" >
+        m_address,
+      </if>
+      <if test="mBusinessType != null" >
+        m_business_type,
+      </if>
+      <if test="mLabel != null" >
+        m_label,
+      </if>
+      <if test="mBargain != null" >
+        m_bargain,
+      </if>
+      <if test="mFollows != null" >
+        m_follows,
+      </if>
+      <if test="mDeals != null" >
+        m_deals,
+      </if>
+      <if test="mScore != null" >
+        m_score,
+      </if>
+      <if test="mCreateTime != null" >
+        m_create_time,
+      </if>
+      <if test="mUpdateTime != null" >
+        m_update_time,
+      </if>
+      <if test="mDeleted != null" >
+        m_deleted,
+      </if>
+      <if test="mIntroduction != null" >
+        m_introduction,
+      </if>
+      <if test="mDeviceId != null" >
+        m_device_id,
+      </if>
+      <if test="mIm != null" >
+        m_im,
+      </if>
+      <if test="mToken != null" >
+        m_token,
+      </if>
+      <if test="mDeviceType != null" >
+        m_device_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="masterId != null" >
+        #{masterId,jdbcType=INTEGER},
+      </if>
+      <if test="mNick != null" >
+        #{mNick,jdbcType=VARCHAR},
+      </if>
+      <if test="mSex != null" >
+        #{mSex,jdbcType=BIT},
+      </if>
+      <if test="mStatus != null" >
+        #{mStatus,jdbcType=INTEGER},
+      </if>
+      <if test="mHeadImg != null" >
+        #{mHeadImg,jdbcType=VARCHAR},
+      </if>
+      <if test="mConstellation != null" >
+        #{mConstellation,jdbcType=INTEGER},
+      </if>
+      <if test="mCountryCode != null" >
+        #{mCountryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mTel != null" >
+        #{mTel,jdbcType=VARCHAR},
+      </if>
+      <if test="mPassword != null" >
+        #{mPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="mAddress != null" >
+        #{mAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mBusinessType != null" >
+        #{mBusinessType,jdbcType=VARCHAR},
+      </if>
+      <if test="mLabel != null" >
+        #{mLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="mBargain != null" >
+        #{mBargain,jdbcType=INTEGER},
+      </if>
+      <if test="mFollows != null" >
+        #{mFollows,jdbcType=BIGINT},
+      </if>
+      <if test="mDeals != null" >
+        #{mDeals,jdbcType=BIGINT},
+      </if>
+      <if test="mScore != null" >
+        #{mScore,jdbcType=DOUBLE},
+      </if>
+      <if test="mCreateTime != null" >
+        #{mCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mUpdateTime != null" >
+        #{mUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mDeleted != null" >
+        #{mDeleted,jdbcType=BIT},
+      </if>
+      <if test="mIntroduction != null" >
+        #{mIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="mDeviceId != null" >
+        #{mDeviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="mIm != null" >
+        #{mIm,jdbcType=VARCHAR},
+      </if>
+      <if test="mToken != null" >
+        #{mToken,jdbcType=VARCHAR},
+      </if>
+      <if test="mDeviceType != null" >
+        #{mDeviceType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfMaster" >
+    update tf_master
+    <set >
+      <if test="mNick != null" >
+        m_nick = #{mNick,jdbcType=VARCHAR},
+      </if>
+      <if test="mSex != null" >
+        m_sex = #{mSex,jdbcType=BIT},
+      </if>
+      <if test="mStatus != null" >
+        m_status = #{mStatus,jdbcType=INTEGER},
+      </if>
+      <if test="mHeadImg != null" >
+        m_head_img = #{mHeadImg,jdbcType=VARCHAR},
+      </if>
+      <if test="mConstellation != null" >
+        m_constellation = #{mConstellation,jdbcType=INTEGER},
+      </if>
+      <if test="mCountryCode != null" >
+        m_country_code = #{mCountryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mTel != null" >
+        m_tel = #{mTel,jdbcType=VARCHAR},
+      </if>
+      <if test="mPassword != null" >
+        m_password = #{mPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="mAddress != null" >
+        m_address = #{mAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mBusinessType != null" >
+        m_business_type = #{mBusinessType,jdbcType=VARCHAR},
+      </if>
+      <if test="mLabel != null" >
+        m_label = #{mLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="mBargain != null" >
+        m_bargain = #{mBargain,jdbcType=INTEGER},
+      </if>
+      <if test="mFollows != null" >
+        m_follows = #{mFollows,jdbcType=BIGINT},
+      </if>
+      <if test="mDeals != null" >
+        m_deals = #{mDeals,jdbcType=BIGINT},
+      </if>
+      <if test="mScore != null" >
+        m_score = #{mScore,jdbcType=DOUBLE},
+      </if>
+      <if test="mCreateTime != null" >
+        m_create_time = #{mCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mUpdateTime != null" >
+        m_update_time = #{mUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mDeleted != null" >
+        m_deleted = #{mDeleted,jdbcType=BIT},
+      </if>
+      <if test="mIntroduction != null" >
+        m_introduction = #{mIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="mDeviceId != null" >
+        m_device_id = #{mDeviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="mIm != null" >
+        m_im = #{mIm,jdbcType=VARCHAR},
+      </if>
+      <if test="mToken != null" >
+        m_token = #{mToken,jdbcType=VARCHAR},
+      </if>
+      <if test="mDeviceType != null" >
+        m_device_type = #{mDeviceType,jdbcType=INTEGER},
+      </if>
+
+    </set>
+    where master_id = #{masterId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yinghai.twentyfour.common.model.TfMaster" >
+    update tf_master
+    set m_nick = #{mNick,jdbcType=VARCHAR},
+      m_sex = #{mSex,jdbcType=BIT},
+      m_status = #{mStatus,jdbcType=INTEGER},
+      m_head_img = #{mHeadImg,jdbcType=VARCHAR},
+      m_constellation = #{mConstellation,jdbcType=INTEGER},
+      m_country_code = #{mCountryCode,jdbcType=VARCHAR},
+      m_tel = #{mTel,jdbcType=VARCHAR},
+      m_password = #{mPassword,jdbcType=VARCHAR},
+      m_address = #{mAddress,jdbcType=VARCHAR},
+      m_business_type = #{mBusinessType,jdbcType=VARCHAR},
+      m_label = #{mLabel,jdbcType=VARCHAR},
+      m_bargain = #{mBargain,jdbcType=INTEGER},
+      m_follows = #{mFollows,jdbcType=BIGINT},
+      m_deals = #{mDeals,jdbcType=BIGINT},
+      m_score = #{mScore,jdbcType=DOUBLE},
+      m_create_time = #{mCreateTime,jdbcType=TIMESTAMP},
+      m_update_time = #{mUpdateTime,jdbcType=TIMESTAMP},
+      m_deleted = #{mDeleted,jdbcType=BIT},
+      m_introduction = #{mIntroduction,jdbcType=LONGVARCHAR},
+      m_device_id = #{mDeviceId,jdbcType=VARCHAR},
+      m_im = #{mIm,jdbcType=VARCHAR},
+      m_token = #{mToken,jdbcType=VARCHAR},
+      m_device_type = #{mDeviceType,jdbcType=INTEGER}
+    where master_id = #{masterId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfMaster" >
+    update tf_master
+    set m_nick = #{mNick,jdbcType=VARCHAR},
+      m_sex = #{mSex,jdbcType=BIT},
+      m_status = #{mStatus,jdbcType=INTEGER},
+      m_head_img = #{mHeadImg,jdbcType=VARCHAR},
+      m_constellation = #{mConstellation,jdbcType=INTEGER},
+      m_country_code = #{mCountryCode,jdbcType=VARCHAR},
+      m_tel = #{mTel,jdbcType=VARCHAR},
+      m_password = #{mPassword,jdbcType=VARCHAR},
+      m_address = #{mAddress,jdbcType=VARCHAR},
+      m_business_type = #{mBusinessType,jdbcType=VARCHAR},
+      m_label = #{mLabel,jdbcType=VARCHAR},
+      m_bargain = #{mBargain,jdbcType=INTEGER},
+      m_follows = #{mFollows,jdbcType=BIGINT},
+      m_deals = #{mDeals,jdbcType=BIGINT},
+      m_score = #{mScore,jdbcType=DOUBLE},
+      m_create_time = #{mCreateTime,jdbcType=TIMESTAMP},
+      m_update_time = #{mUpdateTime,jdbcType=TIMESTAMP},
+      m_deleted = #{mDeleted,jdbcType=BIT},
+      m_device_id = #{mDeviceId,jdbcType=VARCHAR},
+      m_im = #{mIm,jdbcType=VARCHAR},
+      m_token = #{mToken,jdbcType=VARCHAR},
+      m_device_type = #{mDeviceType,jdbcType=INTEGER}
+    where master_id = #{masterId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateBargain" parameterType="com.yinghai.twentyfour.common.model.TfMaster">
+    update tf_master
+    <set>
+      <if test="mUpdateTime != null">
+        m_update_time = #{mUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mBargain != null" >
+        m_bargain = IF(#{mBargain,jdbcType=INTEGER}>m_bargain,m_bargain,#{mBargain,jdbcType=INTEGER}),
+      </if>
+    </set>
+    WHERE master_id = #{masterId,jdbcType=INTEGER}
+  </update>
+
+  <select id="findTopId" resultType="int" >
+    SELECT IFNULL(MAX(master_id),0)+1 AS m FROM tf_master
+  </select>
+</mapper>

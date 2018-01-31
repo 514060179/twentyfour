@@ -1,0 +1,1 @@
+ALTER TABLE tf_comment add ct_visible TINYINT(1) NULL default 0 COMMENT '是否不可见，0为可见1为不可见';

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+<script src="${base!}/assets/jquery-3.1.1.min.js"></script>
+<script src="${base!}/assets/zxxFile.js"></script>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<!-- head 头 -->
+<#include "../common/head.html"/>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- 菜单 -->
+    <#include "/ftl/menu.ftl"/>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+
+                <ul class="page-breadcrumb breadcrumb">
+                    <li class="btn-group">
+                        <a href="${base!}/admin/product/list"><button type="button" class="btn grey dropdown-toggle"  data-hover="dropdown" data-delay="1000" data-close-others="true">
+                            返回列表
+                        </button></a>
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">首页</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="${base!}/admin/product/list">产品</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#"><#if product??>编辑产品#${product.productId}<#else>新增产品</#if></a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN VALIDATION STATES-->
+                <div class="portlet box gainsboro">
+                    <div class="portlet-body form">
+                        <div class="form-body">
+                            <!-- BEGIN FORM-->
+                            <h3 class="form-section"><#if product??>编辑产品#${product.productId}<#else>新增产品</#if>  <small></small></h3>
+                            <form action="#" id="registrationForm" class="form-horizontal" novalidate="novalidate">
+                            <input type="hidden" class="form-control" id="productId" name="productId" value="<#if product??>${product.productId!}</#if>" >
+                            <input type="hidden" class="form-control" id="ids" name="ids" value="" >
+                            <input type="hidden" class="form-control" id="act" name="act" value="add" >
+                            <input type="hidden" id="boochange" name="boochange" value='false'>
+                            <input type="hidden" id="act" name="act" value='add'>
+                            <!-- 
+                                <div class="alert alert-success display-show" style="color: red">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    保存失败!
+                                </div>
+                                <div class="alert alert-success display-show">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    保存成功!
+                                </div> -->
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">名称<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="pName" id="pName" value='<#if product??>${product.pName!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">文章类型<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <!-- <input name="lConstellation" id="lConstellation" value='<#if l??>${l.lConstellation!}</#if>' type="text" class="form-control" <#if l??>readonly<#else></#if>> -->
+                                     <select style="height: 32px;" id="pType" name="pType" <#if article??>disabled</#if>>
+                                     	<option value='1' <#if product??><#if product.pType=1>selected</#if></#if>>奇门遁甲</option>
+                                     	<option value='2' <#if product??><#if product.pType=2>selected</#if></#if>>紫微斗数</option>
+                                     	<option value='3' <#if product??><#if product.pType=3>selected</#if></#if>>子平八字</option>
+                                     	<option value='4' <#if product??><#if product.pType=4>selected</#if></#if>>铁板神数</option>
+                                     	<option value='5' <#if product??><#if product.pType=5>selected</#if></#if>>掌相</option>
+                                     </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">简介<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="pIntroduction" id="pIntroduction" value='<#if product??>${product.pIntroduction!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">价格<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="pPrice" id="pPrice" value='<#if product??><#if product.pPrice??>${product.pPrice/100}</#if></#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">总数<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="pTotal" id="pTotal" value='<#if product??>${product.pTotal!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">尺寸<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="pSize" id="pSize" value='<#if product??>${product.pSize!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">大师<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="pMasterId" id="pMasterId" value='<#if product??>${product.pMasterId!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">归属地</label>
+                                    <div class="col-md-4">
+                                      <input name="pAttribution" id="pAttribution" value='<#if product??>${product.pAttribution!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">是否包邮<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <!-- <input name="lConstellation" id="lConstellation" value='<#if l??>${l.lConstellation!}</#if>' type="text" class="form-control" <#if l??>readonly<#else></#if>> -->
+                                     <select style="height: 32px;" id="pFreeShipping" name="pFreeShipping" >
+                                     	<option value='false' <#if product??><#if
+														product.pFreeShipping?string("1","0")='0'>selected</#if></#if>
+														>不包邮</option>
+                                     	<option value='true' <#if product??><#if
+														product.pFreeShipping?string("1","0")='1'>selected</#if></#if>
+														>包邮</option>
+                                     
+                                     </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">是否下架<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <select style="height: 32px;" id="pOffline" name="pOffline" >
+                                     	<option value='false' <#if product??><#if
+														product.pOffline?string("1","0")='0'>selected</#if></#if>
+														>上架</option>
+                                     	<option value='true' <#if product??><#if
+														product.pOffline?string("1","0")='1'>selected</#if></#if>
+														>下架</option>
+                                     
+                                     </select>
+                                    </div>
+                                </div>
+	                           	<div class="form-group">
+									<!-- Search input-->
+									<label class="control-label col-md-3">产品图片<span class="required">*</span></label>
+									<div class="col-md-9">
+									<input id="file" name = "file" type="file" size="30" name="fileselect[]" multiple accept="image/jpeg,image/png,image/gif" />
+									</div>
+									 <div id="images" class="form-group">
+									 <#if product??><#list product.imgList as item>
+									 <div id="${item.imgTmpId!}" class="col-md-2"><p><strong>2</strong>
+									 <a href="javascript:" onclick="deleteImg('${item.imgTmpId!}',-1)" class="upload_delete" title="删除" data-index=" ${item.imgTmpId!} ">删除</a><br />
+									 <img id="uploadImage_${item.imgTmpId!}" height="200" width="200"   src='${item.itUrl!}' class="upload_image" /></p>
+									 <span id="uploadProgress_${item.imgTmpId!}" class="upload_progress"></span></div>
+									   </#list></#if>
+									 </div>
+								</div>
+                            
+                                <div class="form-group">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" id = 'submit' class="btn default">保存</button>
+                                        <button type="button" class="btn default">取消</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                    <!-- END VALIDATION STATES-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<#include "../common/footer.html"/>
+<div id="content" style="display: none"><#if product??>${product.aContent!}</#if></div>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+
+<!-- END CORE PLUGINS -->
+ 
+<script>
+
+var fileArray =  new Array();
+var ids = '';//编辑后需要删除的ID
+
+$("#submit")
+.click(
+		function() {
+			   var pName = document.getElementById("pName").value;
+			   var pIntroduction = document.getElementById("pIntroduction").value;
+			   var pPrice = document.getElementById("pPrice").value;
+			   var pType = $('#pType').val();
+			   var pTotal = document.getElementById("pTotal").value;
+			   var pMasterId = document.getElementById("pMasterId").value;
+               var pSize = document.getElementById('pSize').value;
+               var pAttribution = document.getElementById('pAttribution').value;
+               var pFreeShipping = $('#pFreeShipping option:selected').val();
+               var pOffline = $('#pOffline option:selected').val();
+               if(pName==""){
+                  alert("产品名字不能为空");
+                   return false;
+               }
+               if(pIntroduction==""){
+            	   alert("产品简介不能为空");
+                   return false;
+               }
+               if(pType==""){
+            	   alert("产品类型不能为空");
+                   return false;
+               }
+				if (pMasterId == "") {
+					alert("大师不能為空");
+                   return false;
+				}
+				if (pPrice == "") {
+					alert("产品单价不能為空");
+                   return false;
+				}
+				if (pTotal == "") {
+					alert("产品总数量不能為空");
+                   return false;
+				}
+				if (pSize == "") {
+					alert("产品尺寸不能為空");
+                   return false;
+				}
+				var productId = document.getElementById("productId").value;
+				if(productId!=""){
+					document.getElementById("act").value = "upd";
+					document.getElementById("ids").value = ids;
+				}
+				//判斷文件是否符合類型
+				var filePath = $("#file").val();
+				if ("" != filePath) {
+					var fileType = getFileType(filePath);
+					//判断上传的附件是否为图片  
+					if ("jpg" != fileType
+							&& "jpeg" != fileType
+							&& "bmp" != fileType
+							&& "png" != fileType
+							&& "gif" != fileType) {
+						alert("请上传JPG,JPEG,BMP,PNG,GIF格式的图片");
+						return false;
+					} else {
+						//获取附件大小（单位：KB）  
+						var fileSize = document
+								.getElementById("file").files[0].size / 1024;
+						if (fileSize > 2048) {
+							alert("图片大小不能超过2MB");
+							return false;
+						}
+					}
+				}
+				
+				var formData = new FormData(
+						$("#registrationForm")[0]);
+				 var files = document.getElementById('file').files;
+			      for (var i = 0; i < fileArray.length; i++) {  
+			    	  if(fileArray[i]!=null&&fileArray[i]!=''){
+			    		  formData.append("file"+i, fileArray[i]);
+			    	  }
+			      }
+			      formData.delete("file");
+				$.ajax({
+					url : '${base}/admin/product/save',
+					type : 'POST',
+					data : formData,
+					async : false,
+					cache : false,
+					contentType : false,
+					processData : false,
+					success : function(returndata) {
+						if (returndata.code == "1"||returndata.code == "2") {
+							alert(returndata.msg);
+							window.location.href = '${base}/admin/product/list';
+						}else{
+							alert(returndata.msg);
+						}
+					},
+					error : function(returndata) {
+						alert(returndata);
+					}
+				});
+				 return false;
+			});
+			
+				
+	
+function resetFormInput() { //清空表单
+	$("form input").each(function() {
+		$(this).val("");
+	});
+}
+var str="";
+var k = 0;
+$('#date-picker').datepicker();
+$(document)
+		.ready(
+				function() {
+					document.getElementById('file').onchange = function(
+							evt) {
+						// 如果浏览器不支持FileReader，则不处理
+						if (!window.FileReader)
+							return;
+						document.getElementById("boochange").value = 'true';
+						var files = evt.target.files;
+						for (var i = 0, f; f = files[i]; i++) {
+							if (!f.type.match('image.*')) {
+								continue;
+							}
+							var reader = new FileReader();
+							reader.onload = (function(theFile) {
+								return function(e) {
+									// img 元素
+									str='<div id="uploadList_'+ k +'"  class="col-md-2"><p><strong>' + theFile.name + '</strong>'+ 
+									'<a href="javascript:" onclick="deleteImg(\'uploadList_'+ k +'\','+(k-1)+')" class="upload_delete" title="删除" data-index="'+ k +'">删除</a><br />' +
+									'<img height="200" width="200" id="uploadImage_' + k + '" src="' + e.target.result + '" class="upload_image" /></p>'+ 
+									'<span id="uploadProgress_' + k + '" class="upload_progress"></span>' +
+								'</div>';
+								 $("#images").append(str);
+								 fileArray[k-1]=theFile;
+								};
+							})(f);
+							reader.readAsDataURL(f);
+							k++;
+						}
+					}
+
+				})
+	
+	function deleteImg(imgId,x){
+		$("#"+imgId).remove();
+		if(x!=''&&x!=-1){
+			fileArray[x]='';
+		}
+		var productId = document.getElementById("productId").value;
+		if(productId!=""){
+			ids=ids+imgId+";"
+		}
+		
+	}
+	
+function getFileType(filePath) {
+	var startIndex = filePath.lastIndexOf(".");
+	if (startIndex != -1)
+		return filePath.substring(startIndex + 1, filePath.length)
+				.toLowerCase();
+	else
+		return "";
+}
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

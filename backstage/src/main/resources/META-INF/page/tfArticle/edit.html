@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+<script src="${base!}/assets/jquery-3.1.1.min.js"></script>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<!-- head 头 -->
+<#include "../common/head.html"/>
+<!-- END HEADER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- 菜单 -->
+    <#include "/ftl/menu.ftl"/>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+
+                <ul class="page-breadcrumb breadcrumb">
+                    <li class="btn-group">
+                        <a href="${base!}/admin/article/list"><button type="button" class="btn grey dropdown-toggle"  data-hover="dropdown" data-delay="1000" data-close-others="true">
+                            返回列表
+                        </button></a>
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">首页</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="${base!}/admin/article/list">文章</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#"><#if article??>编辑文章#${article.articleId}<#else>新增文章</#if></a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN VALIDATION STATES-->
+                <div class="portlet box gainsboro">
+                    <div class="portlet-body form">
+                        <div class="form-body">
+                            <!-- BEGIN FORM-->
+                            <h3 class="form-section"><#if article??>编辑文章#${article.articleId}<#else>新增文章</#if>  <small></small></h3>
+                            <form action="#" id="form1" class="form-horizontal" novalidate="novalidate">
+                            <input type="hidden" class="form-control" id="articleId" name="articleId" value="<#if article??>${article.articleId!}</#if>" >
+                            <!-- 
+                                <div class="alert alert-success display-show" style="color: red">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    保存失败!
+                                </div>
+                                <div class="alert alert-success display-show">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    保存成功!
+                                </div> -->
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">标题<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="aTitle" id="aTitle" value='<#if article??>${article.aTitle!}</#if>'type="text" class="form-control" >
+                                    </div>
+                                </div>
+                               <div class="form-group">
+                                    <label class="control-label col-md-3">文章类型<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                     <!-- <input name="lConstellation" id="lConstellation" value='<#if l??>${l.lConstellation!}</#if>' type="text" class="form-control" <#if l??>readonly<#else></#if>> -->
+                                     <select style="height: 32px;" id="aType" name="aType" <#if article??>disabled</#if>>
+                                     	<option value='1' <#if article??><#if article.aType=1>selected</#if></#if>>奇门遁甲</option>
+                                     	<option value='2' <#if article??><#if article.aType=2>selected</#if></#if>>紫微斗数</option>
+                                     	<option value='3' <#if article??><#if article.aType=3>selected</#if></#if>>子平八字</option>
+                                     	<option value='4' <#if article??><#if article.aType=4>selected</#if></#if>>铁板神数</option>
+                                     	<option value='5' <#if article??><#if article.aType=5>selected</#if></#if>>掌相</option>
+                                     </select>
+                                    </div>
+                                </div>
+	                           	<div class="form-group">
+									<!-- Search input-->
+									<label class="control-label col-md-3">內容<span class="required">*</span></label>
+									<div class="col-md-6">
+										<textarea id="textArea" class="ckeditor"></textarea>
+										<p class="help-block" style="color:red;font-size:10px;" id="textareaIip"></p>
+									</div>
+								</div>
+                            
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">发布时间<span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                      <input name="aPublishDate" id="aPublishDate" value='<#if article??>${(article.aPublishDate?string("yyyy-MM-dd"))!}</#if>' type="date" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">截止时间</label>
+                                    <div class="col-md-4">
+                                      <input name="aAbortDate" id="aAbortDate" value='<#if article??>${(article.aAbortDate?string("yyyy-MM-dd"))!}</#if>' type="date" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group"">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" id = 'submit' class="btn default">保存</button>
+                                        <button type="button" class="btn default">取消</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                    <!-- END VALIDATION STATES-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<#include "../common/footer.html"/>
+<div id="content" style="display: none"><#if article??>${article.aContent!}</#if></div>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+
+<!-- END CORE PLUGINS -->
+ 
+<script>
+var first = true;
+jQuery(document).ready(function () {
+    App.init();
+    $("#layout").click(function(){
+        if(first){
+            layout();
+            first = false;
+        }else{
+            resetLayout();
+            first = true;
+        }
+
+    });
+});
+
+
+$("#submit")
+.click(
+		function() {
+			   var title = document.getElementById("aTitle").value;
+               var content = contentArea.getData();
+               var type = $('#aType').val();
+               var publishDate = document.getElementById('aPublishDate').value;
+               var abortDate = document.getElementById('aAbortDate').value;
+               if(title==""){
+                  alert("標題不能为空");
+                   return false;
+               }
+               if(content==""){
+            	   alert("內容不能为空");
+                   return false;
+               }
+				if (publishDate == "") {
+					alert("發佈日期不能為空");
+                   return false;
+				}
+				if (type == "") {
+					alert("文章类型不能为空");
+                   return false;
+				}
+		
+				var jsonUser = {
+						"title":title,
+						"content":content,
+						"publishDate":publishDate,
+						"abortDate":abortDate
+				};
+				var articleId = $("#articleId").val();
+				var act = "add";
+				if(articleId.trim()!=""){
+					jsonUser["articleId"] = articleId;
+                   act = "upd";
+               }
+			$
+			.post(
+					"${base}/admin/article/save?act="
+							+ act,jsonUser,
+					function(data) {
+						if (data.code == "1"||data.code == "2") {
+							alert(data.msg);
+							window.location.href = '${base}/admin/article/list';
+						}else{
+							alert(data.msg);
+						}
+					});
+			
+			 return false;
+		});
+	
+function resetFormInput() { //清空表单
+	$("form input").each(function() {
+		$(this).val("");
+	});
+}
+
+window.onload = function () {
+	var id = "<#if article??>${article.articleId!}</#if>";
+	if(id!=""){
+		var c = $("#content").html();
+		contentArea.setData(c);
+	}
+}
+var contentArea = CKEDITOR.replace('textArea'); 
+
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

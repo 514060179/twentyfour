@@ -1,0 +1,58 @@
+<html><head><link href="http://res.layui.com/lay/lib/laycode/laycode.css" type="text/css" rel="stylesheet">
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+body{padding:10px; font-size:14px; background:#fff; width:95%; margin:0 auto; font-size:14px; line-height:20px; overflow:hidden;}
+p{margin-bottom:10px;}
+button,input{border:1px solid #999; padding:5px 10px; margin:0 10px 10px 0;}
+button{ cursor:pointer;}
+</style></head>
+
+<body class="laycode">
+<p><strong><label>请在关闭该层之前留个标记：</label></strong><input id="name"></p>
+<p>这是一个新的页面，您可以通过父窗口得到这里的DOM(点击右上角关闭按钮试试)，从而操作这里的一切。也可以在这里操作父窗口。</p>
+
+
+<div class="code_box code_skin0"><pre style="height: 180px; overflow-y: auto;"><span class="run">var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+</span>
+<div>
+<button id="add">让层自适应iframe</button>
+<button id="new">在父层弹出一个层</button>
+<button id="transmit">给父页面传值</button>
+<button id="closeIframe">关闭iframe</button>
+</div>
+
+<div style="text-align:center;">
+
+  <script type="text/javascript" async="" charset="utf-8" src="http://c.cnzz.com/core.php?web_id=30088308&amp;t=q"></script><script type="text/javascript">
+      /*640*60 创建于 2016-01-07*/
+      var cpro_id = "u2482727";
+  </script>
+  <script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+
+
+</div>
+
+
+<script src="http://res.layui.com/lay/lib/laycode/laycode.min.js"></script>
+<script>
+new Function($('.run').text())()
+$('pre').show().laycode({height:180, title:'parent是js自带的全局对象，可用于操作父页面'});
+
+//var index = parent.layer.getFrameIndex(window.name);
+//parent.layer.iframeAuto(index);
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$('#transmit').on('click', function(){
+    parent.$("input[type='checkbox']").each(function(){
+    	alert(this.value);
+    });})
+
+});
+</script>
+
+</body></html>

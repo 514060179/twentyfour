@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>24占|twentyfour</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+	<link rel="stylesheet" href="${base!}/assets/plugins/bootstrap/css/bootstrap.min.css">
+	<script src="${base!}/assets/plugins/jquery-1.10.2.min.js"></script>
+	<script src="${base!}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${base!}/assets/plugins/layer/layer.js"></script>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body>
+<div style="font-size:15px;width:100%;">
+	<div style="float: left;width: 10%;height:55px"></div>
+	<div style="float: left;width: 80%;height:100%;">
+		<br/>
+		<form action="">
+			<input id="recordId" name="recordId" style="display:none;" value="${recordId!}" />
+			<input id="amount" name="amount" style="display:none;" value="${amount!}" />
+			<input id="total" name="total" style="display:none;" value="${total!}" />
+		</form>
+		<p>
+			<span>提现申请金额：</span> <#if amount??>${amount!}<#else>0.0</#if>
+		</p>
+		<p>
+			<span>每月金额明细：</span>
+		</p>
+		<div class="form-title">
+			<#if map??>
+				<#list map?keys as key>
+					<p>
+						&nbsp;&nbsp;&nbsp;&nbsp;<span>${key}</span><span>金额：${map["${key}"]}</span>
+					</p>
+				</#list>
+			</#if>
+		</div>
+		<p>
+			<span>可提现金额：</span><#if total??>${total!}<#else>0.0</#if>
+		</p>
+		<span style="color: red"><#if total??><#if total=0>可提现金额为0<#else><#if eq=0>申请金额与可提现金额不一致</#if></#if></#if></span>
+<!-- 		<div class="form-group" style="text-align:center;margin-top: 20px;">
+			<input type="button" value="确定" style="width: 70px;" onclick="sure()"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" value="取消" style="width: 70px;" onclick="cancel()"/>
+		</div> -->
+	</div>
+</div>
+
+ 
+ 
+ 
+<script>
+var first = true;
+jQuery(document).ready(function () {
+    /* App.init(); */
+    $("#layout").click(function(){
+        if(first){
+            layout();
+            first = false;
+        }else{
+            resetLayout();
+            first = true;
+        }
+
+    });
+
+});
+
+function cancel(){
+	var index = parent.layer.getFrameIndex(window.name);
+	parent.layer.close(index);
+}
+
+
+
+
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

@@ -1,0 +1,1 @@
+ALTER TABLE tf_address add as_sex TINYINT(1) NULL DEFAULT 1 COMMENT '收货人性别';
