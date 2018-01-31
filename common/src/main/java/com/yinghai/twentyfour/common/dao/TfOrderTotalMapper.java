@@ -37,5 +37,9 @@ public interface TfOrderTotalMapper {
 	 */
 	TfOrderTotalHelper findOrderTotalHelperByNo(String orderTotalNo);
 
+	TfOrderTotalHelper findOrderByMaster(@Param("masterId")Integer masterId, @Param("orderNo")String orderNo);
+
+	TfOrderTotalHelper findOrderByMasterId(@Param("totalId")Integer totalId, @Param("masterId")Integer masterId);
+
 	
 }

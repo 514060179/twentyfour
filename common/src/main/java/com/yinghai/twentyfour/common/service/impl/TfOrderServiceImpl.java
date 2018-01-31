@@ -579,14 +579,14 @@ public class TfOrderServiceImpl implements TfOrderService {
 
 	@Override
 	@Transactional
-	public int cancelUpdateProductTotalOrder(TfOrderTotal tfOrderTotal) {
+	public int cancelUpdateProductTotalOrder(TfOrderTotal tfOrderTotal,Integer cancelType) {
 		//更新子总订单和子订单状态
 		List<TfOrder> l1 = tfOrderMapper.findOrdersByTotalNo(tfOrderTotal.gettOrderNo());
 		for(TfOrder o:l1){
 			TfOrder order = new TfOrder();
 			order.setOrderId(o.getOrderId());
 			order.setoStatus(TfOrder.orderStatusRebackCancel);
-			order.setoCancelType(order.getoCancelType());
+			order.setoCancelType(cancelType);
 			order.setoUpdateTime(new Date());
 			order.setoCancelTime(new Date());
 			order.setoPayStatus(TfOrder.payStatusCancel);
@@ -622,7 +622,7 @@ public class TfOrderServiceImpl implements TfOrderService {
 
 	@Override
 	@Transactional
-	public int cancelProductOrder(TfOrderTotalHelper tfOrderTotal) {
+	public int cancelProductOrder(TfOrderTotalHelper tfOrderTotal,Integer cancelType) {
 		//判断支付订单是子总订单还是父总订单
 		//退款操作
 		List<TfOrder> orders = tfOrderTotal.getOrderList();
@@ -630,7 +630,6 @@ public class TfOrderServiceImpl implements TfOrderService {
 			return -4;//对应商品订单不存在
 		}
 		int payType = orders.get(0).getoPayWay();
-		int type = 0 ;
 		String orderNo = "";
 		String outRequestNo = null;
 		String totalFee = tfOrderTotal.gettAmount()+"";//支付总金额
@@ -685,7 +684,7 @@ public class TfOrderServiceImpl implements TfOrderService {
 			o1.setoPayStatus(TfOrder.payStatusRebackMoneyDone);
 			o1.setoStatus(TfOrder.orderStatusRebackMoneyDone);
 			o1.setoUpdateTime(new Date());
-			o1.setoCancelType(2);//用户取消
+			o1.setoCancelType(cancelType);//用户取消
 			o1.setoCancelTime(new Date());
 			int j = tfOrderMapper.updateByPrimaryKeySelective(o1);
 			if(j!=1){

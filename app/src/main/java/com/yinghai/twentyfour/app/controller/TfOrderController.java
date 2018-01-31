@@ -2,6 +2,7 @@ package com.yinghai.twentyfour.app.controller;
 
 import com.yinghai.twentyfour.common.vo.MasterSchedule;
 import com.yinghai.twentyfour.app.service.TfOrderTotalService;
+import com.yinghai.twentyfour.common.im.util.ExpressCompanyUtil;
 import com.yinghai.twentyfour.common.model.*;
 import com.yinghai.twentyfour.common.service.TfBusinessService;
 import com.yinghai.twentyfour.common.service.TfMasterService;
@@ -598,11 +599,18 @@ public class TfOrderController {
 				break;
 			case 2://子总订单——商品订单
 				//总订单取消、更新状态；更新子订单状态
-				if(!"user".equals(realm)){
+				
+				if("master".equals(realm)){//大师取消
+					cancelType = 1;
+					tfOrderTotal = tfOrderTotalService.findByMasterId(oid,Integer.parseInt(masterId));
+				}else if("user".equals(realm)){//用户取消
+					cancelType = 2;
+					tfOrderTotal = tfOrderTotalService.findByUserId(oid, Integer.parseInt(userId));//子总订单
+				}else{
 					ResponseVo.send101Code(response, "realm错误");
 					return;
 				}
-				tfOrderTotal = tfOrderTotalService.findByUserId(oid, Integer.parseInt(userId));//子总订单
+					
 				if(tfOrderTotal==null){
 					ResponseVo.send102Code(response, "总订单不存在");
 					return;
@@ -618,16 +626,16 @@ public class TfOrderController {
 				switch(sts){
 				case 1://未支付
 					//更新子总订单、子订单状态
-					i = tfOrderService.cancelUpdateProductTotalOrder(tfOrderTotal);
+					i = tfOrderService.cancelUpdateProductTotalOrder(tfOrderTotal,cancelType);
 					
 					break;
 				case 2://已支付，需要退款
 					//退款，更新子总订单、子订单
-					i = tfOrderService.cancelProductOrder(tfOrderTotal);
+					i = tfOrderService.cancelProductOrder(tfOrderTotal,cancelType);
 					break;
 				case 3://已确定
 					//退款，更新子总订单、子订单、父总订单
-					i = tfOrderService.cancelProductOrder(tfOrderTotal);
+					i = tfOrderService.cancelProductOrder(tfOrderTotal,cancelType);
 					break;
 				}
 				break;
@@ -838,5 +846,67 @@ public class TfOrderController {
     	ResponseVo.send1Code(response, "success", jsonObj);
     }
     
-    
+    //商家发货
+    @RequestMapping(value="/deliver",method=RequestMethod.POST)
+    public void deliverGoods(HttpServletRequest request,HttpServletResponse response){
+    	log.info("======商家发货======");
+    	Integer masterId = TransformUtils.toInt(request.getParameter("masterId"));
+    	String orderNo = request.getParameter("orderNo");
+    	String realm = request.getHeader("Realm");
+    	if(!"master".equals(realm)){
+    		ResponseVo.send101Code(response, "Realm为空或有误");
+    		return;
+    	}
+    	if(masterId<1){
+    		ResponseVo.send101Code(response, "masterId为空或有误");
+    		return;
+    	}
+    	if(StringUtil.empty(orderNo)){
+    		ResponseVo.send101Code(response, "orderNo为空");
+    		return;
+    	}
+    	Integer expressCompanyId = TransformUtils.toInt(request.getParameter("companyId"));
+    	String expressNo = request.getParameter("expressNo");
+    	if(expressCompanyId<1){
+    		ResponseVo.send101Code(response, "companyId为空或有误");
+    		return;
+    	}
+    	String company = ExpressCompanyUtil.getCompany(expressCompanyId);
+    	if(StringUtil.empty(company)){
+    		ResponseVo.send101Code(response, "companyId为空或有误");
+    		return;
+    	}
+    	if(StringUtil.empty(expressNo)){
+    		ResponseVo.send101Code(response, "expressNo为空");
+    		return;
+    	}
+    	String reg = "^[A-Z0-9]+$";
+    	if(!expressNo.matches(reg)){
+    		ResponseVo.send104Code(response, "expressNo格式错误");
+    		return;
+    	}
+    	//订单是否存在
+    	TfOrderTotalHelper ot = tfOrderTotalService.findOrderByMaster(masterId,orderNo);
+    	if(ot==null){
+    		ResponseVo.send102Code(response, "订单不存在");
+    		return;
+    	}
+    	//判断订单状态是否为进行中
+    	if(!TfOrder.orderStatusPaidDone.equals(ot.gettStatus())){
+    		ResponseVo.send510Code(response, "订单状态不匹配");
+    		return;
+    	}
+    	//更新物流信息
+    	TfOrderTotal orderTotal = new TfOrderTotal();
+    	orderTotal.setTotalId(ot.getTotalId());
+    	orderTotal.settExpressCompanyId(expressCompanyId);
+    	orderTotal.settExpressCompany(company);
+    	orderTotal.settExpressNo(expressNo);
+    	int i = tfOrderTotalService.updateOrderTotal(orderTotal);
+    	if(i!=1){
+    		ResponseVo.send106Code(response, "数据出错，操作失败");
+    		return;
+    	}
+    	ResponseVo.send1Code(response, "success", new JSONObject());
+    }
 }

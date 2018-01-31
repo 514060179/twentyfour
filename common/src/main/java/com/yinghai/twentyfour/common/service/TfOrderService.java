@@ -177,13 +177,13 @@ public interface TfOrderService {
 	 * @param tfOrderTotal
 	 * @return
 	 */
-	int cancelUpdateProductTotalOrder(TfOrderTotal tfOrderTotal);
+	int cancelUpdateProductTotalOrder(TfOrderTotal tfOrderTotal,Integer cancelType);
 	/**
 	 * 取消商品子总订单，需要退款
 	 * @param tfOrderTotal
 	 * @return
 	 */
-	int cancelProductOrder(TfOrderTotalHelper tfOrderTotal);
+	int cancelProductOrder(TfOrderTotalHelper tfOrderTotal,Integer cancelType);
 	/**
 	 * 根据产品Id和其他条件查询订单
 	 * @param o

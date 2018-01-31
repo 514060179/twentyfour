@@ -180,5 +180,20 @@ public class TfOrderTotalServiceImpl implements TfOrderTotalService {
 		return tfOrderTotalMapper.findByPayOrderNo(orderNo);
 	}
 
+	@Override
+	public TfOrderTotalHelper findOrderByMaster(Integer masterId, String orderNo) {
+		return tfOrderTotalMapper.findOrderByMaster(masterId,orderNo);
+	}
+
+	@Override
+	public TfOrderTotalHelper findByMasterId(Integer totalId, Integer masterId) {
+		return tfOrderTotalMapper.findOrderByMasterId(totalId,masterId);
+	}
+
+	@Override
+	public int updateOrderTotal(TfOrderTotal orderTotal) {
+		return tfOrderTotalMapper.updateByPrimaryKeySelective(orderTotal);
+	}
+
 
 }

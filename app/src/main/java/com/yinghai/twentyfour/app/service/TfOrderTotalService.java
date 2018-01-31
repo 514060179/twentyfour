@@ -52,4 +52,24 @@ public interface TfOrderTotalService {
 	 * @return
 	 */
 	public List<TfOrderTotal> findByPayOrderNo(String orderNo);
+	/**
+	 * 大师查询总订单
+	 * @param masterId
+	 * @param orderNo
+	 * @return
+	 */
+	public TfOrderTotalHelper findOrderByMaster(Integer masterId, String orderNo);
+	/**
+	 * 根据大师和订单Id查询总订单
+	 * @param totalId
+	 * @param masterId
+	 * @return
+	 */
+	public TfOrderTotalHelper findByMasterId(Integer totalId, Integer masterId);
+	/**
+	 * 更新总订单
+	 * @param orderTotal
+	 * @return
+	 */
+	public int updateOrderTotal(TfOrderTotal orderTotal);
 }

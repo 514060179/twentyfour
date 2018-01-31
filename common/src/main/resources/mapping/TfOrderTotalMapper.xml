@@ -416,4 +416,44 @@
     LEFT JOIN tf_address a ON ot.t_address_id = a.address_id
     LEFT JOIN tf_user u ON ot.t_user_id = u.user_id
   </select>
+  <select id="findOrderByMasterId" resultMap="ProductResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>,
+ 	<include refid="Order_Column_List"/>,
+ 	<include refid="Master_Column_List"/>,
+ 	<include refid="Product_Column_List"/>,
+ 	<include refid="Address_Column_List"/>,
+ 	<include refid="User_Column_List"/>
+  	from 
+  	(select <include refid="Base_Column_List"/> from tf_order_total
+  	where total_id = #{totalId,jdbcType=INTEGER} AND t_parent_id IS NOT NULL
+  	<if test="masterId != null" >
+      AND t_master_id=#{masterId,jdbcType=INTEGER}
+    </if>
+  	) ot
+  	LEFT JOIN tf_order o ON ot.t_order_no = o.o_order_total_no 
+    LEFT JOIN tf_master m ON o.o_master_id=m.master_id
+    LEFT JOIN tf_product p ON o.o_product_id=p.product_id
+    LEFT JOIN tf_address a ON ot.t_address_id = a.address_id
+    LEFT JOIN tf_user u ON ot.t_user_id = u.user_id
+  </select>
+  <select id="findOrderByMaster" resultMap="ProductResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>,
+ 	<include refid="Order_Column_List"/>,
+ 	<include refid="Master_Column_List"/>,
+ 	<include refid="Product_Column_List"/>,
+ 	<include refid="Address_Column_List"/>,
+ 	<include refid="User_Column_List"/>
+  	from 
+  	(select <include refid="Base_Column_List"/> from tf_order_total
+  	where t_order_no = #{orderNo,jdbcType=VARCHAR} AND t_parent_id IS NOT NULL
+    AND t_master_id=#{masterId,jdbcType=INTEGER}
+  	) ot
+  	LEFT JOIN tf_order o ON ot.t_order_no = o.o_order_total_no 
+    LEFT JOIN tf_master m ON o.o_master_id=m.master_id
+    LEFT JOIN tf_product p ON o.o_product_id=p.product_id
+    LEFT JOIN tf_address a ON ot.t_address_id = a.address_id
+    LEFT JOIN tf_user u ON ot.t_user_id = u.user_id
+  </select>
 </mapper>
