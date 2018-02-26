@@ -2,6 +2,8 @@ package com.yinghai.twentyfour.shiro;
 
 import com.yinghai.twentyfour.backstage.model.ManagerUser;
 import com.yinghai.twentyfour.backstage.service.ManagerUserService;
+import com.yinghai.twentyfour.backstage.service.TfPermissionService;
+import com.yinghai.twentyfour.backstage.service.TfRoleService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -11,6 +13,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +28,26 @@ public class UserRealm extends AuthorizingRealm {
 
     @Autowired
     private ManagerUserService managerUserService;
+    @Autowired
+    private TfPermissionService tfPermissionService;
+    @Autowired
+    private TfRoleService tfRoleService;
     /**
      * 权限授权函数,查詢用戶的所擁有的權限
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        String userName = (String) principalCollection.getPrimaryPrincipal();
+        SimpleAuthorizationInfo info =  new SimpleAuthorizationInfo();
+
+        ManagerUser managerUser = (ManagerUser)SecurityUtils.getSubject().getPrincipal();
         // 取得用户的所有权限
         Set<String> permissions = new HashSet<String>();
         Set<String> roleNames = new HashSet<String>();
-        System.out.println(permissions);
-        System.out.println(roleNames);
-        System.out.println("拦截1");
-        return new SimpleAuthorizationInfo(roleNames);
+        permissions = tfPermissionService.findPermissionByUserId(managerUser.getId());
+        roleNames = tfRoleService.findRoleByUserId(managerUser.getId());
+        info.setStringPermissions(permissions);
+        info.setRoles(roleNames);
+        return info;
     }
     /**
      * 身份认证函数
@@ -56,7 +66,7 @@ public class UserRealm extends AuthorizingRealm {
 //            if(member.getIslock() !=null && member.getIslock() == 1){
 //                throw new AuthenticationException("msg:该已帐号禁止登录.");
 //            }
-            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(username, member.getPassword().toCharArray(), ByteSource.Util.bytes(username),this.getName());
+            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(member, member.getPassword().toCharArray(), ByteSource.Util.bytes(username),this.getName());
             this.setSession("currentUser", member.getUsername());
 
             return authcInfo;

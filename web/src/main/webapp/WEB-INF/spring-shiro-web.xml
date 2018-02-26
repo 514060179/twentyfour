@@ -1,16 +1,21 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:cache="http://www.springframework.org/schema/cache"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                         http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                         http://www.springframework.org/schema/context
                         http://www.springframework.org/schema/context/spring-context-3.1.xsd
                         http://www.springframework.org/schema/mvc
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
                         http://www.springframework.org/schema/aop
-                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                        http://www.springframework.org/schema/cache
+                        http://www.springframework.org/schema/cache/spring-cache-4.3.xsd">
     <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />-->
     <!-- 凭证匹配器 -->
     <!-- 缓存管理器 使用Ehcache实现 -->
@@ -33,15 +38,19 @@
         <property name="credentialsMatcher" ref="credentialsMatcher" />
     </bean>
 
-    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>-->
+    <!--<aop:config proxy-target-class="true"></aop:config>-->
+    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
+        <!--<property name="securityManager" ref="securityManager"/>-->
+    <!--</bean>-->
     <!-- 安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="userRealm" />
     </bean>
 
     <aop:config proxy-target-class="true"/>
+    <bean id="login" class="com.yinghai.twentyfour.backstage.interceptor.LoginFilter" />
+    <bean id="permission" class="com.yinghai.twentyfour.backstage.interceptor.PermissionFilter" />
+
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
@@ -50,75 +59,22 @@
         <!--登录成功后要跳转的链接-->
         <property name="successUrl" value="/loginsuccess.jhtml" />
         <!--用户访问未对其授权的资源时,所显示的链接-->
-        <property name="unauthorizedUrl" value="/test" />
+        <property name="unauthorizedUrl" value="/" />
         <property name="filterChainDefinitions">
             <value>
-                 /admin/** = authc
-            </value>
-        </property>
-    </bean>
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-
-<!--
-
-
-    &lt;!&ndash; Shiro's main business-tier object for web-enabled applications &ndash;&gt;
-    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <property name="realm" ref="myShiroRealm" />
-        <property name="cacheManager" ref="cacheManager" />
-    </bean>
-
-    &lt;!&ndash; 項目自定义的Realm &ndash;&gt;
-    <bean id="myShiroRealm" class="com.yinghai.twentyfourour.test.UserRealm">
-        <property name="cacheManager" ref="cacheManager" />
-    </bean>
-
-    &lt;!&ndash; Shiro Filter &ndash;&gt;
-    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-        &lt;!&ndash; Shiro的核心安全接口,这个属性是必须的 &ndash;&gt;
-        <property name="securityManager" ref="securityManager" />
-        &lt;!&ndash; 要求登录时的链接 &ndash;&gt;
-        <property name="loginUrl" value="/login.jhtml" />
-        &lt;!&ndash; 登录成功后要跳转的链接 &ndash;&gt;
-        <property name="successUrl" value="/loginsuccess.jhtml" />
-        &lt;!&ndash; 用户访问未对其授权的资源时,所显示的链接 &ndash;&gt;
-        <property name="unauthorizedUrl" value="/error.jhtml" />
-        <property name="filterChainDefinitions">
-            <value>
-                /index.jhtml = authc
-                /login.jhtml = anon
-                /checkLogin.json = anon
-                /loginsuccess.jhtml = anon
-                /logout.json = anon
-                /** = changedPassword
+                 /admin/** = login,permission
             </value>
         </property>
         <property name="filters">
-            <map>
-                <entry key="changedPassword" value-ref="changedPassword" />
-            </map>
+            <util:map>
+                <entry key="login" value-ref="login"></entry>
+                <entry key="permission" value-ref="permission"></entry>
+            </util:map>
         </property>
     </bean>
-    &lt;!&ndash; 自定义shiro的filter &ndash;&gt;
-    <bean id="changedPassword" class="com.yinghai.twentyfourour.test.ChangePasswordFilter" />
-    &lt;!&ndash; 用户授权信息Cache &ndash;&gt;
-    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
-
-    &lt;!&ndash; 保证实现了Shiro内部lifecycle函数的bean执行 &ndash;&gt;
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-
-    &lt;!&ndash; AOP式方法级权限检查 &ndash;&gt;
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-          depends-on="lifecycleBeanPostProcessor">
-        <property name="proxyTargetClass" value="true" />
-    </bean>
-
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager" />
-    </bean>
--->
-
-
+    <import resource="spring-ehcache.xml"/>
     <!--
    filterChainDefinitions参数说明,注意其验证顺序是自上而下
    =================================================================================================

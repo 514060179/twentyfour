@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                        http://www.springframework.org/schema/cache
+                        http://www.springframework.org/schema/cache/spring-cache-4.3.xsd">
+    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />-->
+    <!--缓存驱动声明-->
+    <!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
+    <cache:annotation-driven cache-manager="ehcacheManager"/>
+
+    <!-- cacheManager工厂类，指定ehcache.xml的位置 -->
+    <bean id="ehcacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:search_ehcache.xml" />
+    </bean>
+    <!-- 声明cacheManager -->
+    <bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcacheManagerFactory" />
+    </bean>
+    
+</beans>

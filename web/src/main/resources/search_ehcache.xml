@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache updateCheck="false"  name="shirocache">
-    <diskStore path="D:\cache"/>
+<ehcache updateCheck="false"  name="searchcache">
+    <diskStore path="D:\searchcache"/>
     <!-- 登录记录缓存 锁定10分钟 -->
-    <cache name="cacheTest1"
+    <cache name="cacheTest"
            maxElementsInMemory="1"
            eternal="true"
            overflowToDisk="true"
            timeToIdleSeconds="10"
            timeToLiveSeconds="20"/>
 
-
-    <cache name="passwordRetryCache"
-           maxEntriesLocalHeap="2000"
-           eternal="false"
-           timeToIdleSeconds="1800"
-           timeToLiveSeconds="0"
-           overflowToDisk="false"
-           statistics="true">
-    </cache>
-
-    <cache name="selectList"
-           maxElementsInMemory="10"
-           eternal="true"
-           timeToIdleSeconds="0"
-           timeToLiveSeconds="0"
-           overflowToDisk="false"
-           >
-    </cache>
-    <cache name="typeNameMap"
-    	   maxElementsInMemory="1000"
+    <cache name="roleSet"
+           maxElementsInMemory="10000"
            eternal="true"
            timeToIdleSeconds="0"
            timeToLiveSeconds="0"
            overflowToDisk="false">
-    
+
+    </cache>
+    <cache name="permissionSet"
+           maxElementsInMemory="10000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false">
+
     </cache>
     <!--
         name	 Cache的名称，必须是唯一的(ehcache会把这个cache放到HashMap里)

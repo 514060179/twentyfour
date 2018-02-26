@@ -13,6 +13,9 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
     <bean id="tfUserService" class="com.yinghai.twentyfour.common.service.impl.TfUserServiceImpl"/>
     <bean id="tfProductService" class="com.yinghai.twentyfour.common.service.impl.TfProductServiceImpl"/>
     <bean id="tfOrderTotalServiceBack" class="com.yinghai.twentyfour.common.service.impl.TfOrderTotalServiceImpl"/>
-    
+
+    <bean id="tfPermissionService" class="com.yinghai.twentyfour.backstage.service.impl.TfPermissionServiceImpl"/>
+    <bean id="tfRoleService" class="com.yinghai.twentyfour.backstage.service.impl.TfRoleServiceImpl"/>
+
     
 </beans>
