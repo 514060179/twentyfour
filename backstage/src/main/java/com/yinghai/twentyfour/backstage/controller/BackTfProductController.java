@@ -85,6 +85,10 @@ public class BackTfProductController {
 		if(StringUtil.notEmpty(masterId)){
 			tfProduct.setpMasterId(TransformUtils.toInt(masterId));
 		}
+		String pType = request.getParameter("pType");
+		if(StringUtil.notEmpty(pType)){
+			tfProduct.setpType(pType);
+		}
 		String name = request.getParameter("pName");
 		if (StringUtil.notEmpty(name)) {
 			tfProduct.setpName("%"+name.trim()+"%");
@@ -192,6 +196,7 @@ public class BackTfProductController {
 		String masterId = request.getParameter("pMasterId");//大师ID
 		String pFreeShipping = request.getParameter("pFreeShipping");//包邮
 		String act = request.getParameter("act");//更新or新增
+		String pType = request.getParameter("pType");//产品类型
 		TfProduct tfProduct = new TfProduct();
 		tfProduct.setpOffline(TransformUtils.toBoolean(pOffline));
 		tfProduct.setpFreeShipping(TransformUtils.toBoolean(pFreeShipping));
@@ -212,6 +217,9 @@ public class BackTfProductController {
 		}
 		if(StringUtil.notEmpty(pAttribution)){
 			tfProduct.setpAttribution(pAttribution);
+		}
+		if(StringUtil.notEmpty(pType)){
+			tfProduct.setpType(pType);
 		}
 		String imgIds = "";
 		String boochange = request.getParameter("boochange");

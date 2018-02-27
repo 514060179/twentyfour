@@ -178,10 +178,11 @@ public class BackTfArticleController {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		 SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd" ); 
 		String articleId = request.getParameter("articleId");//文章ID
 		String title = request.getParameter("title");//標題
 		String content = request.getParameter("content");//內容
+		String type = request.getParameter("type");//类型
 		String publishDate = request.getParameter("publishDate");//發佈日期
 		String abortDate = request.getParameter("abortDate");//截止日期
 		String act = request.getParameter("act");//更新or新增
@@ -191,6 +192,7 @@ public class BackTfArticleController {
 		}
 		tfArticle.setaTitle(title);
 		tfArticle.setaContent(content);
+		tfArticle.setaType(type);
 		tfArticle.setaPublishDate(sdf.parse(publishDate));
 		tfArticle.setaAbortDate(sdf.parse(abortDate));
 		if("udp".equals(act)){//更新操作
@@ -203,8 +205,19 @@ public class BackTfArticleController {
 				ResponseVo.common("2", "更新成功", new JSONObject(), response);
 			}
 		}else if("add".equals(act)){
+			if(StringUtil.empty(title)){
+				ResponseVo.send101Code(response, "标题不能为空");
+				return;
+			}
+			if(StringUtil.empty(content)){
+				ResponseVo.send101Code(response, "内容不能为空");
+				return;
+			}
+			if(StringUtil.empty(type)){
+				ResponseVo.send101Code(response, "文章类型不能为空");
+				return;
+			}
 			tfArticle.setaMasterId(0);
-			tfArticle.setaType("");
 			tfArticle.setaCreateTime(new Date());
 			int i = tfArticleService.insertSelective(tfArticle);
 			if(i<1){
