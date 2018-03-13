@@ -13,10 +13,11 @@
     <result column="as_default" property="asDefault" jdbcType="TINYINT" />
     <result column="as_street" property="asStreet" jdbcType="VARCHAR" />
     <result column="as_sex" property="asSex" jdbcType="TINYINT" />
+    <result column="as_delete" property="asDelete" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Base_Column_List" >
     address_id, as_user_id, as_consignee_name, as_country_code, as_tel, as_details, as_create_time, 
-    as_update_time,as_default,as_street,as_sex
+    as_update_time,as_default,as_street,as_sex,as_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -61,7 +62,7 @@
   	select
   	<include refid="Base_Column_List" />
     from tf_address
-    where as_user_id = #{userId,jdbcType=INTEGER}
+    where as_user_id = #{userId,jdbcType=INTEGER} AND as_delete = 0
     order by as_default desc,as_update_time desc,as_create_time desc
   </select>
   
@@ -72,10 +73,10 @@
   <insert id="insert" parameterType="com.yinghai.twentyfour.common.model.TfAddress" >
     insert into tf_address (address_id, as_user_id, as_consignee_name, 
       as_country_code, as_tel, as_details, 
-      as_create_time, as_update_time,as_default,as_street,as_sex)
+      as_create_time, as_update_time,as_default,as_street,as_sex,as_delete)
     values (#{addressId,jdbcType=INTEGER}, #{asUserId,jdbcType=INTEGER}, #{asConsigneeName,jdbcType=VARCHAR}, 
       #{asCountryCode,jdbcType=VARCHAR}, #{asTel,jdbcType=VARCHAR}, #{asDetails,jdbcType=VARCHAR}, 
-      #{asCreateTime,jdbcType=TIMESTAMP}, #{asUpdateTime,jdbcType=TIMESTAMP},#{asDefault,jdbcType=TINYINT},#{asStreet,jdbcType=VARCHAR},#{asSex,jdbcType=TINYINT})
+      #{asCreateTime,jdbcType=TIMESTAMP}, #{asUpdateTime,jdbcType=TIMESTAMP},#{asDefault,jdbcType=TINYINT},#{asStreet,jdbcType=VARCHAR},#{asSex,jdbcType=TINYINT},#{asDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfAddress" useGeneratedKeys="true" keyProperty="addressId">
     insert into tf_address
@@ -113,6 +114,9 @@
       <if test="asSex != null" >
         as_sex,
       </if>
+      <if test="asDelete != null" >
+        as_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="addressId != null" >
@@ -148,6 +152,9 @@
        <if test="asSex != null" >
         #{asSex,jdbcType=TINYINT},
       </if>
+       <if test="asDelete != null" >
+        #{asDelete,jdbcType=TINYINT},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.yinghai.twentyfour.common.model.TfAddress" >
@@ -181,7 +188,10 @@
         as_street = #{asStreet,jdbcType=VARCHAR},
       </if>
       <if test="asSex != null" >
-        as_sex = #{asSex,jdbcType=VARCHAR},
+        as_sex = #{asSex,jdbcType=TINYINT},
+      </if>
+      <if test="asDelete != null" >
+        as_delete = #{asDelete,jdbcType=TINYINT},
       </if>
     </set>
     where address_id = #{addressId,jdbcType=INTEGER}
@@ -197,7 +207,8 @@
       as_update_time = #{asUpdateTime,jdbcType=TIMESTAMP},
       as_default = #{asDefault,jdbcType=TINYINT},
       as_street = #{asStreet,jdbcType=VARCHAR},
-      as_sex = #{asSex,jdbcType=TINYINT}
+      as_sex = #{asSex,jdbcType=TINYINT},
+      as_delete= #{asDelete,jdbcType=TINYINT}
     where address_id = #{addressId,jdbcType=INTEGER}
   </update>
 </mapper>

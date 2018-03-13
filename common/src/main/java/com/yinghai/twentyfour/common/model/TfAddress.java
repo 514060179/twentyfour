@@ -25,7 +25,17 @@ public class TfAddress {
     
     private Boolean asSex;
     
-    public Boolean getAsSex() {
+    private Boolean asDelete;
+    
+    public Boolean getAsDelete() {
+		return asDelete;
+	}
+
+	public void setAsDelete(Boolean asDelete) {
+		this.asDelete = asDelete;
+	}
+
+	public Boolean getAsSex() {
 		return asSex;
 	}
 

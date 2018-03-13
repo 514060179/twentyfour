@@ -2,6 +2,14 @@ package com.yinghai.twentyfour.app.controller;
 
 import com.yinghai.twentyfour.common.vo.MasterSchedule;
 import com.yinghai.twentyfour.app.service.TfOrderTotalService;
+import com.yinghai.twentyfour.common.constant.Express;
+import com.yinghai.twentyfour.common.constant.PushCode;
+import com.yinghai.twentyfour.common.im.constant.App;
+import com.yinghai.twentyfour.common.im.method.Message;
+import com.yinghai.twentyfour.common.im.method.User;
+import com.yinghai.twentyfour.common.im.model.CheckOnlineResult;
+import com.yinghai.twentyfour.common.im.model.CodeSuccessResult;
+import com.yinghai.twentyfour.common.im.msg.TxtMessage;
 import com.yinghai.twentyfour.common.im.util.ExpressCompanyUtil;
 import com.yinghai.twentyfour.common.model.*;
 import com.yinghai.twentyfour.common.service.TfBusinessService;
@@ -26,13 +34,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Created by Administrator on 2017/10/23.
@@ -729,6 +750,24 @@ public class TfOrderController {
     			return;
     		}
     	}
+    	//判断用户是否在线
+    	User user = new User();
+    	String userId = "user"+order.getoUserId();
+    	CheckOnlineResult result;
+		try {
+			result = user.checkOnline(userId);
+			if(200!=result.getCode()){
+				log.error("用户状态获取失败");
+			}else{
+				if("0".equals(result.getStatus())){
+					ResponseVo.send126Code(response, "用户不在线");
+	    			return;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("用户状态获取失败");
+		}
     	JsonConfig config = new JsonConfig();
     	config.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd HH:mm:ss"));
     	TfUser u = tfUserService.findUserById(order.getoUserId());
@@ -736,7 +775,7 @@ public class TfOrderController {
     	obj.put("user", JSONObject.fromObject(u, config));
     	//订单状态不匹配
 		if(order.getoStatus()==TfOrder.orderStatusHaveInHand){
-			ResponseVo.send509Code(response, "订单状态已更新", obj);;
+			ResponseVo.send509Code(response, "订单状态已更新", obj);
 			return;
 		}
 		if(order.getoStatus()!=TfOrder.orderStatusMakeSure){
@@ -865,17 +904,13 @@ public class TfOrderController {
     		ResponseVo.send101Code(response, "orderNo为空");
     		return;
     	}
-    	Integer expressCompanyId = TransformUtils.toInt(request.getParameter("companyId"));
+    	String companyCode = request.getParameter("companyCode");
     	String expressNo = request.getParameter("expressNo");
-    	if(expressCompanyId<1){
-    		ResponseVo.send101Code(response, "companyId为空或有误");
+    	if(StringUtil.empty(companyCode)){
+    		ResponseVo.send101Code(response, "companyCode为空");
     		return;
     	}
-    	String company = ExpressCompanyUtil.getCompany(expressCompanyId);
-    	if(StringUtil.empty(company)){
-    		ResponseVo.send101Code(response, "companyId为空或有误");
-    		return;
-    	}
+    	String company = ExpressCompanyUtil.getCompany(companyCode);
     	if(StringUtil.empty(expressNo)){
     		ResponseVo.send101Code(response, "expressNo为空");
     		return;
@@ -891,22 +926,107 @@ public class TfOrderController {
     		ResponseVo.send102Code(response, "订单不存在");
     		return;
     	}
-    	//判断订单状态是否为进行中
+    	//判断订单状态是否为已支付
     	if(!TfOrder.orderStatusPaidDone.equals(ot.gettStatus())){
     		ResponseVo.send510Code(response, "订单状态不匹配");
+    		return;
+    	}
+    	if(ot.gettExpressNo()!=null){
+    		ResponseVo.send802Code(response, "已有发货信息");
     		return;
     	}
     	//更新物流信息
     	TfOrderTotal orderTotal = new TfOrderTotal();
     	orderTotal.setTotalId(ot.getTotalId());
-    	orderTotal.settExpressCompanyId(expressCompanyId);
+    	orderTotal.settCompanyCode(companyCode);
     	orderTotal.settExpressCompany(company);
     	orderTotal.settExpressNo(expressNo);
+    	orderTotal.settStatus(3);//更新订单的状态信息
     	int i = tfOrderTotalService.updateOrderTotal(orderTotal);
     	if(i!=1){
     		ResponseVo.send106Code(response, "数据出错，操作失败");
     		return;
     	}
-    	ResponseVo.send1Code(response, "success", new JSONObject());
+    	ot.settStatus(3);
+    	ot.settCompanyCode(companyCode);
+    	ot.settExpressCompany(company);
+    	ot.settExpressNo(expressNo);
+    	//推送信息给用户
+    	JSONObject json = new JSONObject();
+    	JSONObject res = new JSONObject();
+    	JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd HH:mm:ss"));
+		JSONObject responseObject = JSONObject.fromObject(ot, config);
+		res.put("totalOrder", responseObject);
+    	json.put("code", PushCode.UOrderDeliver);
+		json.put("msg", PushCode.UOrderDeliverMsg);
+		json.put("data", res);
+    	TxtMessage m = new TxtMessage(json.toString(), "");
+		Message message = new Message();
+		String[] strs = {"user"+ot.gettUserId()};
+		try {
+			CodeSuccessResult result = message.publishSystem(App.admin, strs, m, PushCode.UOrderDeliverMsg, json.toString(), 1, 1);
+			if(result.getCode()!=200){
+				//throw new RuntimeException("推送消息发送失败");
+				log.error("推送消息发送失败");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("推送消息发送失败");
+			//throw new RuntimeException("推送消息发送失败");
+		}
+    	JSONObject obj = new JSONObject();
+    	obj.put("orderTotal", responseObject);
+    	ResponseVo.send1Code(response, "success", obj);
+    }
+    
+    //查询物流信息
+    @RequestMapping("/expressInfo")
+    public void getExpressInformationz(HttpServletRequest request,HttpServletResponse response){
+    	log.info("查询物流信息");
+    	String com = request.getParameter("com");
+    	if(StringUtil.empty(com)){
+    		ResponseVo.send101Code(response, "com为空");
+    		return;
+    	}
+    	String nu = request.getParameter("nu");
+    	if(StringUtil.empty(nu)){
+    		ResponseVo.send101Code(response, "nu为空");
+    		return;
+    	}
+    	String url = "http://api.kuaidi100.com/api?id="+Express.expressid+
+    			"&com="+com+"&nu="+nu+"&valicode="+""+
+    			"&show=0&muti=1&order=desc";
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	JSONObject json = null;
+    	try {
+			URL u = new URL(url);
+			URLConnection urlcon = u.openConnection();
+			InputStream is = urlcon.getInputStream();
+			BufferedReader buffer = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			StringBuffer bs = new StringBuffer();
+			String l = null;
+			while ((l = buffer.readLine()) != null) {
+				bs.append(l);
+			}
+			json = JSONObject.fromObject(bs.toString());
+			String status = json.getString("status");
+			if("0".equals(status)){//物流单暂无结果
+				ResponseVo.common("803", "暂无物流结果", new JSONObject(), response);
+				return;
+			}else if("1".equals(status)){//查询成功
+				ResponseVo.send1Code(response, "success", json);
+				return;
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	//接口出现异常
+    	ResponseVo.sendNotMeErrorCode(response, "接口出现异常");
+		return;
     }
 }

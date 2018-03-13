@@ -27,7 +27,7 @@ public class TfOrderTotal {
 
     private String tExpressNo;
     
-    private Integer tExpressCompanyId;
+    private String tCompanyCode;
     
     private String tExpressCompany;
     
@@ -63,12 +63,13 @@ public class TfOrderTotal {
 		this.tExpressNo = tExpressNo;
 	}
 
-	public Integer gettExpressCompanyId() {
-		return tExpressCompanyId;
+
+	public String gettCompanyCode() {
+		return tCompanyCode;
 	}
 
-	public void settExpressCompanyId(Integer tExpressCompanyId) {
-		this.tExpressCompanyId = tExpressCompanyId;
+	public void settCompanyCode(String tCompanyCode) {
+		this.tCompanyCode = tCompanyCode;
 	}
 
 	public String gettExpressCompany() {

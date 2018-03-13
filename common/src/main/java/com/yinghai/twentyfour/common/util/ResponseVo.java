@@ -283,6 +283,15 @@ public class ResponseVo {
 		String code = ConstantCode.TIME_125_CODE;
 		common(code,msg,new JSONObject(),response);
 	}
+	/**
+	 * 用户不在线
+	 * @param response
+	 * @param msg
+	 */
+	public static void send126Code(HttpServletResponse response,String msg){
+		String code = ConstantCode.IM_OFFLINE;
+		common(code,msg,new JSONObject(),response);
+	}
 
 	/**
 	 * 资源尚未购买使用
@@ -514,6 +523,15 @@ public class ResponseVo {
 	 */
 	public static void send801Code(HttpServletResponse response,String msg){
 		String code = ConstantCode.COMMENT_801_CODE;
+		common(code,msg,new JSONObject(),response);
+	}
+	/**
+	 * 已经填写物流信息
+	 * @param response
+	 * @param string
+	 */
+	public static void send802Code(HttpServletResponse response, String msg) {
+		String code = ConstantCode.COMMENT_802_CODE;
 		common(code,msg,new JSONObject(),response);
 	}
 }

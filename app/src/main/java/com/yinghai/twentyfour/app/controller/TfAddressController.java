@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.yinghai.twentyfour.app.service.TfAddressService;
+import com.yinghai.twentyfour.app.service.TfOrderTotalService;
 import com.yinghai.twentyfour.common.model.TfAddress;
 import com.yinghai.twentyfour.common.model.TfUser;
 import com.yinghai.twentyfour.common.service.TfUserService;
@@ -35,6 +36,8 @@ public class TfAddressController {
 	private TfUserService tfUserService;
 	@Autowired
 	private TfAddressService tfAddressService;
+	@Autowired
+	private TfOrderTotalService tfOrderTotalService;
 	
 	//新增或修改地址记录
 	@RequestMapping(value="/createOrUpdate",method=RequestMethod.POST)
@@ -255,12 +258,26 @@ public class TfAddressController {
 		}
 		//删除地址
 		TfAddress address=null;
-		try {
-			address = tfAddressService.deleteAddress(addressId,userId);
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseVo.send106Code(response, "数据出错，删除收货地址失败");
-			return;
+		//判断，如果有订单使用过此地址，则不删除，修改asDelete值为1；否则删除
+		int i = tfOrderTotalService.findByAddress(addressId);
+		if(i>0){//更新地址信息
+			TfAddress adr = new TfAddress();
+			adr.setAddressId(addressId);
+			adr.setAsDelete(true);
+			int j = tfAddressService.updateAddress(adr);
+			if(j!=1){
+				ResponseVo.send102Code(response, "收货地址不存在");;
+				return;
+			}
+			address = tfAddressService.findAddressById(addressId);
+		}else{
+			try {
+				address = tfAddressService.deleteAddress(addressId,userId);
+			} catch (Exception e) {
+				e.printStackTrace();
+				ResponseVo.send106Code(response, "数据出错，删除收货地址失败");
+				return;
+			}
 		}
 		if(address==null){
 			ResponseVo.send102Code(response, "收货地址不存在");;

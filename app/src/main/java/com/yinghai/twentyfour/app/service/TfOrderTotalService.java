@@ -72,4 +72,10 @@ public interface TfOrderTotalService {
 	 * @return
 	 */
 	public int updateOrderTotal(TfOrderTotal orderTotal);
+	/**
+	 * 根据地址id查询总订单
+	 * @param addressId
+	 * @return
+	 */
+	public int findByAddress(Integer addressId);
 }

@@ -41,5 +41,7 @@ public interface TfOrderTotalMapper {
 
 	TfOrderTotalHelper findOrderByMasterId(@Param("totalId")Integer totalId, @Param("masterId")Integer masterId);
 
+	int findByAddress(Integer addressId);
+
 	
 }

@@ -49,9 +49,11 @@ public class PushCode {
     public static final String MOrderCancelByMasterMsg = "您的一张订单已被您取消！";
     //大师收到订单完成推送code
     public static final String MOrderCompleteByUser = "3004";
-    public static final String MOrderCompleteByUserMsg = "你的一张订单成功完成！";
+    public static final String MOrderCompleteByUserMsg = "您的一张订单成功完成！";
     
-    
+    //商品订单已发货
+    public static final String UOrderDeliver = "4001";
+    public static final String UOrderDeliverMsg = "您的一张订单商家已发货！";
 
 
 

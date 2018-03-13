@@ -15,6 +15,7 @@
     <result column="a_read_amount" property="aReadAmount" jdbcType="BIGINT" />
     <result column="isCollection" property="isCollection" jdbcType="BIT" />
     <result column="a_delete" property="aDelete" jdbcType="BIT" />
+    <result column="a_add_type" property="aAddType" jdbcType="INTEGER"/>
      <association property="tfMaster" javaType="com.yinghai.twentyfour.common.model.TfMaster">
       <id column="master_id" property="masterId" jdbcType="INTEGER" />
       <result column="m_nick" property="mNick" jdbcType="VARCHAR" />
@@ -54,7 +55,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     article_id, a_master_id, a_type, a_publish_date, a_abort_date, a_img, a_url, a_create_time, a_title,
-    a_update_time,a_read_amount,a_delete
+    a_update_time,a_read_amount,a_delete,a_add_type
   </sql>
   <sql id="Blob_Column_List" >
     a_content
@@ -63,7 +64,7 @@
    <sql id="Base_Img_Column_List" >
     a.article_id, a.a_master_id, a.a_type, a.a_publish_date, a.a_abort_date, a.a_img, a_url, a.a_create_time, a.a_title,
     a.a_update_time,a.a_read_amount,it.img_tmp_id,it.it_type,
-    it.it_url,it.it_app_path,it.it_is_userd,it.it_size,a.a_delete
+    it.it_url,it.it_app_path,it.it_is_userd,it.it_size,a.a_delete,a_add_type
   </sql>
   <sql id="Blob_Img_Column_List" >
     a.a_content
@@ -148,12 +149,12 @@
     insert into tf_article (article_id, a_master_id, a_type, a_title
       a_publish_date, a_abort_date, a_img, 
       a_url, a_create_time, a_update_time,a_read_amount 
-      a_content,a_delete)
+      a_content,a_delete,a_add_type)
     values (#{articleId,jdbcType=INTEGER}, #{aMasterId,jdbcType=INTEGER}, #{aType,jdbcType=VARCHAR}, #{aTitlee,jdbcType=VARCHAR}, 
       #{aPublishDate,jdbcType=DATE}, #{aAbortDate,jdbcType=DATE}, #{aImg,jdbcType=VARCHAR}, 
       #{aUrl,jdbcType=VARCHAR}, #{aCreateTime,jdbcType=TIMESTAMP}, #{aUpdateTime,jdbcType=TIMESTAMP},
       #{aReadAmount,jdbcType=BIGINT}, 
-      #{aContent,jdbcType=LONGVARCHAR},#{aDelete,jdbcType=BIT})
+      #{aContent,jdbcType=LONGVARCHAR},#{aDelete,jdbcType=BIT},#{aAddType,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yinghai.twentyfour.common.model.TfArticle" useGeneratedKeys="true" keyProperty="articleId"  >
     insert into tf_article
@@ -197,6 +198,9 @@
       <if test="aDelete != null" >
         a_delete,
       </if>
+      <if test="aAddType != null" >
+        a_add_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="articleId != null" >
@@ -237,6 +241,9 @@
       </if>
       <if test="aDelete != null" >
         #{aDelete,jdbcType=BIT},
+      </if>
+      <if test="aAddType != null" >
+        #{aAddType,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -279,6 +286,9 @@
       <if test="aDelete != null" >
         a_delete = #{aDelete,jdbcType=LONGVARCHAR},
       </if>
+      <if test="aAddType != null" >
+        a_add_type = #{aAddType,jdbcType=INTEGER},
+      </if>
     </set>
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
@@ -295,7 +305,8 @@
       a_update_time = #{aUpdateTime,jdbcType=TIMESTAMP},
       a_read_amount = #{aReadAmount,jdbcType=BIGINT},
        a_delete = #{aDelete,jdbcType=LONGVARCHAR},
-      a_content = #{aContent,jdbcType=LONGVARCHAR}
+      a_content = #{aContent,jdbcType=LONGVARCHAR},
+      a_add_type = #{aAddType,jdbcType=INTEGER}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yinghai.twentyfour.common.model.TfArticle" >
@@ -310,7 +321,8 @@
       a_create_time = #{aCreateTime,jdbcType=TIMESTAMP},
       a_update_time = #{aUpdateTime,jdbcType=TIMESTAMP}
       a_read_amount = #{aReadAmount,jdbcType=BIGINT},
-       a_delete = #{aDelete,jdbcType=LONGVARCHAR}
+      a_delete = #{aDelete,jdbcType=LONGVARCHAR},
+      a_add_type = #{aAddType,jdbcType=INTEGER}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
 </mapper>

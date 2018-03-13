@@ -14,7 +14,7 @@
     <result column="t_pay_no" property="tPayNo" jdbcType="VARCHAR" />
     <result column="t_master_id" property="tMasterId" jdbcType="INTEGER" />
     <result column="t_express_no" property="tExpressNo" jdbcType="VARCHAR" />
-    <result column="t_express_company_id" property="tExpressCompanyId" jdbcType="INTEGER" />
+    <result column="t_company_code" property="tCompanyCode" jdbcType="VARCHAR" />
     <result column="t_express_company" property="tExpressCompany" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ProductResultMap" type="com.yinghai.twentyfour.common.model.TfOrderTotalHelper">
@@ -30,7 +30,7 @@
     <result column="t_pay_no" property="tPayNo" jdbcType="VARCHAR" />
     <result column="t_master_id" property="tMasterId" jdbcType="INTEGER" />
     <result column="t_express_no" property="tExpressNo" jdbcType="VARCHAR" />
-    <result column="t_express_company_id" property="tExpressCompanyId" jdbcType="INTEGER" />
+    <result column="t_company_code" property="tCompanyCode" jdbcType="VARCHAR" />
     <result column="t_express_company" property="tExpressCompany" jdbcType="VARCHAR" />
     <association property="address" javaType="com.yinghai.twentyfour.common.model.TfAddress">
     	<id column="address_id" property="addressId" jdbcType="INTEGER" />
@@ -170,12 +170,18 @@
     u_constellation, u_create_time, u_update_time, u_deleted,u_device_id,u_device_type,u_im,u_token
   </sql>
   <sql id="Base_Column_List" >
-    total_id, t_order_no, t_amount, t_create_time, t_user_id,t_address_id,t_status,t_qty,t_parent_id,t_pay_no,t_master_id,t_express_no,t_express_company_id,t_express_company
+    total_id, t_order_no, t_amount, t_create_time, t_user_id,t_address_id,t_status,t_qty,t_parent_id,t_pay_no,t_master_id,t_express_no,t_company_code,t_express_company
   </sql>
   <sql id="Address_Column_List">
   	address_id, as_user_id, as_consignee_name, as_country_code, as_tel, as_details, as_create_time, 
     as_update_time,as_default,as_street,as_sex
   </sql>
+  <select id="findByAddress" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  	select count(total_id) 
+  	from tf_order_total
+  	where t_address_id = #{addressId,jdbcType=INTEGER}
+  </select>
+  
   <select id="findOrderTotalByNO" resultMap="BaseResultMap" parameterType="java.lang.String">
   	select
   	<include refid="Base_Column_List" />
@@ -258,8 +264,8 @@
       <if test="tExpressNo != null" >
         t_express_no,
       </if>
-      <if test="tExpressCompanyId != null" >
-        t_express_company_id,
+      <if test="tCompanyCode != null" >
+        t_company_code,
       </if>
       <if test="tExpressCompany != null" >
         t_express_company,
@@ -302,8 +308,8 @@
       <if test="tExpressNo != null" >
         #{tExpressNo,jdbcType=VARCHAR},
       </if>
-      <if test="tExpressCompanyId != null" >
-        #{tExpressCompanyId,jdbcType=INTEGER},
+      <if test="tCompanyCode != null" >
+        #{tCompanyCode,jdbcType=VARCHAR},
       </if>
       <if test="tExpressCompany != null" >
         #{tExpressCompany,jdbcType=VARCHAR},
@@ -346,8 +352,8 @@
       <if test="tExpressNo != null" >
         t_express_no = #{tExpressNo,jdbcType=VARCHAR},
       </if>
-      <if test="tExpressCompanyId != null" >
-        t_express_company_id = #{tExpressCompanyId,jdbcType=INTEGER},
+      <if test="tCompanyCode != null" >
+        t_company_code = #{tCompanyCode,jdbcType=VARCHAR},
       </if>
       <if test="tExpressCompany != null" >
         t_express_company = #{tExpressCompany,jdbcType=VARCHAR},
@@ -368,7 +374,7 @@
       t_pay_no = #{tPayNo,jdbcType=VARCHAR},
       t_master_id = #{tMasterId,jdbcType=INTEGER},
       t_express_no = #{tExpressNo,jdbcType=VARCHAR},
-      t_express_company_id = #{tExpressCompanyId,jdbcType=INTEGER},
+      t_company_code = #{tCompanyCode,jdbcType=VARCHAR},
       t_express_company = #{tExpressCompany,jdbcType=VARCHAR}
     where total_id = #{totalId,jdbcType=INTEGER}
   </update>

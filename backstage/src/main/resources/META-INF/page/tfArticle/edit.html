@@ -21,7 +21,12 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <meta name="MobileOptimized" content="320">
-<script src="${base!}/assets/jquery-3.1.1.min.js"></script>
+<script src="${base!}/assets/plugins/jquery-1.10.2.min.js"></script>
+
+<link rel="stylesheet" href="${base!}/assets/plugins/bootstrap/css/bootstrap.min.css" type="text/css"/> 
+<script type="text/javascript" src="${base!}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${base!}/assets/plugins/bootstrap/js/bootstrap-select.js"></script>
+<link rel="stylesheet" href="${base!}/assets/plugins/bootstrap/css/bootstrap-select.css" type="text/css"/>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -90,13 +95,23 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                                     <label class="control-label col-md-3">文章类型<span class="required">*</span></label>
                                     <div class="col-md-4">
                                      <!-- <input name="lConstellation" id="lConstellation" value='<#if l??>${l.lConstellation!}</#if>' type="text" class="form-control" <#if l??>readonly<#else></#if>> -->
-                                     <select style="height: 32px;" id="aType" name="aType" <#if article??>disabled</#if>>
-                                     	<option value='1' <#if article??><#if article.aType=1>selected</#if></#if>>奇门遁甲</option>
-                                     	<option value='2' <#if article??><#if article.aType=2>selected</#if></#if>>紫微斗数</option>
-                                     	<option value='3' <#if article??><#if article.aType=3>selected</#if></#if>>子平八字</option>
-                                     	<option value='4' <#if article??><#if article.aType=4>selected</#if></#if>>铁板神数</option>
-                                     	<option value='5' <#if article??><#if article.aType=5>selected</#if></#if>>掌相</option>
+
+                                     <label for="aType"></label>
+                                     <select  id="aType" name="aType" multiple data-live-search="false" class="selectpicker bia bla bia " <#if article??>disabled</#if>><!--  style="height: 32px;"-->
+                                     	<option value='1' <#if type??><#if type?seq_contains('1')>selected</#if></#if>>奇门遁甲</option>
+                                     	<option value='2' <#if type??><#if type?seq_contains('2')>selected</#if></#if>>紫微斗数</option>
+                                     	<option value='3' <#if type??><#if type?seq_contains('3')>selected</#if></#if>>子平八字</option>
+                                     	<option value='4' <#if type??><#if type?seq_contains('4')>selected</#if></#if>>铁板神数</option>
+                                     	<option value='5' <#if type??><#if type?seq_contains('5')>selected</#if></#if>>掌相</option>
                                      </select>
+									                                     
+                                     <!-- <select style="height: 32px;" id="aType" name="aType" <#if article??>disabled</#if>>
+                                     	<option value='1' <#if article??><#if article.aType='1'>selected</#if></#if>>奇门遁甲</option>
+                                     	<option value='2' <#if article??><#if article.aType='2'>selected</#if></#if>>紫微斗数</option>
+                                     	<option value='3' <#if article??><#if article.aType='3'>selected</#if></#if>>子平八字</option>
+                                     	<option value='4' <#if article??><#if article.aType='4'>selected</#if></#if>>铁板神数</option>
+                                     	<option value='5' <#if article??><#if article.aType='5'>selected</#if></#if>>掌相</option>
+                                     </select> -->
                                     </div>
                                 </div>
 	                           	<div class="form-group">
@@ -189,12 +204,19 @@ $("#submit")
 					alert("文章类型不能为空");
                    return false;
 				}
-		
+				var t = "";
+				for(i=0;i<type.length;i++){
+					if(""!=t){
+						t = t +","
+					}
+					t = t+type[i];
+				}
 				var jsonUser = {
 						"title":title,
 						"content":content,
 						"publishDate":publishDate,
-						"abortDate":abortDate
+						"abortDate":abortDate,
+						"type":t
 				};
 				var articleId = $("#articleId").val();
 				var act = "add";
@@ -230,6 +252,8 @@ window.onload = function () {
 		var c = $("#content").html();
 		contentArea.setData(c);
 	}
+	console.log($('.selectpicker'));
+	$('.selectpicker').selectpicker({'selectedText':'cat'}); 
 }
 var contentArea = CKEDITOR.replace('textArea'); 
 

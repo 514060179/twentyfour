@@ -2,10 +2,12 @@ package com.yinghai.twentyfour.app.controller;
 
 import com.yinghai.twentyfour.app.service.HistoryService;
 import com.yinghai.twentyfour.common.model.TfBusiness;
+import com.yinghai.twentyfour.common.model.TfBusinessType;
 import com.yinghai.twentyfour.common.model.TfHistory;
 import com.yinghai.twentyfour.common.model.TfMaster;
 import com.yinghai.twentyfour.common.model.TfUser;
 import com.yinghai.twentyfour.common.service.TfBusinessService;
+import com.yinghai.twentyfour.common.service.TfBusinessTypeService;
 import com.yinghai.twentyfour.common.service.TfMasterService;
 import com.yinghai.twentyfour.common.service.TfUserService;
 import com.yinghai.twentyfour.common.util.JsonDateValueProcessor;
@@ -48,6 +50,8 @@ public class TfBusinessController {
     private HistoryService tfHistoryService;
     @Autowired
     private TfUserService tfUserService;
+    @Autowired
+    private TfBusinessTypeService tfBusinessTypeService;
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public void save(HttpServletRequest request, HttpServletResponse response){
@@ -230,6 +234,30 @@ public class TfBusinessController {
             ResponseVo.send701Code(response,"price不能小于等于0");
             return;
         }
+        //添加类型的更新
+        String type = request.getParameter("type");
+        if(!StringUtil.empty(type)){
+        	if(type.matches("^[1-9][0-9]*$")){
+        		List<TfBusinessType> list = tfBusinessTypeService.findAll();
+        		Integer t = Integer.valueOf(type);
+        		boolean b = false;
+        		for(TfBusinessType bt:list){
+        			if(bt.getBusinessTypeId()==t){
+        				b = true;
+        			}
+        		}
+        		if(!b){
+        			ResponseVo.send114Code(response, "业务类型错误");
+        			log.error("该业务类型不存在");
+        			return;
+        		}
+        		tfBusiness.setbType(type);
+        	}else{
+        		ResponseVo.send114Code(response, "业务类型错误");
+    			return;
+        	}
+        }
+        
         tfBusiness.setbUpdateTime(new Date());
         int i = tfBusinessService.updateBusiness(tfBusiness);
         if(i>0){

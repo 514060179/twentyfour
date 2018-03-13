@@ -223,4 +223,13 @@ public class ConstantCode {
 	 * 占卜订单预约时间已过
 	 */
 	public static final String TIME_125_CODE = "125";
+	
+	/**
+	 * 用户im不在线
+	 */
+	public static final String IM_OFFLINE = "126";
+	/**
+	 * 已经存在物流信息
+	 */
+	public static final String COMMENT_802_CODE = "802";
 }

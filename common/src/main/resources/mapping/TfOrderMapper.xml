@@ -161,7 +161,7 @@
     <result column="t_pay_no" property="tPayNo" jdbcType="VARCHAR" />
     <result column="t_master_id" property="tMasterId" jdbcType="INTEGER" />
     <result column="t_express_no" property="tExpressNo" jdbcType="VARCHAR" />
-    <result column="t_express_company_id" property="tExpressCompanyId" jdbcType="INTEGER" />
+    <result column="t_company_code" property="tCompanyCode" jdbcType="VARCHAR" />
     <result column="t_express_company" property="tExpressCompany" jdbcType="VARCHAR" />
     <association property="address" javaType="com.yinghai.twentyfour.common.model.TfAddress">
     	<id column="address_id" property="addressId" jdbcType="INTEGER" />
@@ -319,7 +319,7 @@
   </sql>
   <sql id="OrderTotal_Column_List">
   	total_id, t_order_no, t_amount, t_create_time, t_user_id,t_address_id,t_status,t_qty,
-  	t_parent_id,t_pay_no,t_master_id,t_express_no,t_express_company_id,t_express_company
+  	t_parent_id,t_pay_no,t_master_id,t_express_no,t_company_code,t_express_company
   </sql>
   <sql id="Img_Column_List">
   	img_tmp_id,it_type,it_url,it_app_path,it_is_userd

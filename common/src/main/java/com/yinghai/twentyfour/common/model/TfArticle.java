@@ -50,7 +50,18 @@ public class TfArticle {
     
     private String aTypeName;
     
-    public String getaTypeName() {
+    private Integer aAddType;//添加文章类型，1为APP添加，2为后台添加
+    
+    
+    public Integer getaAddType() {
+		return aAddType;
+	}
+
+	public void setaAddType(Integer aAddType) {
+		this.aAddType = aAddType;
+	}
+
+	public String getaTypeName() {
     	String s = aType;
     	if(s==null){
     		return "";

@@ -97,4 +97,13 @@ public class Constant {
 	 * 运势信息xcel模板 
 	 */
 	public static final String lucktemplate = PropertyUtil.getAppProperty("lucktemplate");
+	/**
+	 * 用户端apk
+	 */
+	public static final String PREFIX_USER = PropertyUtil.getAppProperty("userapk");
+	/**
+	 * 大师端apk
+	 */
+	public static final String PREFIX_MASTER = PropertyUtil.getAppProperty("masterapk");
+	public static String apk = PropertyUtil.getAppProperty("apk");
 }

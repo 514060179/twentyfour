@@ -195,5 +195,10 @@ public class TfOrderTotalServiceImpl implements TfOrderTotalService {
 		return tfOrderTotalMapper.updateByPrimaryKeySelective(orderTotal);
 	}
 
+	@Override
+	public int findByAddress(Integer addressId) {
+		return tfOrderTotalMapper.findByAddress(addressId);
+	}
+
 
 }

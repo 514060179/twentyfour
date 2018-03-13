@@ -155,11 +155,12 @@ public class BackTfArticleController {
 		}
 		//获取参数
 		Integer articleId= TransformUtils.toInteger(request.getParameter("articleId"));
-		System.out.println("*********"+articleId);
 		if(articleId!=null&&articleId>0){
 			TfArticle tfArticle = tfArticleService.selectByPrimaryKey(articleId);
-			System.out.println("*********"+tfArticle);
 			model.addAttribute("article", tfArticle);
+			String type = tfArticle.getaType();
+			String[] s = type.split(",");
+			model.addAttribute("type",s);
 		}
 		return "tfArticle/edit";
 	}
@@ -219,6 +220,7 @@ public class BackTfArticleController {
 			}
 			tfArticle.setaMasterId(0);
 			tfArticle.setaCreateTime(new Date());
+			tfArticle.setaAddType(2);
 			int i = tfArticleService.insertSelective(tfArticle);
 			if(i<1){
 				ResponseVo.send106Code(response, "新增失敗，數據庫更新失敗");
