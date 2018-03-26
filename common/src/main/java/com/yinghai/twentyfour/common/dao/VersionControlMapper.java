@@ -13,4 +13,8 @@ public interface VersionControlMapper {
     Page<VersionControl> findByCondion(VersionControl record);
 
     int updateByPrimaryKeySelective(VersionControl versionControl);
+
+	Page<VersionControl> queryVersion(VersionControl version);
+
+	VersionControl findById(Integer id);
 }

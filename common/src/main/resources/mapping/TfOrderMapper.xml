@@ -1077,5 +1077,9 @@ SELECT
 		t.`t_status`=999,t2.`t_status`=999
     where o.o_status = 1 and unix_timestamp(o.o_create_time) &lt;= unix_timestamp(#{time1,jdbcType=VARCHAR}) 
     </update>
-  
+
+    <select id="getMasterFeeByDate" resultType="java.lang.String">
+        select
+        IFNULL(SUM(o_amount),0) from `tf_order` where o_master_id =#{masterId,jdbcType=INTEGER} AND o_status=5 AND DATE_FORMAT(o_complete_time,'%Y%m')=#{dateStr,jdbcType=VARCHAR}
+    </select>
 </mapper>

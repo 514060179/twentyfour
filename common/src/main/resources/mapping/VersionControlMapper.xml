@@ -15,6 +15,31 @@
   <sql id="Base_Column_List" >
     id, version_id, force_update, device_type, realm,`describe`, create_time, update_time, priority
   </sql>
+  <select id="queryVersion" resultMap="BaseResultMap" parameterType="com.yinghai.twentyfour.common.model.VersionControl">
+  	select 
+  	<include refid="Base_Column_List" />
+    from version_control
+    where 1=1
+    <if test="id != null">
+    	AND id = ${id,jdbcType=INTEGER}
+    </if>
+    <if test="versionId != null">
+    	AND version_id = ${versionId,jdbcType=VARCHAR}
+    </if>
+    <if test="forceUpdate != null">
+    	AND force_update = ${forceUpdate,jdbcType=BIT}
+    </if>
+    <if test="deviceType != null">
+    	AND device_type = ${deviceType,jdbcType=VARCHAR}
+    </if>
+    <if test="realm != null">
+    	AND realm = ${realm,jdbcType=VARCHAR}
+    </if>
+    <if test="describe != null">
+    	AND  descirbe like CONCAT('%',CONCAT(describe,'%'))
+    </if>
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -136,7 +161,12 @@
       priority = #{priority,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
+  <select id="findById" parameterType="Integer" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+    from version_control
+    where id = #{id,jdbcType=INTEGER}
+  </select>
   <select id="findVersion" resultMap="BaseResultMap" parameterType="com.yinghai.twentyfour.common.model.VersionControl" >
     select
     <include refid="Base_Column_List" />

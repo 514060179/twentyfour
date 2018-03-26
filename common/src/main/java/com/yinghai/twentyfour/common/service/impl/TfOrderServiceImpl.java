@@ -780,4 +780,9 @@ public class TfOrderServiceImpl implements TfOrderService {
 		// TODO Auto-generated method stub
 		return tfOrderMapper.updateUnpaidTotalOrder(time1);
 	}
+
+	@Override
+	public String getMasterFeeByDate(String dateStr, Integer masterId) {
+		return tfOrderMapper.getMasterFeeByDate(dateStr,masterId);
+	}
 }

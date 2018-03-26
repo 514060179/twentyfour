@@ -200,4 +200,12 @@ public interface TfOrderService {
 	List<TfOrder> autoCancleOrder(Date time1, Date time2);
 	
 	int updateUnpaidTotalOrder(String time1);
+
+	/**
+	 * 获取大师每月应得费用
+	 * @param dateStr
+	 * @param masterId
+	 * @return
+	 */
+	String getMasterFeeByDate(String dateStr,Integer masterId);
 }

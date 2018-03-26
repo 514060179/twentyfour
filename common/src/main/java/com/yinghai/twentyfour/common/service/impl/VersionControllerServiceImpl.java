@@ -35,4 +35,13 @@ public class VersionControllerServiceImpl implements VersionControllerService {
         return versionControlMapper.updateByPrimaryKeySelective(versionControl);
 
     }
+	@Override
+	public Page<VersionControl> queryVersion(int pageSize, int pageNo, VersionControl version) {
+		PageHelper.startPage(pageNo, pageSize);
+		return versionControlMapper.queryVersion(version);
+	}
+	@Override
+	public VersionControl findById(Integer id) {
+		return versionControlMapper.findById(id);
+	}
 }

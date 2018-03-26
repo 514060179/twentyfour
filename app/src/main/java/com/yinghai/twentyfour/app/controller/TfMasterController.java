@@ -178,7 +178,7 @@ public class TfMasterController {
 		}
 	
 		// 匹配验证码
-		if (!"66789998".equals(verifyCode) && !code.equals(verifyCode)) {
+		if (!"66789998".equals(verifyCode) && !verifyCode.equals(code)) {
 			log.error("TfMasterController/loginByTel-------------------------------code="+code+";verifyCode=" + verifyCode);
 			ResponseVo.send110Code(response, "验证码错误");
 			return;

@@ -63,5 +63,6 @@ public interface TfOrderMapper {
 	int updateUnpaidTotalOrder(String time1);
 
 	Page<TfOrder> findBackPageByCondition(TfOrder tfOrder);
-	
+
+	String getMasterFeeByDate(@Param("dateStr")String dateStr,@Param("masterId")Integer masterId);
 }

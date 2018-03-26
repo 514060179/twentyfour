@@ -1029,4 +1029,37 @@ public class TfOrderController {
     	ResponseVo.sendNotMeErrorCode(response, "接口出现异常");
 		return;
     }
+
+
+    //统计订单
+    @RequestMapping(value="/statis",method=RequestMethod.POST)
+    public void orderStatistics(HttpServletRequest request,HttpServletResponse response)  throws Exception {
+        String masterId = request.getParameter("masterId");
+        if(StringUtil.empty(masterId)){
+            ResponseVo.send101Code(response,"");
+            return;
+        }
+        String dateStr = "";
+        String date = request.getParameter("dateStr");//yyyymm
+        if(StringUtil.empty(date)){
+            Calendar now = Calendar.getInstance();
+            int month = now.get(Calendar.MONTH) + 1;
+            int year = now.get(Calendar.YEAR);
+            if (month<10){
+                dateStr = year+"0"+month;
+            }else{
+                dateStr = year+""+month;
+            }
+        }else{
+            dateStr = date;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+        String d = tfOrderService.getMasterFeeByDate(dateStr,Integer.parseInt(masterId));
+        JSONObject data = new JSONObject();
+        data.put("date",dateStr);
+        data.put("fee",d);
+        data.put("masterId",masterId);
+        data.put("msg",(sdf.parse(dateStr).getMonth()+1)+"月份所得");
+        ResponseVo.send1Code(response,"success",data);
+    }
 }
