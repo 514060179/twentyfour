@@ -498,7 +498,7 @@ public class TfUserController {
 		}
 		String sex = request.getParameter("sex");// 性别0女1男
 		if (StringUtil.notEmpty(sex)) {
-			if (TransformUtils.toBoolean(sex)) {
+			if ("1".equals(sex)) {
 				updateTfUser.setuSex(true);
 				tfUser.setuSex(true);
 			} else {
@@ -554,7 +554,7 @@ public class TfUserController {
 		}
 		// 判斷大師是否在線，如果是在線的時候才允許登出
 		if(tfUser.getuStatus()!=TfUser.User_Online){//如果狀態不為999，則返回狀態錯誤，登出失敗
-			ResponseVo.send103Code(response, "用户狀態不為在線，登出失敗");
+			ResponseVo.send127Code(response, "用户狀態不為在線，登出失敗");
 			return;
 		}else{
 			TfUser updateTfUser = new TfUser();

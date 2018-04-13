@@ -115,7 +115,9 @@
      
      <task:scheduled-tasks>
         <task:scheduled ref="taskCool" method="orderJob" initial-delay="5000" fixed-delay="300000"/>
-    </task:scheduled-tasks>
+         <task:scheduled ref="refundTask" method="refundJob" cron="0/10 * * * * ?"/>
+         <!--<task:scheduled ref="refundTask" method="refundJob" initial-delay="5000" fixed-delay="300000"/>-->
+     </task:scheduled-tasks>
 	<mvc:interceptors>
 	    <!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
 		    <mvc:interceptor>

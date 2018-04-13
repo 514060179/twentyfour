@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.yinghai.twentyfour.common.model.TfMaster;
+import com.yinghai.twentyfour.common.model.TfUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -53,7 +55,8 @@ public class BackOrderController {
 		pageSize = (pageSize!=null&&pageSize>0)?pageSize:10;
 		TfOrder order = new TfOrder();
 		Integer orderId = TransformUtils.toInteger(request.getParameter("orderId"));
-		Integer userId = TransformUtils.toInteger(request.getParameter("userId"));
+		String userName = request.getParameter("userName");
+		String masterName = request.getParameter("masterName");
 		String orderNo = request.getParameter("orderNo");
 		Integer type = TransformUtils.toInteger(request.getParameter("type"));
 		Integer payWay = TransformUtils.toInteger(request.getParameter("payWay"));
@@ -61,8 +64,15 @@ public class BackOrderController {
 		if(orderId!=null&&orderId>0){
 			order.setOrderId(orderId);
 		}
-		if(userId!=null&&userId>0){
-			order.setoUserId(userId);
+		TfUser user = new TfUser();
+		TfMaster master = new TfMaster();
+		if(userName!=null){
+			user.setuNick(userName);
+			order.setTfUser(user);
+		}
+		if(masterName!=null){
+			master.setmNick(masterName);
+			order.setTfMaster(master);
 		}
 		if(!StringUtil.empty(orderNo)){
 			order.setoOrderNo(orderNo);

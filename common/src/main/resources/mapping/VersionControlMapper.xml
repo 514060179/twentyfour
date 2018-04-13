@@ -21,22 +21,22 @@
     from version_control
     where 1=1
     <if test="id != null">
-    	AND id = ${id,jdbcType=INTEGER}
+    	AND id = #{id,jdbcType=INTEGER}
     </if>
-    <if test="versionId != null">
-    	AND version_id = ${versionId,jdbcType=VARCHAR}
+    <if test="versionId != null and versionId !=''">
+    	AND version_id = #{versionId,jdbcType=VARCHAR}
     </if>
     <if test="forceUpdate != null">
-    	AND force_update = ${forceUpdate,jdbcType=BIT}
+    	AND force_update = #{forceUpdate,jdbcType=BIT}
     </if>
-    <if test="deviceType != null">
-    	AND device_type = ${deviceType,jdbcType=VARCHAR}
+    <if test="deviceType != null and deviceType !=''">
+    	AND device_type = #{deviceType,jdbcType=VARCHAR}
     </if>
-    <if test="realm != null">
-    	AND realm = ${realm,jdbcType=VARCHAR}
+    <if test="realm != null and realm != ''">
+    	AND realm = #{realm,jdbcType=VARCHAR}
     </if>
-    <if test="describe != null">
-    	AND  descirbe like CONCAT('%',CONCAT(describe,'%'))
+    <if test="describe != null and describe != ''">
+    	AND `describe` LIKE CONCAT(CONCAT('%',#{describe,jdbcType=VARCHAR}),'%')
     </if>
   </select>
   

@@ -109,11 +109,16 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 	                              	</div>
 	                              	<div class="col-md-3 col-sm-12">
 	                              		<div>
-	                              			<label>用户&nbsp;&nbsp;ID&nbsp;&nbsp;:
-	                              				<input  id="userId" name="userId" type="text" class="form-control input-small"  value="<#escape x as x?xml>${order.oUserId!}</#escape>" onkeyup="value=value.replace(/[^\d]/g,'')"/>
+	                              			<label>用户名字:
+	                              				<input  id="userId" name="userName" type="text" class="form-control input-small"  value="<#if order.tfUser??><#escape x as x?xml>${order.tfUser.uNick!}</#escape></#if>" />
 	                              			</label>
 	                              		</div>
 	                              	</div>
+                                    <div class="col-md-3 col-sm-12" style="width:382px;height:39px;">
+                                          <label>大师名字:
+                                              <input  id="masterId" name="masterName" type="text" class="form-control input-small"  value="<#if order.tfMaster??><#escape x as x?xml>${order.tfMaster.mNick!}</#escape></#if>" />
+                                          </label>
+                                    </div>
 	                              	<div class="col-md-3 col-sm-12">
 	                              		<div>
 	                              			<label>订单编号:
@@ -121,12 +126,11 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 	                              			</label>
 	                              		</div>
 	                              	</div>
-	                              	<div class="col-md-3 col-sm-12" style="width:382px;height:39px;"></div>
 	                              	<div class="col-md-3 col-sm-12">
 	                              		<div>
 	                              			<label>订单类型:
 	                              				<select id="type" name="type" class="form-control input-small">
-	                              					<option value=""></option>
+	                              					<option value="">全部</option>
 	                              					<option value="1" <#if order.oOrderType??><#if order.oOrderType=1>selected</#if></#if>>占卜</option>
 	                              					<option value="3" <#if order.oOrderType??><#if order.oOrderType=3>selected</#if></#if>>商品</option>
 	                              				</select>
@@ -137,7 +141,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 	                              		<div>
 	                              			<label>支付方式:
 	                              				<select id="payWay" name="payWay" class="form-control input-small">
-	                              					<option value=""></option>
+	                              					<option value="">全部</option>
 	                              					<option value="1" <#if order.oPayWay??><#if order.oPayWay=1>selected</#if></#if>>微信支付</option>
 	                              					<option value="2" <#if order.oPayWay??><#if order.oPayWay=2>selected</#if></#if>>支付宝</option>
 	                              				</select>
@@ -148,7 +152,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 	                              		<div>
 	                              			<label>订单状态:
 	                              				<select id="orderStatus" name="orderStatus" class="form-control input-small">
-	                              					<option value=""></option>
+	                              					<option value="">全部</option>
 	                              					<option value="1" <#if order.oStatus??><#if order.oStatus=1>selected</#if></#if>>未支付</option>
 	                              					<option value="2" <#if order.oStatus??><#if order.oStatus=2>selected</#if></#if>>已支付</option>
 	                              					<option value="3" <#if order.oStatus??><#if order.oStatus=3>selected</#if></#if>>已确定</option>
@@ -183,12 +187,12 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
                                             aria-controls="sample_2" rowspan="1" colspan="1"
                                             aria-label="Platform(s): activate to sort column ascending"
-                                            style="width: 3%;word-break: break-all;">用户ID
+                                            style="width: 3%;word-break: break-all;">用户名字
                                         </th>
                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
                                             aria-controls="sample_2" rowspan="1" colspan="1"
                                             aria-label="Platform(s): activate to sort column ascending"
-                                            style="width: 3%;word-break: break-all;">大师ID
+                                            style="width: 3%;word-break: break-all;">大师名字
                                         </th>
                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
                                             aria-controls="sample_2" rowspan="1" colspan="1"
@@ -198,7 +202,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
                                             aria-controls="sample_2" rowspan="1" colspan="1"
                                             aria-label="Platform(s): activate to sort column ascending"
-                                            style="width: 3%;word-break: break-all;">商品/业务ID
+                                            style="width: 3%;word-break: break-all;">商品p/业务b
                                         </th>
                                         <th class="hidden-xs sorting" role="columnheader" tabindex="0"
                                             aria-controls="sample_2" rowspan="1" colspan="1"
@@ -248,8 +252,8 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                                     <tr class="odd" id="${item.orderId!}Tr">
                                         <td class=" " style="width: 3%;word-break: break-all;"><a href="${base!}/admin/order/detail?orderId=${item.orderId!}<#if item.oOrderType??><#if item.oOrderType=3>&type=3</#if></#if>">${item.orderId!}</a></td>
                                         <td class=" " style="width: 10%;word-break: break-all;white-space:normal;">${item.oOrderNo!}</td>
-                                        <td class=" " style="width: 3%;word-break: break-all;">${item.oUserId!}</td>
-                                        <td class=" " style="width: 3%;word-break: break-all;">${item.oMasterId!}</td>
+                                        <td class=" " style="width: 3%;word-break: break-all;">${item.tfUser.uNick!}</td>
+                                        <td class=" " style="width: 3%;word-break: break-all;">${item.tfMaster.mNick!}</td>
                                         <td class=" " style="width: 3%;word-break: break-all;">
                                         	<#if item.oOrderType??>
                                         		<#if item.oOrderType=1>在线占卜
@@ -260,8 +264,8 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                                         </td>
                                         <td class=" " style="width: 3%;word-break: break-all;">
                                         	<#if item.oOrderType??>
-                                        		<#if item.oOrderType=1 || item.oOrderType=2>${item.oBusinessId!}
-                                        		<#elseif item.oOrderType=3>${item.oProductId!}</#if>
+                                        		<#if item.oOrderType=1 || item.oOrderType=2>${item.tfBusiness.bName!}(b)
+                                        		<#elseif item.oOrderType=3>${item.tfProduct.pName!}</#if>(p)
                                         	</#if>
                                         </td>
                                         <td class=" " style="width: 5%;word-break: break-all;">

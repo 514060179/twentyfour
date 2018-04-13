@@ -292,7 +292,16 @@ public class ResponseVo {
 		String code = ConstantCode.IM_OFFLINE;
 		common(code,msg,new JSONObject(),response);
 	}
-
+	/**
+	 * 用户状态不在线
+	 * @param response
+	 * @param msg
+	 */
+	public static void send127Code(HttpServletResponse response,String msg){
+		String code = ConstantCode.USER_OFFLINE;
+		common(code,msg,new JSONObject(),response);
+	}
+	
 	/**
 	 * 资源尚未购买使用
 	 * @param response

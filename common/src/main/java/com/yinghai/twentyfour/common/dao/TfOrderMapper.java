@@ -2,6 +2,7 @@ package com.yinghai.twentyfour.common.dao;
 
 import com.yinghai.twentyfour.common.model.TfOrder;
 import com.yinghai.twentyfour.common.model.TfOrderTotalHelper;
+import com.yinghai.twentyfour.common.model.TimeTableEntity;
 import com.yinghai.twentyfour.common.util.Page;
 import com.yinghai.twentyfour.common.vo.MasterAndUserIm;
 import com.yinghai.twentyfour.common.vo.MasterSchedule;
@@ -64,5 +65,9 @@ public interface TfOrderMapper {
 
 	Page<TfOrder> findBackPageByCondition(TfOrder tfOrder);
 
+	List<TimeTableEntity> queryPeriod(@Param("masterId")Integer masterId,@Param("date")Date date,@Param("orderer")Integer orderer);
+
 	String getMasterFeeByDate(@Param("dateStr")String dateStr,@Param("masterId")Integer masterId);
+
+    List<TfOrder> findAllList(TfOrder tfOrder);
 }

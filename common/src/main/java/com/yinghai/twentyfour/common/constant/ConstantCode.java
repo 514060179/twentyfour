@@ -229,6 +229,11 @@ public class ConstantCode {
 	 */
 	public static final String IM_OFFLINE = "126";
 	/**
+	 * 用户状态不在线
+	 */
+	public static final String USER_OFFLINE = "127";
+	
+	/**
 	 * 已经存在物流信息
 	 */
 	public static final String COMMENT_802_CODE = "802";

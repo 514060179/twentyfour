@@ -27,6 +27,7 @@ import com.yinghai.twentyfour.common.model.TfOrderTotal;
 import com.yinghai.twentyfour.common.model.TfOrderTotalHelper;
 import com.yinghai.twentyfour.common.model.TfProduct;
 import com.yinghai.twentyfour.common.model.TfUser;
+import com.yinghai.twentyfour.common.model.TimeTableEntity;
 import com.yinghai.twentyfour.common.service.TfOrderService;
 import com.yinghai.twentyfour.common.service.TfProductService;
 import com.yinghai.twentyfour.common.service.TfUserService;
@@ -329,6 +330,7 @@ public class TfOrderServiceImpl implements TfOrderService {
 		o.setOrderId(order.getOrderId());
 		o.setoStatus(TfOrder.orderStatusHaveDone);
 		o.setoUpdateTime(new Date());
+		o.setoCompleteTime(new Date());
 		int i = tfOrderMapper.updateByPrimaryKeySelective(o);
 		if(i!=1){
 			log.error("订单状态更新失败，completeOrder:"+order.getOrderId());
@@ -406,6 +408,7 @@ public class TfOrderServiceImpl implements TfOrderService {
 				record.setOrderId(o.getOrderId());
 				record.setoStatus(TfOrder.orderStatusHaveDone);
 				record.setoUpdateTime(new Date());
+				record.setoCompleteTime(new Date());
 				int i = tfOrderMapper.updateByPrimaryKeySelective(record);
 				if(i!=1){
 					log.error("订单状态更新失败,orderId:"+o.getOrderId());
@@ -782,7 +785,112 @@ public class TfOrderServiceImpl implements TfOrderService {
 	}
 
 	@Override
+	public List<TimeTableEntity> queryPeriod(Integer masterId,Date date,Integer orderer) {
+		return tfOrderMapper.queryPeriod(masterId,date,orderer);
+	}
+
+	@Override
 	public String getMasterFeeByDate(String dateStr, Integer masterId) {
 		return tfOrderMapper.getMasterFeeByDate(dateStr,masterId);
+	}
+
+	@Override
+	public List<TfOrder> findAllHadPaidList() {
+    	TfOrder tfOrder = new TfOrder();
+    	tfOrder.setoStatus(TfOrder.orderStatusPaidDone);
+    	tfOrder.setoPayStatus(TfOrder.payStatusPaidDone);
+		return tfOrderMapper.findAllList(tfOrder);
+	}
+
+	@Override
+	@Transactional
+	public boolean refuundMoney(TfOrder tfOrder) {
+    	//获取订单编号、订单支付类型、订单总额
+		String orderNo = tfOrder.getoOrderNo();
+		int payWay = tfOrder.getoPayWay();
+		int money = tfOrder.getoAmount();
+		//更新订单
+		TfOrder updateOrder = new TfOrder();
+		updateOrder.setOrderId(tfOrder.getOrderId());
+		updateOrder.setoCancelTime(new Date());
+		updateOrder.setoCancelType(3);//订单取消类型1用户取消2大师取消3系统取消
+		updateOrder.setoUpdateTime(new Date());
+		updateOrder.setoPayStatus(TfOrder.payStatusRebackMoneyDone);//已退款
+		updateOrder.setoStatus(TfOrder.orderStatusRebackMoneyDone);//已退款
+		int i = tfOrderMapper.updateByPrimaryKeySelective(updateOrder);
+		if (i!=1){
+			log.error("大师未确定订单退款更新数据库操作失败！");
+			return false;
+		}
+		JSONObject jsonObject = new JSONObject();
+		JSONObject res = new JSONObject();
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd HH:mm:ss"));
+		JSONObject or = JSONObject.fromObject(tfOrder, config);
+
+		//通知用户
+		if (TfOrder.payWayWeChat==payWay){//微信支付
+			try {
+				Map map = WeChatPayUtils.orderrefund(orderNo,money+"",money+"",WeChat.weixinAPPPayType);
+				if("FAIL".equals(map.get("return_code"))){
+					log.error("======大师未确定订单退款操作失败！======"+map.get("return_msg")+map.get("err_code_des"));
+					throw new RuntimeException("退款操作失败"+map.get("return_msg")+map.get("err_code_des"));
+				}
+				System.out.println("============"+orderNo);
+//				throw new RuntimeException("大师未确定订单退款异常（微信）");
+			} catch (Exception e) {
+				log.error("大师未确定订单退款异常",e);
+				e.printStackTrace();
+				throw new RuntimeException("大师未确定订单退款异常（微信）",e);
+			}
+		}else if(TfOrder.payWayAlipay==payWay){//支付宝支付
+			try {
+				AlipayTradeRefundResponse refundResponse = AlipayUtil.refund(orderNo,"",(double)tfOrder.getoAmount()/100,"大师未确定订单退款");
+				if(!refundResponse.isSuccess()){
+					log.error("大师未确定订单退款失败:"+refundResponse.getBody());
+					throw new RuntimeException("大师未确定订单退款失败！"+refundResponse.getBody());
+				}
+			} catch (AlipayApiException e) {
+				log.error("大师未确定订单退款异常",e);
+				e.printStackTrace();
+				throw new RuntimeException("大师未确定订单退款异常（支付宝）",e);
+			}
+		}else{
+			return false;
+		}
+		String upushCode = PushCode.UOrderNoConfirm;
+		String upushMsg = PushCode.UOrderNoConfirmMsg;
+		String mpushCode = PushCode.MOrderNoConfirm;
+		String mpushMsg = PushCode.MOrderNoConfirmMsg;
+
+//		upushCode = PushCode.UOrderCancelByMaster;
+//		upushMsg = PushCode.UOrderCancelByMasterMsg;
+//		mpushCode = PushCode.MOrderCancelByMaster;
+//		mpushMsg = PushCode.MOrderCancelByMasterMsg;
+		Message message = new Message();
+		res.put("order",or);
+		res.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		jsonObject.put("code", upushCode);
+		jsonObject.put("msg",upushMsg);
+		jsonObject.put("data",res);
+		jsonObject = JSONObject.fromObject(jsonObject, config);
+		//通知
+		try {
+			CodeSuccessResult r1 = message.publishSystem("admin",new String[]{tfOrder.getTfUser().getuIm()},new TxtMessage(jsonObject.toString(),""),upushMsg,jsonObject.toString(), 1, 1);
+			if (r1.getCode()!=200){
+				log.error("大师未确定订单取消成功通知用户失败！"+r1);
+			}
+			//大师
+			jsonObject.put("code", mpushCode);
+			jsonObject.put("msg",mpushMsg);
+			CodeSuccessResult r2 = message.publishSystem("admin",new String[]{tfOrder.getTfMaster().getmIm()},new TxtMessage(jsonObject.toString(),""),mpushMsg,jsonObject.toString(), 1, 1);
+			if (r2.getCode()!=200){
+				log.error("大师未确定订单取消成功通知大师失败！"+r2);
+			}
+		} catch (Exception e) {
+			log.error("通知用户失败",e);
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

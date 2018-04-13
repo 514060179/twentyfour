@@ -4,6 +4,7 @@ import com.yinghai.twentyfour.common.model.TfOrder;
 import com.yinghai.twentyfour.common.model.TfOrderAttach;
 import com.yinghai.twentyfour.common.model.TfOrderTotal;
 import com.yinghai.twentyfour.common.model.TfOrderTotalHelper;
+import com.yinghai.twentyfour.common.model.TimeTableEntity;
 import com.yinghai.twentyfour.common.util.Page;
 import com.yinghai.twentyfour.common.vo.MasterSchedule;
 import org.apache.ibatis.annotations.Param;
@@ -202,10 +203,29 @@ public interface TfOrderService {
 	int updateUnpaidTotalOrder(String time1);
 
 	/**
+	 * 查询预约订单的未支付、已支付、进行中订单，获取时间区间字段
+	 * @return
+	 */
+	List<TimeTableEntity> queryPeriod(Integer masterId,Date date,Integer orderer);
+	/**
 	 * 获取大师每月应得费用
 	 * @param dateStr
 	 * @param masterId
 	 * @return
 	 */
 	String getMasterFeeByDate(String dateStr,Integer masterId);
+
+	/**
+	 * 查询大师未确定的订单
+	 * @return
+	 */
+	List<TfOrder> findAllHadPaidList();
+
+
+	/**
+	 *	大师未确定回退钱
+	 * @param tfOrder
+	 * @return
+	 */
+	boolean refuundMoney(TfOrder tfOrder);
 }

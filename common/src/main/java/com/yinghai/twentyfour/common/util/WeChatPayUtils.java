@@ -64,7 +64,6 @@ public class WeChatPayUtils {
 				+ "&out_trade_no="+out_trade_no+"&spbill_create_ip="+spbill_create_ip+"&total_fee="+total_fee+"&trade_type=APP";
 		String stringSignTemp = stringA+"&key="+WeChat.weixinPayKey;
 		String sign = MD5Encode(stringSignTemp, "utf-8").toUpperCase();
-		System.out.println(sign.length());
 		StringBuffer sb = new StringBuffer();
 		sb.append("<xml>");
 		sb.append("<appid>"+WeChat.weixinPayAppId+"</appid>");
@@ -78,7 +77,6 @@ public class WeChatPayUtils {
 		sb.append("<trade_type>APP</trade_type>");
 		sb.append("<sign>"+sign+"</sign>");
 		sb.append("</xml>");
-		System.out.println(sb.toString());
 		OutputStreamWriter outPut = null;
 		outPut = new OutputStreamWriter(connection.getOutputStream());
 		outPut.write(new String(sb.toString().getBytes("utf-8")));
@@ -93,13 +91,9 @@ public class WeChatPayUtils {
 		}
 		String nonce_str2=element.elementText("nonce_str");
 		String timeStamp=timestamp(date);
-		System.out.println(element.elementText("return_code"));
-		System.out.println(element.elementText("return_msg"));
-		System.out.println(prepay_id);
 		String stringB="appid="+WeChat.weixinPayAppId+"&noncestr="+nonce_str2+"&package=Sign=WXPay&partnerid="+WeChat.mchId
 				+ "&prepayid="+prepay_id+"&timestamp="+timeStamp;
 		String stringSignTemp2 = stringB+"&key="+WeChat.weixinPayKey;
-		System.out.println(stringSignTemp2);
 		String sign2 = MD5Encode(stringSignTemp2, "utf-8").toUpperCase();
 		return WeChat.weixinPayAppId+","+WeChat.mchId+","+prepay_id+","+nonce_str2+","+timeStamp+","+sign2+","+WeChat.weixinPayKey;
 		} 
@@ -129,8 +123,6 @@ public class WeChatPayUtils {
 		String stringA = "appid="+WeChat.weixinPayAppId+"&mch_id="+WeChat.mchId+"&nonce_str="+nonce_str+"&out_trade_no="+out_trade_no;
 		String stringTemp = stringA+"&key="+WeChat.weixinPayKey;
 		String sign = MD5Encode(stringTemp, "utf-8").toUpperCase();
-		System.out.println(stringTemp);
-		System.out.println(sign);
 		StringBuffer sb = new StringBuffer();
 		sb.append("<xml>");
 		sb.append("<appid>"+WeChat.weixinPayAppId+"</appid>");
@@ -139,17 +131,12 @@ public class WeChatPayUtils {
 		sb.append("<out_trade_no>"+out_trade_no+"</out_trade_no>");
 		sb.append("<sign>"+sign+"</sign>");
 		sb.append("</xml>");
-		System.out.println(sb.toString());
 		OutputStreamWriter output = new OutputStreamWriter(connection.getOutputStream());
 		output.write(new String(sb.toString().getBytes("utf-8")));
 		output.flush();
 		output.close();
 		Document doc = new SAXReader().read(connection.getInputStream());
 		Element element = doc.getRootElement();
-		System.out.println(element.elementText("return_code"));
-		System.out.println(element.elementText("return_msg"));
-		System.out.println(element.elementText("trade_type"));
-		System.out.println(element.elementText("total_fee"));
 		return element.elementText("return_code")+" "+element.elementText("return_msg");
 		
 	}
@@ -173,8 +160,6 @@ public class WeChatPayUtils {
 		String stringA = "appid="+WeChat.weixinPayAppId+"&mch_id="+WeChat.mchId+"&nonce_str="+nonce_str+"&out_trade_no="+out_trade_no;
 		String stringTemp = stringA+"&key="+WeChat.weixinPayKey;
 		String sign = MD5Encode(stringTemp, "utf-8").toUpperCase();
-		System.out.println(stringTemp);
-		System.out.println(sign);
 		StringBuffer sb = new StringBuffer();
 		sb.append("<xml>");
 		sb.append("<appid>"+WeChat.weixinPayAppId+"</appid>");
@@ -183,7 +168,6 @@ public class WeChatPayUtils {
 		sb.append("<out_trade_no>"+out_trade_no+"</out_trade_no>");
 		sb.append("<sign>"+sign+"</sign>");
 		sb.append("</xml>");
-		System.out.println(sb.toString());
 		OutputStreamWriter output = new OutputStreamWriter(connection.getOutputStream());
 		output.write(new String(sb.toString().getBytes("utf-8")));
 		output.flush();
@@ -319,7 +303,6 @@ public class WeChatPayUtils {
 		}
 		
 		//注意sign转为大写
-		System.out.println(sb.toString());
 		return MD5Encode(sb.toString(), characterEncoding).toUpperCase();
 	}
 	
@@ -607,12 +590,22 @@ public class WeChatPayUtils {
 		//HttpGet httpget = new HttpGet("https://api.mch.weixin.qq.com/secapi/pay/refund");
 		HttpPost httppost = new HttpPost(WeChat.wechat_refund_url);
 		httppost.setEntity(new StringEntity(data, "UTF-8"));
-		System.out.println("executing request" + httppost.getRequestLine());
+		System.out.println("executing request" + data);
 		CloseableHttpResponse response = httpclient.execute(httppost);
 		HttpEntity entity = response.getEntity();
 		String jsonStr = EntityUtils.toString(response.getEntity(),
 				"UTF-8");
 		EntityUtils.consume(entity);
 		return jsonStr;
+	}
+
+
+	public static void main(String[] args) {
+		try {
+			Map map = orderrefund("2018031123011426290534","5900","5900","APP");
+			System.out.println(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

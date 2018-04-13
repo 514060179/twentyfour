@@ -129,8 +129,18 @@ public class TfOrder {
     private Integer oCancelType;
     //用于查询
     private String[] statusArray;
+    
+    private Integer oAppointPeriod;
+    
+    public Integer getoAppointPeriod() {
+		return oAppointPeriod;
+	}
 
-    public String[] getStatusArray() {
+	public void setoAppointPeriod(Integer oAppointPeriod) {
+		this.oAppointPeriod = oAppointPeriod;
+	}
+
+	public String[] getStatusArray() {
         return statusArray;
     }
 

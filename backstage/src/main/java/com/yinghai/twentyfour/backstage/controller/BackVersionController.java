@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 /**
@@ -36,6 +38,11 @@ public class BackVersionController {
     @RequestMapping("/list")
     public String getList(HttpServletRequest request,HttpServletResponse response,ModelMap model){
     	log.info("查询版本记录列表");
+    	try {
+			request.setCharacterEncoding("utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
     	Integer id = TransformUtils.toInt(request.getParameter("id"));
     	VersionControl version = new VersionControl();
     	if(id>0){
@@ -58,7 +65,7 @@ public class BackVersionController {
     		version.setDeviceType(deviceType.toString());
     	}
     	String realm = request.getParameter("realm");
-    	if(StringUtil.empty(realm)){
+    	if(!StringUtil.empty(realm)){
     		if("master".equals(realm)){
     			version.setRealm(realm);
     		}else if("user".equals(realm)){

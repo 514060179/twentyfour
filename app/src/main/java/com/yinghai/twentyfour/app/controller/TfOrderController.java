@@ -2,6 +2,8 @@ package com.yinghai.twentyfour.app.controller;
 
 import com.yinghai.twentyfour.common.vo.MasterSchedule;
 import com.yinghai.twentyfour.app.service.TfOrderTotalService;
+import com.yinghai.twentyfour.app.util.TimeUtil;
+import com.yinghai.twentyfour.common.constant.Constant;
 import com.yinghai.twentyfour.common.constant.Express;
 import com.yinghai.twentyfour.common.constant.PushCode;
 import com.yinghai.twentyfour.common.im.constant.App;
@@ -25,6 +27,8 @@ import com.yinghai.twentyfour.common.util.TransformUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,15 +49,20 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Administrator on 2017/10/23.
@@ -93,7 +102,35 @@ public class TfOrderController {
             return;
         }
         try {
-            Date date = sdf.parse(appointmentTime+":00");
+        	Date date1 = sdf.parse(appointmentTime+":00");
+			Date now = new Date();
+			Calendar c1 = Calendar.getInstance();
+			Calendar c2 = Calendar.getInstance();
+			c1.setTime(date1);
+			c2.setTime(now);
+			boolean b = DateUtils.isSameDay(c1, c2);
+			Integer period1 = TimeUtil.getPeriod(date1);
+			Integer period2 = TimeUtil.getPeriod(now);
+			if(!b){//不是同一天
+				if(c1.before(c2)){//时间早于当前时间
+					ResponseVo.send117Code(response, "预约时间段不能早于当前时间");
+	            	return;
+				}
+			}else{//同一天
+				if(period1<=period2){
+					ResponseVo.send117Code(response, "预约时间段不能早于当前时间");
+	            	return;
+				}
+			}
+			if(c1.get(Calendar.MINUTE)<30){
+				c1.set(Calendar.MINUTE, 0);
+			}else{
+				c1.set(Calendar.MINUTE,30);
+			}
+        	Date date = c1.getTime();
+        	
+        	
+			/*Date date = sdf.parse(appointmentTime+":00");
             Date d = new Date();
             Calendar c1 = Calendar.getInstance();
             Calendar c2 = Calendar.getInstance();
@@ -119,7 +156,9 @@ public class TfOrderController {
                     	return;
             		}
             	}
-            }
+            }*/
+            //判断预约时间所在的时间段
+            tfOrder.setoAppointPeriod(TimeUtil.getPeriod(date));
             tfOrder.setoAppointmentTime(date);
         } catch (ParseException e) {
             log.error(e);
@@ -490,6 +529,90 @@ public class TfOrderController {
             }
         }
     }
+    /**
+     * 按日期查询大师预约情况
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value="dailySchedule",method=RequestMethod.POST)
+    public void dailySchedule(HttpServletRequest request,HttpServletResponse response){
+    	log.info("按日期查询大师预约情况时间表");
+    	String dateStr = request.getParameter("date");
+    	Date date = null;
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	Integer interval = 0;//时间段
+    	if(StringUtil.empty(dateStr)){
+    		date = new Date();
+    	}else{
+    		try {
+				date = sdf.parse(dateStr);
+			} catch (ParseException e) {
+				e.printStackTrace();
+				ResponseVo.send104Code(response, "日期格式有误");
+				return;
+			}
+    	}
+    	Integer masterId = TransformUtils.toInt(request.getParameter("masterId"));
+    	if(masterId<=0){
+    		ResponseVo.send101Code(response, "masterId不能为空");
+    		return;
+    	}
+    	//查询未支付、已支付、进行中订单，获取时间区间字段
+    	Map<String,String> m = new HashMap<String,String>();
+    	Date d = new Date();
+    	interval = TimeUtil.getPeriod(d);
+    	boolean b1 = DateUtils.isSameDay(date, d);
+    	Integer b = null;
+    	Integer orderer = TransformUtils.toInt(Constant.ORDERERS)==0?1:TransformUtils.toInt(Constant.ORDERERS);
+    	for(Integer i=1;i<=48;i++){
+    		m.put(i.toString(), orderer.toString());
+    	}
+    	if(b1){//同一天
+    		b = 0;
+    	}else{
+    		long t = date.getTime() - d.getTime();
+    		if(t>0){//未来的某天
+    			b = 1;
+    		}else{//过去
+    			b = -1;
+    		}
+    	}
+
+    	if(b!=-1){
+    		List<TimeTableEntity> list = tfOrderService.queryPeriod(masterId,date,orderer);
+    		for(TimeTableEntity s:list){
+    			System.out.println("****"+s);
+    			m.put(s.getPeriod().toString(), s.getNumbers().toString());
+    		}
+    	}
+    	if(b==0){
+    		for(Integer i=1;i<=48;i++){
+    			if(i<=interval){
+    				m.put(i.toString(), "-1");
+    			}
+    		}
+    	}else if(b==-1){
+    		for(Integer i=1;i<=48;i++){
+				m.put(i.toString(), "-1");
+			}
+    	}
+    	
+    	//将Map按value排序
+    	Set<Entry<String, String>> set = m.entrySet();
+    	Iterator<Entry<String, String>> it = set.iterator();
+    	List<String> list = new ArrayList<String>();
+    	while(it.hasNext()){
+    		Entry<String, String> en = it.next();
+    		list.add(en.getKey()+":"+en.getValue());
+    	}
+    	JSONObject respObj = new JSONObject();
+    	JSONArray arr = JSONArray.fromObject(list);
+    	respObj.put("timetable", arr);
+    	respObj.put("date", sdf.format(date));
+    	ResponseVo.send1Code(response, "sucess", respObj);
+    }
+    
+    
     //大师端
     @RequestMapping(value = "schedule", method = RequestMethod.POST)
     public void schedule(HttpServletRequest request, HttpServletResponse response){
@@ -720,8 +843,21 @@ public class TfOrderController {
     		ResponseVo.send102Code(response, "订单不存在");
     		return;
     	}
-    	//做时间限制，未到时间或时间过时都不能开启视频
+    	//做时间限制，当天订单才可以开启视频
+    	Date date1 = order.getoAppointmentTime();
     	Date now = new Date();
+    	boolean b = DateUtils.isSameDay(date1, now);
+    	if(!b){
+    		if(date1.getTime()>now.getTime()){
+    			ResponseVo.send118Code(response, "该占卜订单预约时间未到");
+    			return;
+    		}else{
+    			ResponseVo.send125Code(response, "该占卜订单预约时间已过");
+    			return;
+    		}
+    	}
+    	
+    	/*Date now = new Date();
     	Date d = order.getoAppointmentTime();
     	Calendar c = Calendar.getInstance();
     	c.setTime(d);
@@ -749,7 +885,7 @@ public class TfOrderController {
     			ResponseVo.send125Code(response, "该占卜订单预约时间已过");
     			return;
     		}
-    	}
+    	}*/
     	//判断用户是否在线
     	User user = new User();
     	String userId = "user"+order.getoUserId();

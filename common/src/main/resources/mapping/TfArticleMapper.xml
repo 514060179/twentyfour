@@ -69,7 +69,9 @@
   <sql id="Blob_Img_Column_List" >
     a.a_content
   </sql>
-  
+  <sql id="Article_List_Master">
+  	m.m_nick,m.m_head_img
+  </sql>
    <sql id="Base_Master_Column_List" >
     m.master_id, m.m_nick,m.m_sex, m.m_status, m.m_head_img, m.m_constellation, m.m_country_code,
     m.m_tel, m.m_password, m.m_address, m.m_business_type, m.m_label, m.m_bargain, m.m_follows, m.m_deals, 
@@ -93,6 +95,8 @@
     <include refid="Base_Img_Column_List" />
     ,
     <include refid="Blob_Img_Column_List" />
+    ,
+    <include refid="Article_List_Master"/>
     <if test="tfArticle.queryUserId!=null">
     	 ,ifnull(cn.cn_user_id,0) as isCollection
     </if>
@@ -115,7 +119,8 @@
     	</if>
     	limit #{startNumber,jdbcType=INTEGER},#{pageStartSize,jdbcType=INTEGER}
     	) a
-    	LEFT JOIN tf_img_tmp it ON a.article_id=it.it_key_id 
+    	LEFT JOIN tf_img_tmp it ON a.article_id=it.it_key_id
+    	LEFT JOIN tf_master m ON a.a_master_id = m.master_id 
     <if test="tfArticle.queryUserId!=null">
     	  LEFT JOIN (SELECT * FROM tf_collection c WHERE c.`cn_user_id`=#{tfArticle.queryUserId,jdbcType=INTEGER}  AND  c.`cn_type`=2) cn ON cn.`cn_article_id`=a.`article_id`
     </if>

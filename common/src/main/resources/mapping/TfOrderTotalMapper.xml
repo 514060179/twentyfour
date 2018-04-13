@@ -69,6 +69,7 @@
 	    <result column="o_amount" property="oAmount" jdbcType="INTEGER" />
 	    <result column="o_is_order_total" property="oIsOrderTotal" jdbcType="BIT" />
 	    <result column="o_order_total_no" property="oOrderTotalNo" jdbcType="VARCHAR" />
+	    <result column="o_appoint_period" property="oAppointPeriod" jdbcType="INTEGER"/>
 		<association property="tfOrderAttach" javaType="com.yinghai.twentyfour.common.model.TfOrderAttach">
 	      <id column="ah_order_id" property="ahOrderId" jdbcType="INTEGER" />
 	      <result column="ah_name" property="ahName" jdbcType="VARCHAR" />
@@ -154,7 +155,7 @@
   <sql id="Order_Column_List" >
     order_id, o_master_id, o_user_id, o_product_id, o_business_id, o_pay_status,o_cancel_type, o_pay_time,
     o_status,o_pay_way, o_order_type, o_order_no, o_logistics_no, o_create_time, o_update_time,
-    o_appointment_time,o_complete_time,o_cancel_time, o_price, o_qty, o_amount, o_is_order_total, o_order_total_no
+    o_appointment_time,o_complete_time,o_cancel_time, o_price, o_qty, o_amount, o_is_order_total, o_order_total_no,o_appoint_period
   </sql>
   <sql id="Master_Column_List" >
     master_id, m_nick, m_sex, m_status, m_head_img, m_constellation, m_country_code,

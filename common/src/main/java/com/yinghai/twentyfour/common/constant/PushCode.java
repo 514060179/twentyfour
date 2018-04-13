@@ -35,6 +35,9 @@ public class PushCode {
     //用户完成订单
     public static final String UOrderComplete = "2008";
     public static final String UOrderCompleteMsg = "您有张订单成功完成";
+    //大师为确定退款信息
+    public static final String UOrderNoConfirm = "2009";
+    public static final String UOrderNoConfirmMsg = "您有张订单大师未确定，已成功退款";
     
 
 
@@ -50,6 +53,9 @@ public class PushCode {
     //大师收到订单完成推送code
     public static final String MOrderCompleteByUser = "3004";
     public static final String MOrderCompleteByUserMsg = "您的一张订单成功完成！";
+    //大师收到订单完成推送code
+    public static final String MOrderNoConfirm = "3005";
+    public static final String MOrderNoConfirmMsg = "您的一张订单待确定时间超时，系统已自动取消！";
     
     //商品订单已发货
     public static final String UOrderDeliver = "4001";

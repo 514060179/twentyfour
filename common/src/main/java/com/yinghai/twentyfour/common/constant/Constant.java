@@ -106,4 +106,8 @@ public class Constant {
 	 */
 	public static final String PREFIX_MASTER = PropertyUtil.getAppProperty("masterapk");
 	public static String apk = PropertyUtil.getAppProperty("apk");
+	/**
+	 * 一个时间段允许的预约人数  
+	 */
+	public static final String ORDERERS = PropertyUtil.getAppProperty("orderers");
 }
